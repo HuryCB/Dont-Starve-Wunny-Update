@@ -31,20 +31,136 @@ TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
 	"rabbit",
 	
 	"shovel",
-
+	
 	"carrot",
 	"carrot",
-
+	
 	"manrabbit_tail",
 	"manrabbit_tail",
 	
 }
 
+local prefabs =
+{
+	"wobybig",
+	"wobysmall",
+}
 local start_inv = {}
 for k, v in pairs(TUNING.GAMEMODE_STARTING_ITEMS) do
 	start_inv[string.lower(k)] = v.WUNNY
 end
-local prefabs = FlattenTree(start_inv, true)
+
+prefabs = FlattenTree({ prefabs, start_inv }, true)
+
+local function SpawnWoby(inst)
+    local player_check_distance = 40
+    local attempts = 0
+
+    local max_attempts = 30
+    local x, y, z = inst.Transform:GetWorldPosition()
+
+    local woby = SpawnPrefab(TUNING.WALTER_STARTING_WOBY)
+	inst.woby = woby
+	woby:LinkToPlayer(inst)
+    inst:ListenForEvent("onremove", inst._woby_onremove, woby)
+
+    while true do
+        local offset = FindWalkableOffset(inst:GetPosition(), math.random() * PI, player_check_distance + 1, 10)
+
+        if offset then
+            local spawn_x = x + offset.x
+            local spawn_z = z + offset.z
+
+            if attempts >= max_attempts then
+                woby.Transform:SetPosition(spawn_x, y, spawn_z)
+                break
+            elseif not IsAnyPlayerInRange(spawn_x, 0, spawn_z, player_check_distance) then
+                woby.Transform:SetPosition(spawn_x, y, spawn_z)
+                break
+            else
+                attempts = attempts + 1
+            end
+        elseif attempts >= max_attempts then
+            woby.Transform:SetPosition(x, y, z)
+            break
+        else
+            attempts = attempts + 1
+        end
+    end
+
+    return woby
+end
+
+local function ResetOrStartWobyBuckTimer(inst)
+	if inst.components.timer:TimerExists("wobybuck") then
+		inst.components.timer:SetTimeLeft("wobybuck", TUNING.WALTER_WOBYBUCK_DECAY_TIME)
+	else
+		inst.components.timer:StartTimer("wobybuck", TUNING.WALTER_WOBYBUCK_DECAY_TIME)
+	end
+end
+
+local function OnTimerDone(inst, data)
+	if data and data.name == "wobybuck" then
+		inst._wobybuck_damage = 0
+	end
+end
+
+local function OnAttacked(inst, data)
+    if inst.components.rider:IsRiding() then
+        local mount = inst.components.rider:GetMount()
+        if mount:HasTag("woby") then
+			local damage = data and data.damage or TUNING.WALTER_WOBYBUCK_DAMAGE_MAX * 0.5 -- Fallback in case of mods.
+			inst._wobybuck_damage = inst._wobybuck_damage + damage
+			if inst._wobybuck_damage >= TUNING.WALTER_WOBYBUCK_DAMAGE_MAX then
+				inst.components.timer:StopTimer("wobybuck")
+				inst._wobybuck_damage = 0
+				mount.components.rideable:Buck()
+			else
+				ResetOrStartWobyBuckTimer(inst)
+			end
+        end
+    end
+end
+
+local function OnWobyTransformed(inst, woby)
+	if inst.woby ~= nil then
+		inst:RemoveEventCallback("onremove", inst._woby_onremove, inst.woby)
+	end
+
+	inst.woby = woby
+	inst:ListenForEvent("onremove", inst._woby_onremove, woby)
+end
+
+local function OnWobyRemoved(inst)
+	inst.woby = nil
+	inst._replacewobytask = inst:DoTaskInTime(1, function(i) i._replacewobytask = nil if i.woby == nil then SpawnWoby(i) end end)
+end
+
+local function OnRemoveEntity(inst)
+	-- hack to remove pets when spawned due to session state reconstruction for autosave snapshots
+	if inst.woby ~= nil and inst.woby.spawntime == GetTime() then
+		inst:RemoveEventCallback("onremove", inst._woby_onremove, inst.woby)
+		inst.woby:Remove()
+	end
+
+	if inst._story_proxy ~= nil and inst._story_proxy:IsValid() then
+		inst._story_proxy:Remove()
+	end
+end
+
+local function OnDespawn(inst)
+    if inst.woby ~= nil then
+		inst.woby:OnPlayerLinkDespawn()
+        inst.woby:PushEvent("player_despawn")
+    end
+end
+
+local function OnReroll(inst)
+    if inst.woby ~= nil then
+		inst.woby:OnPlayerLinkDespawn(true)
+    end
+end
+
 
 -- When the character is revived from human
 local function onbecamehuman(inst)
@@ -58,7 +174,7 @@ local function onbecameghost(inst)
 end
 
 -- When loading or spawning the character
-local function onload(inst)
+local function onload(inst, data)
 	inst:ListenForEvent("ms_respawnedfromghost", onbecamehuman)
 	inst:ListenForEvent("ms_becameghost", onbecameghost)
 
@@ -66,6 +182,30 @@ local function onload(inst)
 		onbecameghost(inst)
 	else
 		onbecamehuman(inst)
+	end
+
+	if data ~= nil then
+		if data.woby ~= nil then
+			inst._woby_spawntask:Cancel()
+			inst._woby_spawntask = nil
+
+			local woby = SpawnSaveRecord(data.woby)
+			inst.woby = woby
+			if woby ~= nil then
+				if inst.migrationpets ~= nil then
+					table.insert(inst.migrationpets, woby)
+				end
+				woby:LinkToPlayer(inst)
+
+				woby.AnimState:SetMultColour(0,0,0,1)
+				woby.components.colourtweener:StartTween({1,1,1,1}, 19*FRAMES)
+				local fx = SpawnPrefab(woby.spawnfx)
+				fx.entity:SetParent(woby.entity)
+
+				inst:ListenForEvent("onremove", inst._woby_onremove, woby)
+			end
+		end
+		inst._wobybuck_damage = data.buckdamage or 0
 	end
 end
 
@@ -215,6 +355,16 @@ local function OnGrowLongBeard(inst, skinname)
 end
 
 local master_postinit = function(inst)
+
+	inst.components.petleash:SetMaxPets(0) -- walter can only have Woby as a pet
+
+	inst._wobybuck_damage = 0
+	inst:ListenForEvent("timerdone", OnTimerDone)
+
+	inst._woby_spawntask = inst:DoTaskInTime(0, function(i) i._woby_spawntask = nil SpawnWoby(i) end)
+	inst._woby_onremove = function(woby) OnWobyRemoved(inst) end
+
+	inst.OnWobyTransformed = OnWobyTransformed
 
 	--beard
 	inst:AddComponent("beard")
@@ -426,6 +576,11 @@ local master_postinit = function(inst)
 
 	inst.OnLoad = onload
 	inst.OnNewSpawn = onload
+	inst.OnDespawn = OnDespawn
+    inst:ListenForEvent("ms_playerreroll", OnReroll)
+
+	inst:ListenForEvent("onremove", OnRemoveEntity)
+	inst:ListenForEvent("attacked", OnAttacked)
 
 end
 
