@@ -180,7 +180,51 @@ local function CarrotPreserverRate(inst, item)
 	return (item ~= nil and item == "carrot" or item == "coocked_carrot") and TUNING.WURT_FISH_PRESERVER_RATE or nil
 end
 
+local function OnResetBeard(inst)
+    inst.AnimState:ClearOverrideSymbol("beard")
+end
+
+local BEARD_DAYS = { 4, 8, 16 }
+local BEARD_BITS = { 1, 3,  9 }
+
+local function OnGrowShortBeard(inst, skinname)
+    if skinname == nil then
+        inst.AnimState:OverrideSymbol("beard", "beard", "beard_short")
+    else
+        inst.AnimState:OverrideSkinSymbol("beard", skinname, "beard_short" )
+    end
+    inst.components.beard.bits = BEARD_BITS[1]
+end
+
+local function OnGrowMediumBeard(inst, skinname)
+    if skinname == nil then
+        inst.AnimState:OverrideSymbol("beard", "beard", "beard_medium")
+    else
+        inst.AnimState:OverrideSkinSymbol("beard", skinname, "beard_medium" )
+    end
+    inst.components.beard.bits = BEARD_BITS[2]
+end
+
+local function OnGrowLongBeard(inst, skinname)
+    if skinname == nil then
+        inst.AnimState:OverrideSymbol("beard", "beard", "beard_long")
+    else
+        inst.AnimState:OverrideSkinSymbol("beard", skinname, "beard_long" )
+    end
+    inst.components.beard.bits = BEARD_BITS[3]
+end
+
 local master_postinit = function(inst)
+
+	--beard
+	inst:AddComponent("beard")
+    inst.components.beard.onreset = OnResetBeard
+    inst.components.beard.prize = "manrabbit_tail"
+    inst.components.beard.is_skinnable = true
+    inst.components.beard:AddCallback(BEARD_DAYS[1], OnGrowShortBeard)
+    inst.components.beard:AddCallback(BEARD_DAYS[2], OnGrowMediumBeard)
+    inst.components.beard:AddCallback(BEARD_DAYS[3], OnGrowLongBeard)
+
 
 	inst.starting_inventory = start_inv[TheNet:GetServerGameMode()] or start_inv.default
 
@@ -271,7 +315,7 @@ local master_postinit = function(inst)
     -- inst:AddTag("battlesinger")
 
 	--Wilson
-	-- inst:AddTag("bearded")
+	inst:AddTag("bearded")
 
 --TAGS COM ERRO
 	-- inst:AddTag("engineering")
