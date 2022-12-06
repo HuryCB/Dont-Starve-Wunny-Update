@@ -12,7 +12,7 @@ local prefabsItens = {
 TUNING.WUNNY_HEALTH = 115
 TUNING.WUNNY_HUNGER = 150
 TUNING.WUNNY_SANITY = 185
-
+local BEARDLORD_SANITY_THRESOLD = 0.4 -- 50 sanity
 PrefabFiles = {
 	"smallmeat",
 	"cookedsmallmeat",
@@ -23,6 +23,14 @@ PrefabFiles = {
 	"carrot",
 	"manrabbit_tail",
 	"carrot_cooked",
+}
+
+local BEARDLORD_SKINS = { 
+	"beardlord_skin",
+}
+
+local NORMAL_SKINS = { 
+	"normal_skin",
 }
 
 -- Custom starting inventory
@@ -38,6 +46,7 @@ TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
 	"manrabbit_tail",
 	"manrabbit_tail",
 	
+	-- "abigail_flower"
 }
 
 local prefabs =
@@ -213,6 +222,50 @@ end
 local common_postinit = function(inst)
 	-- Minimap icon
 	inst.MiniMapEntity:SetIcon("wunny.tex")
+	-- inst.components.skinner:SetSkinMode("wunny_beardlord_skin")
+end
+
+local function SetSkin(inst)
+	if inst.sg:HasStateTag("nomorph") or
+        inst:HasTag("playerghost") or
+        inst.components.health:IsDead() then
+        return
+    end
+	
+	-- Set skin
+	-- local s = inst.fluffstage + 1
+	-- inst.components.skinner:SetSkinMode(inst.isbeardlord and BEARDLORD_SKINS[0] or NORMAL_SKINS[1], "wilson")
+	inst.components.skinner:SetSkinMode("normal_skin", "wilson")
+end
+
+local function OnSanityDelta(inst, data)
+    if not inst.isbeardlord and data.newpercent < BEARDLORD_SANITY_THRESOLD then
+		-- Becoming beardlord
+		inst.isbeardlord = true
+		inst.components.beard.prize = "beardhair"
+		inst:AddTag("playermonster")
+		inst:AddTag("monster")
+		inst.components.skinner:SetSkinMode("beardlord_skin", "wilson")
+		-- inst.components.sanityaura.aura = -TUNING.SANITYAURA_SMALL
+		-- SetSkin(inst)		
+	elseif inst.isbeardlord and data.newpercent >= BEARDLORD_SANITY_THRESOLD then
+		-- Becoming bunny
+		inst.isbeardlord = false
+		inst.components.beard.prize = "manrabbit_tail"
+		inst:RemoveTag("playermonster")
+		inst:RemoveTag("monster")
+		-- inst.components.sanityaura.aura = 0
+		inst.components.skinner:SetSkinMode("normal_skin", "wilson")
+		-- SetSkin(inst)
+		-- Adjust stats
+		-- AdjustLowSanityStats(inst, 0)
+	end
+	
+	-- Adjust stats
+	if inst.isbeardlord then
+		-- local bonus = LOW_SANITY_BONUS_THRESHOLD - inst.components.sanity.current
+		-- AdjustLowSanityStats(inst, bonus > 0 and bonus or 0)
+	end
 end
 
 --is incave
@@ -232,7 +285,7 @@ local caveSanityfn = function(inst)
 end
 
 local surfaceSanityfn = function(inst)
-	local delta = 0
+	local delta = 0--MUDAR ISTO DEPOIS
 	if TheWorld.state.isdusk
 	then delta = -2.5 / 60
 	elseif TheWorld.state.isnight
@@ -427,7 +480,7 @@ local master_postinit = function(inst)
     inst:AddTag("self_fertilizable")
 
 	--Wortox
-	inst:AddTag("monster")
+	-- inst:AddTag("monster")
     inst:AddTag("soulstealer")
 	inst:AddTag("souleater")
 
@@ -578,6 +631,7 @@ local master_postinit = function(inst)
 	inst.OnNewSpawn = onload
 	inst.OnDespawn = OnDespawn
     inst:ListenForEvent("ms_playerreroll", OnReroll)
+	inst:ListenForEvent("sanitydelta", OnSanityDelta)
 
 	inst:ListenForEvent("onremove", OnRemoveEntity)
 	inst:ListenForEvent("attacked", OnAttacked)

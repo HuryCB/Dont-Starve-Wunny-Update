@@ -270,6 +270,23 @@ AddPrefabPostInit("rabbithole", function(inst)
     inst.components.workable:SetOnFinishCallback(dig_up)
 end)
 
+local DidSkinnerPostInit = false
+AddComponentPostInit("skinner", function(self, inst)
+	-- Only do this if we haven't done this
+	if DidSkinnerPostInit then return end
+	DidSkinnerPostInit = true
+	
+	-- Make sure skinner is loaded first before attempting this
+	local SetSkinsOnAnim_prev = GLOBAL.SetSkinsOnAnim
+	GLOBAL.SetSkinsOnAnim = function(anim_state, prefab, base_skin, clothing_names, skintype, ...)
+		if prefab == "wunny" and skintype ~= "ghost_skin" then
+			skintype = "normal_skin"
+		end
+		return SetSkinsOnAnim_prev(anim_state, prefab, base_skin, clothing_names, skintype, ...)
+	end
+	
+end)
+
 -- local containers_widgetsetup_custom = containers.widgetsetup
 
 -- AddPrefabPostInit("world_network", function(inst)
