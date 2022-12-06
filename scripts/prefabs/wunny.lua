@@ -225,6 +225,11 @@ local common_postinit = function(inst)
 	-- inst.components.skinner:SetSkinMode("wunny_beardlord_skin")
 end
 
+local function OnSave(inst, data)
+	data.woby = inst.woby ~= nil and inst.woby:GetSaveRecord() or nil
+	data.buckdamage = inst._wobybuck_damage > 0 and inst._wobybuck_damage or nil
+end
+
 local function SetSkin(inst)
 	if inst.sg:HasStateTag("nomorph") or
         inst:HasTag("playerghost") or
@@ -238,6 +243,7 @@ local function SetSkin(inst)
 	inst.components.skinner:SetSkinMode("normal_skin", "wilson")
 end
 
+
 local function OnSanityDelta(inst, data)
     if not inst.isbeardlord and data.newpercent < BEARDLORD_SANITY_THRESOLD then
 		-- Becoming beardlord
@@ -246,6 +252,9 @@ local function OnSanityDelta(inst, data)
 		inst:AddTag("playermonster")
 		inst:AddTag("monster")
 		inst.components.skinner:SetSkinMode("beardlord_skin", "wilson")
+		if inst.components.eater ~= nil then
+			inst.components.eater:SetDiet({ FOODGROUP.OMNI }, { FOODTYPE.MEAT, FOODTYPE.GOODIES })
+		end
 		-- inst.components.sanityaura.aura = -TUNING.SANITYAURA_SMALL
 		-- SetSkin(inst)		
 	elseif inst.isbeardlord and data.newpercent >= BEARDLORD_SANITY_THRESOLD then
@@ -256,6 +265,9 @@ local function OnSanityDelta(inst, data)
 		inst:RemoveTag("monster")
 		-- inst.components.sanityaura.aura = 0
 		inst.components.skinner:SetSkinMode("normal_skin", "wilson")
+		if inst.components.eater ~= nil then 
+			inst.components.eater:SetDiet({ FOODGROUP.VEGETARIAN }, { FOODGROUP.VEGETARIAN })
+		end
 		-- SetSkin(inst)
 		-- Adjust stats
 		-- AdjustLowSanityStats(inst, 0)
@@ -285,7 +297,7 @@ local caveSanityfn = function(inst)
 end
 
 local surfaceSanityfn = function(inst)
-	local delta = 0--MUDAR ISTO DEPOIS
+	local delta = 0
 	if TheWorld.state.isdusk
 	then delta = -2.5 / 60
 	elseif TheWorld.state.isnight
@@ -409,15 +421,8 @@ end
 
 local master_postinit = function(inst)
 
-	inst.components.petleash:SetMaxPets(0) -- walter can only have Woby as a pet
+	
 
-	inst._wobybuck_damage = 0
-	inst:ListenForEvent("timerdone", OnTimerDone)
-
-	inst._woby_spawntask = inst:DoTaskInTime(0, function(i) i._woby_spawntask = nil SpawnWoby(i) end)
-	inst._woby_onremove = function(woby) OnWobyRemoved(inst) end
-
-	inst.OnWobyTransformed = OnWobyTransformed
 
 	--beard
 	inst:AddComponent("beard")
@@ -626,7 +631,17 @@ local master_postinit = function(inst)
 	-- 		OnInsane(inst)
 	-- 	end
 	-- end)
+	inst.components.petleash:SetMaxPets(0) -- walter can only have Woby as a pet
 
+	inst._wobybuck_damage = 0
+	inst:ListenForEvent("timerdone", OnTimerDone)
+
+	inst._woby_spawntask = inst:DoTaskInTime(0, function(i) i._woby_spawntask = nil SpawnWoby(i) end)
+	inst._woby_onremove = function(woby) OnWobyRemoved(inst) end
+
+	inst.OnWobyTransformed = OnWobyTransformed
+
+	inst.OnSave = OnSave
 	inst.OnLoad = onload
 	inst.OnNewSpawn = onload
 	inst.OnDespawn = OnDespawn
