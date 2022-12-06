@@ -12,7 +12,7 @@ local prefabsItens = {
 TUNING.WUNNY_HEALTH = 115
 TUNING.WUNNY_HUNGER = 150
 TUNING.WUNNY_SANITY = 185
-local BEARDLORD_SANITY_THRESOLD = 0.4 -- 50 sanity
+
 PrefabFiles = {
 	"smallmeat",
 	"cookedsmallmeat",
@@ -243,7 +243,7 @@ local function SetSkin(inst)
 	inst.components.skinner:SetSkinMode("normal_skin", "wilson")
 end
 
-
+local BEARDLORD_SANITY_THRESOLD = 0.4 -- 50 sanity
 local function OnSanityDelta(inst, data)
     if not inst.isbeardlord and data.newpercent < BEARDLORD_SANITY_THRESOLD then
 		-- Becoming beardlord
@@ -254,6 +254,8 @@ local function OnSanityDelta(inst, data)
 		inst.components.skinner:SetSkinMode("beardlord_skin", "wilson")
 		if inst.components.eater ~= nil then
 			inst.components.eater:SetDiet({ FOODGROUP.OMNI }, { FOODTYPE.MEAT, FOODTYPE.GOODIES })
+			inst.components.eater:SetStrongStomach(true)
+			inst.components.eater:SetCanEatRawMeat(true)
 		end
 		-- inst.components.sanityaura.aura = -TUNING.SANITYAURA_SMALL
 		-- SetSkin(inst)		
@@ -267,6 +269,8 @@ local function OnSanityDelta(inst, data)
 		inst.components.skinner:SetSkinMode("normal_skin", "wilson")
 		if inst.components.eater ~= nil then 
 			inst.components.eater:SetDiet({ FOODGROUP.VEGETARIAN }, { FOODGROUP.VEGETARIAN })
+			inst.components.eater:SetStrongStomach(false)
+			inst.components.eater:SetCanEatRawMeat(false)
 		end
 		-- SetSkin(inst)
 		-- Adjust stats
@@ -329,7 +333,7 @@ local caveNight = function(inst)
 end
 
 local caveBehaviour = function(inst)
-	inst.components.combat.damagemultiplier = 1.1
+	inst.components.combat.damagemultiplier = 1.0
 	inst.components.sanity.custom_rate_fn = caveSanityfn
 	if TheWorld.state.iscaveday
 	then
@@ -362,7 +366,7 @@ local surfaceNight = function(inst)
 end
 
 local surfaceBehaviour = function(inst)
-	inst.components.combat.damagemultiplier = 0.9
+	inst.components.combat.damagemultiplier = 0.75
 
 	inst.components.sanity.custom_rate_fn = surfaceSanityfn
 

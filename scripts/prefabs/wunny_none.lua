@@ -2,13 +2,14 @@ local assets =
 {
 	Asset( "ANIM", "anim/wunny.zip" ),
 	Asset( "ANIM", "anim/wunny_beardlord.zip" ),
+	Asset( "ANIM", "anim/beard_monster.zip" ),
 	Asset( "ANIM", "anim/ghost_wunny_build.zip" ),
 }
 
 local skins =
 {
 	normal_skin = "wunny",
-	beardlord_skin="wunny_beardlord",
+	beardlord_skin="beard_monster",
 	ghost_skin = "ghost_wunny_build",
 }
 
