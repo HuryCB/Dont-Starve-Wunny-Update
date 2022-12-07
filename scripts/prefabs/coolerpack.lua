@@ -66,6 +66,7 @@ local function fn()
 	inst.components.equippable.equipslot = EQUIPSLOTS.BODY
 
     inst.components.equippable:SetOnEquip(onequip)
+    inst.components.equippable.dapperness = -TUNING.DAPPERNESS_TINY
     inst.components.equippable:SetOnUnequip(onunequip)
 
     inst:AddComponent("container")

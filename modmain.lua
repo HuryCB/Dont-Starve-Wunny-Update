@@ -7,6 +7,8 @@ PrefabFiles = {
     "birchnuthat",
     "bunnyback",
     "coolerpack",
+    "beardlordhat",
+    -- "beardlordback"
 }
 
 Assets = {
@@ -120,32 +122,16 @@ function params.coolerpack.itemtestfn(container, item, slot)
     return true
 end
 
--- local function update_recipe(self, ingredients, tab, level, min_spacing, nounlock, numtogive)
---     self.ingredients   = ingredients
---     self.tab           = tab
---     self.level         = level or 0
---     self.level.ANCIENT = self.level.ANCIENT or 0
---     self.level.MAGIC   = self.level.MAGIC or 0
---     self.level.SCIENCE = self.level.SCIENCE or 0
---     self.min_spacing   = min_spacing or 3.2
---     self.nounlock      = nounlock or false
---     self.numtogive     = numtogive or 1
--- end
-
-AddRecipe("coolerpack", { Ingredient("manrabbit_tail", 4), Ingredient("silk", 6), Ingredient("rope", 2) },
+AddRecipe("coolerpack", { Ingredient("manrabbit_tail", 1)--4
+-- , Ingredient("silk", 6), Ingredient("rope", 2) 
+},
     RECIPETABS.SURVIVAL
     , TECH.NONE, nil,
     nil,
     nil,
     nil,
     "wunny", "images/inventoryimages/coolerpack.xml")
--- AddRecipe("coolerpack", { Ingredient("rabbit", 1) },
---     RECIPETABS.SURVIVAL
---     , TECH.NONE, nil,
---     nil,
---     nil,
---     nil,
---     "wunny", "images/inventoryimages/coolerpack.xml")
+
 
 local containers_widgetsetup_custom = containers.widgetsetup
 local MAXITEMSLOTS = containers.MAXITEMSLOTS
@@ -218,7 +204,23 @@ rabbithole_recipe({ Ingredient("carrot", 2), Ingredient("rabbit", 2), Ingredient
 STRINGS.RECIPE_DESC.RABBITHOLE = "A new home for the rabbits."
 
 AddRecipe("birchnuthat",
-    { Ingredient("manrabbit_tail", 1), Ingredient("rope", 1) },
+    { Ingredient("manrabbit_tail", 1)
+    -- , Ingredient("rope", 1)
+ },
+    RECIPETABS.WAR,
+    TECH.NONE,
+    nil,
+    nil,
+    nil,
+    nil,
+    "wunny",
+    "images/inventoryimages/birchnuthat.xml",
+    "birchnuthat.tex")
+
+    AddRecipe("beardlordhat",
+    { Ingredient("manrabbit_tail", 1)
+    -- , Ingredient("rope", 1)
+ },
     RECIPETABS.WAR,
     TECH.NONE,
     nil,
