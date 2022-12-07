@@ -222,7 +222,6 @@ end
 local common_postinit = function(inst)
 	-- Minimap icon
 	inst.MiniMapEntity:SetIcon("wunny.tex")
-	-- inst.components.skinner:SetSkinMode("wunny_beardlord_skin")
 end
 
 local function OnSave(inst, data)
@@ -247,7 +246,10 @@ local BEARDLORD_SANITY_THRESOLD = 0.4 -- 50 sanity
 local function OnSanityDelta(inst, data)
     if not inst.isbeardlord and data.newpercent < BEARDLORD_SANITY_THRESOLD then
 		-- Becoming beardlord
+		-- inst.components.sanity.current = 0
 		inst.isbeardlord = true
+		inst.components.sanity:DoDelta(-TUNING.WUNNY_SANITY)
+		inst.components.sanity:SetPercent(0)
 		inst.components.beard.prize = "beardhair"
 		inst:AddTag("playermonster")
 		inst:AddTag("monster")
@@ -440,7 +442,7 @@ local master_postinit = function(inst)
 
 	inst.starting_inventory = start_inv[TheNet:GetServerGameMode()] or start_inv.default
 
-	inst.components.combat:SetAttackPeriod(TUNING.WILSON_ATTACK_PERIOD*90/100)
+	inst.components.combat:SetAttackPeriod(TUNING.WILSON_ATTACK_PERIOD*110/100)
 	inst.soundsname = "willow"
 	inst:AddTag("wunny")
 
