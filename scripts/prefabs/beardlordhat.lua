@@ -29,8 +29,8 @@ local function OnEquip(inst, owner, data)
     owner.AnimState:Show("HAT_HAIR")
     owner.AnimState:Hide("HAIR_NOHAT")
     owner.AnimState:Hide("HAIR")
-    owner.components.hunger:SetRate(1.1);
-
+    -- owner.components.hunger:SetRate();
+    -- owner.components.
     if owner:HasTag("player") then
         owner.AnimState:Hide("HEAD")
         if TheSim:GetGameID()=="DST" then
