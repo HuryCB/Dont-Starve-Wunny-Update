@@ -74,6 +74,7 @@ local function fn()
 
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
+    
     inst.components.equippable.walkspeedmult = TUNING.PIGGYBACK_SPEED_MULT
 
     inst:AddComponent("waterproofer")
