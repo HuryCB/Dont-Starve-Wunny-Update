@@ -46,6 +46,10 @@ TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
 	"manrabbit_tail",
 	"manrabbit_tail",
 
+	-- "bernie_inactive",
+	-- "lucy",
+	-- "spidereggsack",
+
 	-- "abigail_flower"
 }
 
@@ -248,6 +252,7 @@ local function OnSanityDelta(inst, data)
 		-- Becoming beardlord
 		-- inst.components.sanity.current = 0
 		inst.isbeardlord = true
+		inst.components.combat:SetAttackPeriod(0.5)
 		inst.components.sanity:DoDelta(-TUNING.WUNNY_SANITY)
 		inst.components.sanity:SetPercent(0)
 		inst.components.combat.damagemultiplier = 1.1
@@ -265,6 +270,7 @@ local function OnSanityDelta(inst, data)
 	elseif inst.isbeardlord and data.newpercent >= BEARDLORD_SANITY_THRESOLD then
 		-- Becoming bunny
 		inst.isbeardlord = false
+		inst.components.combat:SetAttackPeriod(TUNING.WILSON_ATTACK_PERIOD * 110 / 100)
 		if TheWorld:HasTag("cave") then
 			inst.components.combat.damagemultiplier = 0.75
 		else
@@ -344,7 +350,7 @@ local caveBehaviour = function(inst)
 	if not inst.isbearlord then
 		inst.components.combat.damagemultiplier = 0.75
 	end
-	inst.components.sanity.custom_rate_fn = caveSanityfn
+	-- inst.components.sanity.custom_rate_fn = caveSanityfn
 	if TheWorld.state.iscaveday
 	then
 		caveDay(inst)
@@ -380,7 +386,7 @@ local surfaceBehaviour = function(inst)
 		inst.components.combat.damagemultiplier = 0.5
 	end
 
-	inst.components.sanity.custom_rate_fn = surfaceSanityfn
+	-- inst.components.sanity.custom_rate_fn = surfaceSanityfn
 
 	if TheWorld.state.isday
 	then
@@ -583,7 +589,7 @@ local master_postinit = function(inst)
 	inst.components.sanity:SetMax(TUNING.WUNNY_SANITY)
 
 	-- Sanity rate
-	inst.components.sanity.night_drain_mult = 0
+	-- inst.components.sanity.night_drain_mult = 0
 
 	inst:DoPeriodicTask(.1, function()
 		local pos = Vector3(inst.Transform:GetWorldPosition())

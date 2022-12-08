@@ -122,8 +122,8 @@ function params.coolerpack.itemtestfn(container, item, slot)
     return true
 end
 
-AddRecipe("coolerpack", { Ingredient("manrabbit_tail", 1)--4
--- , Ingredient("silk", 6), Ingredient("rope", 2) 
+AddRecipe("coolerpack", { Ingredient("manrabbit_tail", 4)--4
+, Ingredient("silk", 6), Ingredient("rope", 2) 
 },
     RECIPETABS.SURVIVAL
     , TECH.NONE, nil,
@@ -203,9 +203,22 @@ rabbithouse_recipe({ Ingredient("carrot", 5), Ingredient("manrabbit_tail", 2), I
 rabbithole_recipe({ Ingredient("carrot", 2), Ingredient("rabbit", 2), Ingredient("shovel", 1) }, TECH.NONE)
 STRINGS.RECIPE_DESC.RABBITHOLE = "A new home for the rabbits."
 
+AddRecipe("lucy",
+    {Ingredient("axe", 1), Ingredient("goldenaxe", 1), Ingredient("moonglassaxe", 1)
+ },
+    RECIPETABS.WAR,
+    TECH.NONE,
+    nil,
+    nil,
+    nil,
+    nil,
+    nil,
+    nil,
+    "lucy.tex")
+
 AddRecipe("birchnuthat",
     { Ingredient("manrabbit_tail", 1)
-    -- , Ingredient("rope", 1)
+    , Ingredient("rope", 1)
  },
     RECIPETABS.WAR,
     TECH.NONE,
@@ -219,7 +232,7 @@ AddRecipe("birchnuthat",
 
     AddRecipe("beardlordhat",
     { Ingredient("manrabbit_tail", 1)
-    -- , Ingredient("rope", 1)
+    , Ingredient("rope", 1)
  },
     RECIPETABS.WAR,
     TECH.NONE,
