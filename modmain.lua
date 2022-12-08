@@ -49,6 +49,10 @@ Assets = {
 
     Asset("ATLAS", "images/inventoryimages/birchnuthat.xml"),
 
+    Asset("ATLAS", "images/inventoryimages/beardlordhat.xml"),
+
+
+
     Asset("ATLAS", "images/inventoryimages/coolerpack.xml"),
     Asset("IMAGE", "images/inventoryimages/coolerpack.tex"),
     Asset("ANIM", "anim/swap_coolerpack.zip"),
@@ -62,6 +66,7 @@ local RECIPETABS = GLOBAL.RECIPETABS
 local Ingredient = GLOBAL.Ingredient
 local TECH = GLOBAL.TECH
 
+modimport("strings.lua")
 
 local containers = require "containers"
 
@@ -130,7 +135,7 @@ AddRecipe("coolerpack", { Ingredient("manrabbit_tail", 4)--4
     nil,
     nil,
     nil,
-    "wunny", "images/inventoryimages/coolerpack.xml")
+    nil, "images/inventoryimages/coolerpack.xml")
 
 
 local containers_widgetsetup_custom = containers.widgetsetup
@@ -226,13 +231,13 @@ AddRecipe("birchnuthat",
     nil,
     nil,
     nil,
-    "wunny",
+    nil,
     "images/inventoryimages/birchnuthat.xml",
     "birchnuthat.tex")
 
     AddRecipe("beardlordhat",
     { Ingredient("manrabbit_tail", 1)
-    , Ingredient("rope", 1)
+    -- , Ingredient("rope", 1)
  },
     RECIPETABS.WAR,
     TECH.NONE,
@@ -240,9 +245,9 @@ AddRecipe("birchnuthat",
     nil,
     nil,
     nil,
-    "wunny",
-    "images/inventoryimages/birchnuthat.xml",
-    "birchnuthat.tex")
+    nil,
+    "images/inventoryimages/beardlordhat.xml",
+    "beardlordhat.tex")
 
 -- AddRecipe("bunnyback", { Ingredient("pigskin", 4), Ingredient("silk", 6), Ingredient("rope", 2) }, TECH.NONE)
 

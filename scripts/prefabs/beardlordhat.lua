@@ -1,10 +1,10 @@
 local assets =
 { 
     Asset("ANIM", "anim/beardlordhat.zip"),
-    Asset("ANIM", "anim/birchnuthat_swap.zip"), 
+    Asset("ANIM", "anim/beardlordhat_swap.zip"), 
 
-    Asset("ATLAS", "images/inventoryimages/birchnuthat.xml"),
-    Asset("IMAGE", "images/inventoryimages/birchnuthat.tex"),
+    Asset("ATLAS", "images/inventoryimages/beardlordhat.xml"),
+    Asset("IMAGE", "images/inventoryimages/beardlordhat.tex"),
 }
 
 local prefabs = 
@@ -104,8 +104,8 @@ local function fn()
     inst:AddComponent("tradable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.imagename = "birchnuthat"
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/birchnuthat.xml"
+    inst.components.inventoryitem.imagename = "beardlordhat"
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/beardlordhat.xml"
     
 	
     inst:AddComponent("equippable")
