@@ -127,8 +127,8 @@ function params.coolerpack.itemtestfn(container, item, slot)
     return true
 end
 
-AddRecipe("coolerpack", { Ingredient("manrabbit_tail", 4)--4
-, Ingredient("silk", 6), Ingredient("rope", 2) 
+AddRecipe("coolerpack", { Ingredient("manrabbit_tail", 4) --4
+    , Ingredient("silk", 6), Ingredient("rope", 2)
 },
     RECIPETABS.SURVIVAL
     , TECH.NONE, nil,
@@ -158,11 +158,11 @@ AddPrefabPostInit("world_network", function(inst)
 end)
 
 -- The character select screen lines
-STRINGS.CHARACTER_TITLES.wunny = "The Bunny man"
+STRINGS.CHARACTER_TITLES.wunny = "The Bunnylord"
 STRINGS.CHARACTER_NAMES.wunny = "Wunny MODED"
-STRINGS.CHARACTER_DESCRIPTIONS.wunny = "*Perk 1\n*Perk 2\n*Perk 3"
+STRINGS.CHARACTER_DESCRIPTIONS.wunny = "*Transforms into a beardlord\n*Befriends bunnyman\n*Is a Vegetarian\n*Has some perks of others survivors... you will have to find out"
 STRINGS.CHARACTER_QUOTES.wunny = "\"Quote\""
-STRINGS.CHARACTER_SURVIVABILITY.wunny = "Slim"
+STRINGS.CHARACTER_SURVIVABILITY.wunny = "Grim"
 
 --variables
 TUNING.WUNNY_SPEED = 6
@@ -209,22 +209,22 @@ rabbithole_recipe({ Ingredient("carrot", 2), Ingredient("rabbit", 2), Ingredient
 STRINGS.RECIPE_DESC.RABBITHOLE = "A new home for the rabbits."
 
 AddRecipe("lucy",
-    {Ingredient("axe", 1), Ingredient("goldenaxe", 1), Ingredient("moonglassaxe", 1)
- },
+    { Ingredient("axe", 1), Ingredient("goldenaxe", 1), Ingredient("moonglassaxe", 1)
+    },
     RECIPETABS.WAR,
     TECH.NONE,
     nil,
     nil,
     nil,
     nil,
-    nil,
+    "wunny",
     nil,
     "lucy.tex")
 
 AddRecipe("birchnuthat",
     { Ingredient("manrabbit_tail", 1)
-    , Ingredient("rope", 1)
- },
+        , Ingredient("rope", 1)
+    },
     RECIPETABS.WAR,
     TECH.NONE,
     nil,
@@ -235,10 +235,11 @@ AddRecipe("birchnuthat",
     "images/inventoryimages/birchnuthat.xml",
     "birchnuthat.tex")
 
-    AddRecipe("beardlordhat",
+AddRecipe("beardlordhat",
     { Ingredient("manrabbit_tail", 1)
-    -- , Ingredient("rope", 1)
- },
+        , Ingredient("rope", 1)
+        , Ingredient("beardhair", 1)
+    },
     RECIPETABS.WAR,
     TECH.NONE,
     nil,
@@ -292,19 +293,19 @@ end)
 
 local DidSkinnerPostInit = false
 AddComponentPostInit("skinner", function(self, inst)
-	-- Only do this if we haven't done this
-	if DidSkinnerPostInit then return end
-	DidSkinnerPostInit = true
-	
-	-- Make sure skinner is loaded first before attempting this
-	local SetSkinsOnAnim_prev = GLOBAL.SetSkinsOnAnim
-	GLOBAL.SetSkinsOnAnim = function(anim_state, prefab, base_skin, clothing_names, skintype, ...)
-		if prefab == "wunny" and skintype ~= "ghost_skin" then
-			skintype = "normal_skin"
-		end
-		return SetSkinsOnAnim_prev(anim_state, prefab, base_skin, clothing_names, skintype, ...)
-	end
-	
+    -- Only do this if we haven't done this
+    if DidSkinnerPostInit then return end
+    DidSkinnerPostInit = true
+
+    -- Make sure skinner is loaded first before attempting this
+    local SetSkinsOnAnim_prev = GLOBAL.SetSkinsOnAnim
+    GLOBAL.SetSkinsOnAnim = function(anim_state, prefab, base_skin, clothing_names, skintype, ...)
+        if prefab == "wunny" and skintype ~= "ghost_skin" then
+            skintype = "normal_skin"
+        end
+        return SetSkinsOnAnim_prev(anim_state, prefab, base_skin, clothing_names, skintype, ...)
+    end
+
 end)
 
 -- local containers_widgetsetup_custom = containers.widgetsetup

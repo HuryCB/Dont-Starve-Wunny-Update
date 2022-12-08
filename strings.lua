@@ -9,6 +9,15 @@ if not STRINGS.CHARACTERS.WATHGRITHR then
 end
 
 STRINGS.NAMES.BEARDLORDHAT = "Beardlord hat"
+STRINGS.RECIPE_DESC.BEARDLORDHAT = "550 hp, 85% dmg reduction, loses small sanity on use, and gives insulation"
+
+STRINGS.NAMES.COOLERPACK = "Bunnyman backpack"
+STRINGS.RECIPE_DESC.COOLERPACK = "Does not slow you down, but makes you lose sanity"
+
+STRINGS.NAMES.BIRCHNUTHAT = "Bunnyman hat"
+STRINGS.RECIPE_DESC.BIRCHNUTHAT = "Gives insulation instead of water protection"
+
+-- TRINGS.RECIPE_DESC.LUCY = "Woodie's axe for Wunny"
 
 -- STRINGS.NAMES.CACTUSMACE = "Cactus Bat"
 -- STRINGS.RECIPE_DESC.CACTUSMACE = "It will hurt them more."
