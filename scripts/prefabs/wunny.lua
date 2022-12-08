@@ -179,7 +179,7 @@ end
 
 local function onbecameghost(inst)
 	-- Remove speed modifier when becoming a ghost
-	inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "wunny_speed_mod")
+	-- inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "wunny_speed_mod")
 end
 
 -- When loading or spawning the character
@@ -671,7 +671,7 @@ local master_postinit = function(inst)
 	local GetDryingRate_prev = moisture.GetDryingRate
 	function moisture:GetDryingRate(moisturerate, ...)
 		local rate = GetDryingRate_prev(self, moisturerate, ...)
-		rate = rate * (1 - (inst.fluffstage * 0.20))
+		rate = rate * (1 - (1 * 0.20))
 		return rate
 	end
 
