@@ -1,4 +1,5 @@
 local MakePlayerCharacter = require "prefabs/player_common"
+local WX78MoistureMeter = require("widgets/wx78moisturemeter")
 
 local assets = {
 	Asset("SCRIPT", "scripts/prefabs/player_common.lua"),
@@ -9,9 +10,24 @@ local prefabsItens = {
 	"carrot"
 }
 
+local WX78ModuleDefinitionFile = require("wx78_moduledefs")
+local GetWX78ModuleByNetID = WX78ModuleDefinitionFile.GetModuleDefinitionFromNetID
+
+local WX78ModuleDefinitions = WX78ModuleDefinitionFile.module_definitions
+-- for mdindex, module_def in ipairs(WX78ModuleDefinitions) do
+--     table.insert(prefabs, "wx78module_"..module_def.name)
+-- end
+
 TUNING.WUNNY_HEALTH = 115
 TUNING.WUNNY_HUNGER = 175
 TUNING.WUNNY_SANITY = 185
+
+
+local CHARGEREGEN_TIMERNAME = "chargeregenupdate"
+local MOISTURETRACK_TIMERNAME = "moisturetrackingupdate"
+local HUNGERDRAIN_TIMERNAME = "hungerdraintick"
+local HEATSTEAM_TIMERNAME = "heatsteam_tick"
+
 
 PrefabFiles = {
 	"smallmeat",
@@ -33,6 +49,117 @@ local NORMAL_SKINS = {
 	"normal_skin",
 }
 
+
+local function CLIENT_GetEnergyLevel(inst)
+    if inst.components.upgrademoduleowner ~= nil then
+        return inst.components.upgrademoduleowner.charge_level
+    elseif inst.player_classified ~= nil then
+        return inst.player_classified.currentenergylevel:value()
+    else
+        return 0
+    end
+end
+
+
+local function get_plugged_module_indexes(inst)
+    local upgrademodule_defindexes = {}
+    for _, module in ipairs(inst.components.upgrademoduleowner.modules) do
+        table.insert(upgrademodule_defindexes, module._netid)
+    end
+
+    -- Fill out the rest of the table with 0s
+    while #upgrademodule_defindexes < TUNING.WX78_MAXELECTRICCHARGE do
+        table.insert(upgrademodule_defindexes, 0)
+    end
+
+    return upgrademodule_defindexes
+end
+
+
+local DEFAULT_ZEROS_MODULEDATA = {0, 0, 0, 0, 0, 0}
+local function CLIENT_GetModulesData(inst)
+    local data = nil
+
+    if inst.components.upgrademoduleowner ~= nil then
+        data = get_plugged_module_indexes(inst)
+    elseif inst.player_classified ~= nil then
+        data = {}
+        for _, module_netvar in ipairs(inst.player_classified.upgrademodules) do
+            table.insert(data, module_netvar:value())
+        end
+    else
+        data = DEFAULT_ZEROS_MODULEDATA
+    end
+
+    return data
+end
+
+
+local function CLIENT_CanUpgradeWithModule(inst, module_prefab)
+    if module_prefab == nil then
+        return false
+    end
+
+    local slots_inuse = (module_prefab._slots or 0)
+
+    if inst.components.upgrademoduleowner ~= nil then
+        for _, module in ipairs(inst.components.upgrademoduleowner.modules) do
+            local modslots = (module.components.upgrademodule ~= nil and module.components.upgrademodule.slots)
+                or 0
+            slots_inuse = slots_inuse + modslots
+        end
+    elseif inst.player_classified ~= nil then
+        for _, module_netvar in ipairs(inst.player_classified.upgrademodules) do
+            local module_definition = GetWX78ModuleByNetID(module_netvar:value())
+            if module_definition ~= nil then
+                slots_inuse = slots_inuse + module_definition.slots
+            end
+        end
+    else
+        return false
+    end
+
+    return (TUNING.WX78_MAXELECTRICCHARGE - slots_inuse) >= 0
+end
+
+local function CLIENT_CanRemoveModules(inst)
+    if inst.components.upgrademoduleowner ~= nil then
+        return inst.components.upgrademoduleowner:NumModules() > 0
+    elseif inst.player_classified ~= nil then
+        -- Assume that, if the first module slot netvar is 0, we have no modules.
+        return inst.player_classified.upgrademodules[1]:value() ~= 0
+    else
+        return false
+    end
+end
+
+
+local function do_chargeregen_update(inst)
+    if not inst.components.upgrademoduleowner:ChargeIsMaxed() then
+        inst.components.upgrademoduleowner:AddCharge(1)
+    end
+end
+
+local function OnUpgradeModuleChargeChanged(inst, data)
+    -- The regen timer gets reset every time the energy level changes, whether it was by the regen timer or not.
+    inst.components.timer:StopTimer(CHARGEREGEN_TIMERNAME)
+    
+    if not inst.components.upgrademoduleowner:ChargeIsMaxed() then
+        inst.components.timer:StartTimer(CHARGEREGEN_TIMERNAME, TUNING.WX78_CHARGE_REGENTIME)
+
+        -- If we just got put to 0 from a non-0 value, tell the player.
+        if data.old_level ~= 0 and data.new_level == 0 then
+            inst.components.talker:Say(GetString(inst, "ANNOUNCE_DISCHARGE"))
+        end
+    else
+        -- If our charge is maxed (this is a post-assignment callback), and our previous charge was not,
+        -- we just hit the max, so tell the player.
+        if data.old_level ~= inst.components.upgrademoduleowner.max_charge then
+            inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE"))
+        end
+    end
+end
+
 -- Custom starting inventory
 TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
 	"rabbit",
@@ -45,6 +172,7 @@ TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
 
 	"manrabbit_tail",
 	"manrabbit_tail",
+	"wx78module_maxhealth",
 
 	-- "bernie_inactive",
 	-- "lucy",
@@ -220,17 +348,202 @@ local function onload(inst, data)
 		end
 		inst._wobybuck_damage = data.buckdamage or 0
 	end
+	if data ~= nil then
+        if data.gears_eaten ~= nil then
+            inst._gears_eaten = data.gears_eaten
+        end
+
+        -- Compatability with pre-refresh WX saves
+        if data.level ~= nil then
+            inst._gears_eaten = (inst._gears_eaten or 0) + data.level
+        end
+
+        -- WX-78 needs to manually save/load health, hunger, and sanity, in case their maxes
+        -- were modified by upgrade circuits, because those components only save current,
+        -- and that gets overridden by the default max values during construction.
+        -- So, if we wait to re-apply them in our OnLoad, we will have them properly
+        -- (as entity OnLoad runs after component OnLoads)
+        if data._wx78_health then
+            inst.components.health:SetCurrentHealth(data._wx78_health)
+        end
+
+        if data._wx78_sanity then
+            inst.components.sanity.current = data._wx78_sanity
+        end
+
+        if data._wx78_hunger then
+            inst.components.hunger.current = data._wx78_hunger
+        end
+    end
+end
+
+local function OnTimerFinished(inst, data)
+    if data.name == HUNGERDRAIN_TIMERNAME then
+        on_hunger_drain_tick(inst)
+    elseif data.name == MOISTURETRACK_TIMERNAME then
+        moisturetrack_update(inst)
+    elseif data.name == CHARGEREGEN_TIMERNAME then
+        do_chargeregen_update(inst)
+    elseif data.name == HEATSTEAM_TIMERNAME then
+        do_steam_fx(inst)
+    end
 end
 
 -- This initializes for both the server and client. Tags can be added here.
 local common_postinit = function(inst)
 	-- Minimap icon
 	inst.MiniMapEntity:SetIcon("wunny.tex")
+
+  
+      
+    inst:AddTag("batteryuser")          -- from batteryuser component
+    inst:AddTag("chessfriend")
+    inst:AddTag("HASHEATER")            -- from heater component
+    inst:AddTag("soulless")
+    
+
+	inst.GetEnergyLevel = CLIENT_GetEnergyLevel
+    inst.GetModulesData = CLIENT_GetModulesData
+	inst.CanUpgradeWithModule = CLIENT_CanUpgradeWithModule
+	inst.CanRemoveModules = CLIENT_CanRemoveModules
 end
 
 local function OnSave(inst, data)
 	data.woby = inst.woby ~= nil and inst.woby:GetSaveRecord() or nil
 	data.buckdamage = inst._wobybuck_damage > 0 and inst._wobybuck_damage or nil
+
+	data.gears_eaten = inst._gears_eaten
+
+    -- WX-78 needs to manually save/load health, hunger, and sanity, in case their maxes
+    -- were modified by upgrade circuits, because those components only save current,
+    -- and that gets overridden by the default max values during construction.
+    -- So, if we wait to re-apply them in our OnLoad, we will have them properly
+    -- (as entity OnLoad runs after component OnLoads)
+    data._wx78_health = inst.components.health.currenthealth
+    data._wx78_sanity = inst.components.sanity.current
+    data._wx78_hunger = inst.components.hunger.current
+end
+
+local HEATSTEAM_TICKRATE = 5
+local function do_steam_fx(inst)
+    local steam_fx = SpawnPrefab("wx78_heat_steam")
+    steam_fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    steam_fx.Transform:SetRotation(inst.Transform:GetRotation())
+
+    inst.components.timer:StartTimer(HEATSTEAM_TIMERNAME, HEATSTEAM_TICKRATE)
+end
+
+local function AddTemperatureModuleLeaning(inst, leaning_change)
+    inst._temperature_modulelean = inst._temperature_modulelean + leaning_change
+
+    if inst._temperature_modulelean > 0 then
+        inst.components.heater:SetThermics(true, false)
+
+        if not inst.components.timer:TimerExists(HEATSTEAM_TIMERNAME) then
+            inst.components.timer:StartTimer(HEATSTEAM_TIMERNAME, HEATSTEAM_TICKRATE, false, 0.5)
+        end
+
+        inst.components.frostybreather:ForceBreathOff()
+    elseif inst._temperature_modulelean == 0 then
+        inst.components.heater:SetThermics(false, false)
+
+        inst.components.timer:StopTimer(HEATSTEAM_TIMERNAME)
+
+        inst.components.frostybreather:ForceBreathOff()
+    else
+        inst.components.heater:SetThermics(false, true)
+
+        inst.components.timer:StopTimer(HEATSTEAM_TIMERNAME)
+
+        inst.components.frostybreather:ForceBreathOn()
+    end
+end
+
+
+local function OnUpgradeModuleAdded(inst, moduleent)
+    local slots_for_module = moduleent.components.upgrademodule.slots
+    inst._chip_inuse = inst._chip_inuse + slots_for_module
+
+    local upgrademodule_defindexes = get_plugged_module_indexes(inst)
+
+    inst:PushEvent("upgrademodulesdirty", upgrademodule_defindexes)
+    if inst.player_classified ~= nil then
+        local newmodule_index = inst.components.upgrademoduleowner:NumModules()
+        inst.player_classified.upgrademodules[newmodule_index]:set(moduleent._netid or 0)
+    end
+end
+
+local function OnUpgradeModuleRemoved(inst, moduleent)
+    inst._chip_inuse = inst._chip_inuse - moduleent.components.upgrademodule.slots
+
+    -- If the module has 1 use left, it's about to be destroyed, so don't return it to the inventory.
+    if moduleent.components.finiteuses == nil or moduleent.components.finiteuses:GetUses() > 1 then
+        if moduleent.components.inventoryitem ~= nil and inst.components.inventory ~= nil then
+            inst.components.inventory:GiveItem(moduleent, nil, inst:GetPosition())
+        end
+    end
+end
+
+local function OnOneUpgradeModulePopped(inst, moduleent)
+    inst:PushEvent("upgrademodulesdirty", get_plugged_module_indexes(inst))
+    if inst.player_classified ~= nil then
+        -- This is a callback of the remove, so our current NumModules should be
+        -- 1 lower than the index of the module that was just removed.
+        local top_module_index = inst.components.upgrademoduleowner:NumModules() + 1
+        inst.player_classified.upgrademodules[top_module_index]:set(0)
+    end
+end
+
+local function OnAllUpgradeModulesRemoved(inst)
+    SpawnPrefab("wx78_big_spark"):AlignToTarget(inst)
+
+    inst:PushEvent("upgrademoduleowner_popallmodules")
+
+    if inst.player_classified ~= nil then
+        inst.player_classified.upgrademodules[1]:set(0)
+        inst.player_classified.upgrademodules[2]:set(0)
+        inst.player_classified.upgrademodules[3]:set(0)
+        inst.player_classified.upgrademodules[4]:set(0)
+        inst.player_classified.upgrademodules[5]:set(0)
+        inst.player_classified.upgrademodules[6]:set(0)
+    end
+end
+
+
+local function CanUseUpgradeModule(inst, moduleent)
+    if (TUNING.WX78_MAXELECTRICCHARGE - inst._chip_inuse) < moduleent.components.upgrademodule.slots then
+        return false, "NOTENOUGHSLOTS"
+    else
+        return true
+    end
+end
+
+local function OnChargeFromBattery(inst, battery)
+    if inst.components.upgrademoduleowner:ChargeIsMaxed() then
+        return false, "CHARGE_FULL"
+    end
+
+    inst.components.health:DoDelta(TUNING.HEALING_SMALL, false, "lightning")
+    inst.components.sanity:DoDelta(-TUNING.SANITY_SMALL)
+
+    inst.components.upgrademoduleowner:AddCharge(1)
+
+    if not inst.components.inventory:IsInsulated() then
+        inst.sg:GoToState("electrocute")
+    end
+
+    return true
+end
+
+local function ModuleBasedPreserverRateFn(inst, item)
+    return (inst._temperature_modulelean > 0 and TUNING.WX78_PERISH_HOTRATE)
+        or (inst._temperature_modulelean < 0 and TUNING.WX78_PERISH_COLDRATE)
+        or 1
+end
+
+
+local function GetThermicTemperatureFn(inst, observer)
+    return inst._temperature_modulelean * TUNING.WX78_HEATERTEMPPERMODULE
 end
 
 local function SetSkin(inst)
@@ -444,7 +757,11 @@ end
 local master_postinit = function(inst)
 
 
-
+	inst._gears_eaten = 0
+    inst._chip_inuse = 0
+    inst._moisture_steps = 0
+    inst._temperature_modulelean = 0        -- Positive if "hot", negative if "cold"; see wx78_moduledefs
+    inst._num_frostybreath_modules = 0   
 
 	--beard
 	inst:AddComponent("beard")
@@ -547,6 +864,10 @@ local master_postinit = function(inst)
 	--Wilson
 	inst:AddTag("bearded")
 
+  -- For UI save/loading
+
+
+  inst:AddComponent("upgrademoduleowner")
 	--TAGS COM ERRO
 	-- inst:AddTag("engineering")
 	-- inst:AddTag("handyperson")
@@ -663,6 +984,8 @@ local master_postinit = function(inst)
 
 	inst.OnWobyTransformed = OnWobyTransformed
 
+	inst:ListenForEvent("timerdone", OnTimerFinished)
+
 	inst.OnSave = OnSave
 	inst.OnLoad = onload
 	inst.OnNewSpawn = onload
@@ -681,6 +1004,26 @@ local master_postinit = function(inst)
 		return rate
 	end
 
+	inst:AddTag("upgrademoduleowner") 
+	inst.components.upgrademoduleowner.onmoduleadded = OnUpgradeModuleAdded
+    inst.components.upgrademoduleowner.onmoduleremoved = OnUpgradeModuleRemoved
+    inst.components.upgrademoduleowner.ononemodulepopped = OnOneUpgradeModulePopped
+    inst.components.upgrademoduleowner.onallmodulespopped = OnAllUpgradeModulesRemoved
+    inst.components.upgrademoduleowner.canupgradefn = CanUseUpgradeModule
+    inst.components.upgrademoduleowner:SetChargeLevel(3)
+
+    inst:ListenForEvent("energylevelupdate", OnUpgradeModuleChargeChanged)
+
+	inst:AddComponent("dataanalyzer")
+	inst.AddTemperatureModuleLeaning = AddTemperatureModuleLeaning
+    inst.components.dataanalyzer:StartDataRegen(TUNING.SEG_TIME)
+	inst:AddComponent("batteryuser")
+    inst.components.batteryuser.onbatteryused = OnChargeFromBattery
+	inst:AddComponent("preserver")
+    inst.components.preserver:SetPerishRateMultiplier(ModuleBasedPreserverRateFn)
+	inst:AddComponent("heater")
+    inst.components.heater:SetThermics(false, false)
+    inst.components.heater.heatfn = GetThermicTemperatureFn
 end
 
 return MakePlayerCharacter("wunny", prefabs, assets, common_postinit, master_postinit, prefabs, prefabsItens)
