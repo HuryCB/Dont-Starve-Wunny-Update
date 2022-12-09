@@ -256,6 +256,9 @@ local function OnSanityDelta(inst, data)
 		inst.components.sanity:DoDelta(-TUNING.WUNNY_SANITY)
 		inst.components.sanity:SetPercent(0)
 		inst.components.combat.damagemultiplier = 1.1
+		inst.components.health:SetAbsorptionAmount(TUNING.WATHGRITHR_ABSORPTION)
+		TUNING.WUNNY_HUNGER_RATE = 1.2
+		
 		inst.components.beard.prize = "beardhair"
 		inst:AddTag("playermonster")
 		inst:AddTag("monster")
@@ -270,9 +273,11 @@ local function OnSanityDelta(inst, data)
 	elseif inst.isbeardlord and data.newpercent >= BEARDLORD_SANITY_THRESOLD then
 		-- Becoming bunny
 		inst.isbeardlord = false
+		inst.components.health:SetAbsorptionAmount(0)
+		TUNING.WUNNY_HUNGER_RATE = 1
 		inst.components.combat:SetAttackPeriod(TUNING.WILSON_ATTACK_PERIOD * 110 / 100)
 		if TheWorld:HasTag("cave") then
-			inst.components.combat.damagemultiplier = 0.75
+			inst.components.combat.damagemultiplier = 0.5
 		else
 			inst.components.combat.damagemultiplier = 0.5
 		end
@@ -348,7 +353,7 @@ end
 
 local caveBehaviour = function(inst)
 	if not inst.isbearlord then
-		inst.components.combat.damagemultiplier = 0.75
+		inst.components.combat.damagemultiplier = 0.5
 	end
 	-- inst.components.sanity.custom_rate_fn = caveSanityfn
 	if TheWorld.state.iscaveday
@@ -577,9 +582,9 @@ local master_postinit = function(inst)
 
 	inst:ListenForEvent("locomote", function()
 		if inst.sg ~= nil and inst.sg:HasStateTag("moving") then
-			inst.components.hunger:SetRate(TUNING.WUNNY_RUNNING_HUNGER_RATE * TUNING.WILSON_HUNGER_RATE) --1.20
+			inst.components.hunger:SetRate(TUNING.WUNNY_RUNNING_HUNGER_RATE * TUNING.WUNNY_HUNGER_RATE) --1.20
 		else
-			inst.components.hunger:SetRate(1 * TUNING.WILSON_HUNGER_RATE)
+			inst.components.hunger:SetRate(1 * TUNING.WUNNY_HUNGER_RATE)
 		end
 	end)
 
