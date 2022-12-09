@@ -9,6 +9,7 @@ PrefabFiles = {
     "coolerpack",
     "beardlordhat",
     "bunnybat",
+    "bunnyhouse",
     -- "beardlordback"
 }
 
@@ -53,6 +54,8 @@ Assets = {
     Asset("ATLAS", "images/inventoryimages/bunnybat.xml"),
 
     Asset("ATLAS", "images/inventoryimages/beardlordhat.xml"),
+
+    Asset("ATLAS", "images/inventoryimages/bunnyhouse.xml"),
     -- Asset("ATLAS", "images/inventoryimages/beardlordhat.tex"),
 
 
@@ -171,7 +174,7 @@ STRINGS.CHARACTER_SURVIVABILITY.wunny = "Grim"
 --variables
 TUNING.WUNNY_SPEED = 6
 TUNING.WUNNY_RUNNING_HUNGER_RATE = 1
-TUNING.WUNNY_HUNGER_RATE = 1
+TUNING.WUNNY_HUNGER_RATE = TUNING.WILSON_HUNGER_RATE
 -- WUNNY_RUNNING_HUNGER_RATETUNNIN.WUNNY_IDLE_HUNGER_RATE = 1
 
 
@@ -204,11 +207,17 @@ local function rabbithole_recipe(ingredients, level)
 end
 
 local function rabbithouse_recipe(ingredientes, level)
-    AddRecipe("rabbithouse", ingredientes, RECIPETABS.SURVIVAL, level,
-        "rabbithouse_placer", nil, nil, nil, "wunny")
+    AddRecipe("bunnyhouse", ingredientes, RECIPETABS.SURVIVAL, level,
+        "rabbithouse_placer", nil, nil, nil, "wunny","images/inventoryimages/bunnyhouse.xml",
+        "bunnyhouse.tex")
 end
 
-rabbithouse_recipe({ Ingredient("carrot", 5), Ingredient("manrabbit_tail", 2), Ingredient("boards", 2) }, TECH.NONE)
+rabbithouse_recipe(
+    {
+        --  Ingredient("carrot", 5),
+     Ingredient("manrabbit_tail", 2)
+    --  , Ingredient("boards", 2) 
+}, TECH.NONE)
 
 rabbithole_recipe({ Ingredient("carrot", 2), Ingredient("rabbit", 2), Ingredient("shovel", 1) }, TECH.NONE)
 STRINGS.RECIPE_DESC.RABBITHOLE = "A new home for the rabbits."

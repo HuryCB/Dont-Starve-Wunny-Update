@@ -256,7 +256,7 @@ local function OnSanityDelta(inst, data)
 		inst.components.sanity:DoDelta(-TUNING.WUNNY_SANITY)
 		inst.components.sanity:SetPercent(0)
 		inst.components.combat.damagemultiplier = 1.1
-		inst.components.health:SetAbsorptionAmount(TUNING.WATHGRITHR_ABSORPTION)
+		inst.components.health:SetAbsorptionAmount(0.1)
 		TUNING.WUNNY_HUNGER_RATE = 1.2
 		
 		inst.components.beard.prize = "beardhair"
@@ -277,7 +277,7 @@ local function OnSanityDelta(inst, data)
 		
 		inst.components.health:SetAbsorptionAmount(0)
 		TUNING.WUNNY_HUNGER_RATE = 1
-		inst.components.combat:SetAttackPeriod(TUNING.WILSON_ATTACK_PERIOD * 110 / 100)
+		inst.components.combat:SetAttackPeriod(TUNING.WILSON_ATTACK_PERIOD)
 		if TheWorld:HasTag("cave") then
 			inst.components.combat.damagemultiplier = 0.5
 		else
@@ -584,9 +584,9 @@ local master_postinit = function(inst)
 
 	inst:ListenForEvent("locomote", function()
 		if inst.sg ~= nil and inst.sg:HasStateTag("moving") then
-			inst.components.hunger:SetRate(TUNING.WUNNY_RUNNING_HUNGER_RATE * TUNING.WUNNY_HUNGER_RATE) --1.20
+			inst.components.hunger:SetRate(TUNING.WUNNY_RUNNING_HUNGER_RATE * TUNING.WILSON_HUNGER_RATE) --1.20
 		else
-			inst.components.hunger:SetRate(1 * TUNING.WUNNY_HUNGER_RATE)
+			inst.components.hunger:SetRate(1 * TUNING.WILSON_HUNGER_RATE)
 		end
 	end)
 

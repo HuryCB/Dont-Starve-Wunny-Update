@@ -17,6 +17,11 @@ STRINGS.RECIPE_DESC.COOLERPACK = "Does not slow you down, but makes you lose san
 STRINGS.NAMES.BIRCHNUTHAT = "Bunnyman hat"
 STRINGS.RECIPE_DESC.BIRCHNUTHAT = "Gives insulation instead of water protection"
 
+STRINGS.NAMES.BUNNYBAT = "Bunny bat"
+STRINGS.RECIPE_DESC.BUNNYBAT = "Just like ham bat"
+
+STRINGS.NAMES.BUNNYHOUSE = "Bunny bat"
+STRINGS.RECIPE_DESC.BUNNYHOUSE = "Just like ham bat"
 -- TRINGS.RECIPE_DESC.LUCY = "Woodie's axe for Wunny"
 
 -- STRINGS.NAMES.CACTUSMACE = "Cactus Bat"
