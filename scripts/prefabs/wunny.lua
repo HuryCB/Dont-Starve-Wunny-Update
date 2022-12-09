@@ -246,12 +246,12 @@ local function SetSkin(inst)
 	inst.components.skinner:SetSkinMode("normal_skin", "wilson")
 end
 
-local BEARDLORD_SANITY_THRESOLD = 0.4 -- 50 sanity
 local function OnSanityDelta(inst, data)
 	if not inst.isbeardlord and data.newpercent < BEARDLORD_SANITY_THRESOLD then
 		-- Becoming beardlord
 		-- inst.components.sanity.current = 0
 		inst.isbeardlord = true
+		inst.components.sanity.dapperness = -TUNING.DAPPERNESS_TINY
 		inst.components.combat:SetAttackPeriod(0.5)
 		inst.components.sanity:DoDelta(-TUNING.WUNNY_SANITY)
 		inst.components.sanity:SetPercent(0)
@@ -273,6 +273,8 @@ local function OnSanityDelta(inst, data)
 	elseif inst.isbeardlord and data.newpercent >= BEARDLORD_SANITY_THRESOLD then
 		-- Becoming bunny
 		inst.isbeardlord = false
+		inst.components.sanity.dapperness = 0
+		
 		inst.components.health:SetAbsorptionAmount(0)
 		TUNING.WUNNY_HUNGER_RATE = 1
 		inst.components.combat:SetAttackPeriod(TUNING.WILSON_ATTACK_PERIOD * 110 / 100)
