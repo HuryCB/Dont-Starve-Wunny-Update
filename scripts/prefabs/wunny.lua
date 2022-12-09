@@ -584,9 +584,9 @@ local master_postinit = function(inst)
 
 	inst:ListenForEvent("locomote", function()
 		if inst.sg ~= nil and inst.sg:HasStateTag("moving") then
-			inst.components.hunger:SetRate(TUNING.WUNNY_RUNNING_HUNGER_RATE * TUNING.WILSON_HUNGER_RATE) --1.20
+			inst.components.hunger:SetRate(TUNING.WUNNY_RUNNING_HUNGER_RATE * TUNING.WILSON_HUNGER_RATE * TUNING.WUNNY_HUNGER_RATE) --1.20
 		else
-			inst.components.hunger:SetRate(1 * TUNING.WILSON_HUNGER_RATE)
+			inst.components.hunger:SetRate(1 * TUNING.WILSON_HUNGER_RATE * TUNING.WUNNY_HUNGER_RATE)
 		end
 	end)
 
