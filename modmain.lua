@@ -8,7 +8,7 @@ PrefabFiles = {
     "bunnyback",
     "coolerpack",
     "beardlordhat",
-    "hambat",
+    "bunnybat",
     -- "beardlordback"
 }
 
@@ -49,9 +49,11 @@ Assets = {
     Asset("IMAGE", "images/inventoryimages/rabbithole.tex"),
 
     Asset("ATLAS", "images/inventoryimages/birchnuthat.xml"),
+
     Asset("ATLAS", "images/inventoryimages/bunnybat.xml"),
 
     Asset("ATLAS", "images/inventoryimages/beardlordhat.xml"),
+    -- Asset("ATLAS", "images/inventoryimages/beardlordhat.tex"),
 
 
 
@@ -223,7 +225,7 @@ AddRecipe("lucy",
     nil,
     "lucy.tex")
 
-AddRecipe("hambat",
+AddRecipe("bunnybat",
     { Ingredient("axe", 1),
     },
     RECIPETABS.WAR,
