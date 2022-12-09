@@ -11,6 +11,7 @@ local prefabs =
 {
     "pigman",
     "bunnyman",
+    "newbunnyman",
     "splash_sink",
 }
 
@@ -202,7 +203,7 @@ local function fn()
 
     inst:AddComponent("spawner")
     WorldSettings_Spawner_SpawnDelay(inst, TUNING.RABBITHOUSE_SPAWN_TIME, TUNING.RABBITHOUSE_ENABLED)
-    inst.components.spawner:Configure("pigman", TUNING.RABBITHOUSE_SPAWN_TIME)
+    inst.components.spawner:Configure("newbunnyman", TUNING.RABBITHOUSE_SPAWN_TIME)
     --inst.components.spawner.onoccupied = onoccupied
     inst.components.spawner.onvacate = onvacate
     inst.components.spawner:CancelSpawning()

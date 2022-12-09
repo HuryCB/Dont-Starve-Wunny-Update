@@ -10,6 +10,7 @@ PrefabFiles = {
     "beardlordhat",
     "bunnybat",
     "bunnyhouse",
+    "newbunnyman",
     -- "beardlordback"
 }
 
