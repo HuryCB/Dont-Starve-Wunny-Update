@@ -204,21 +204,34 @@ local spacing = 2
 --function of rabbithole recipe
 local function rabbithole_recipe(ingredients, level)
     AddRecipe("rabbithole", ingredients, RECIPETABS.SURVIVAL, level,
-        "rabbithole_placer", spacing, nil, nil, "wunny", "images/inventoryimages/rabbithole.xml")
+        "rabbithouse_placer", spacing, nil, nil, "wunny", "images/inventoryimages/rabbithole.xml")
 end
 
-local function rabbithouse_recipe(ingredientes, level)
+local function bunnyhouse_recipe(ingredientes, level)
     AddRecipe("bunnyhouse", ingredientes, RECIPETABS.SURVIVAL, level,
-        "rabbithouse_placer", nil, nil, nil, "wunny","images/inventoryimages/bunnyhouse.xml",
+        "rabbithouse_placer", nil, nil, nil, "wunny", "images/inventoryimages/bunnyhouse.xml",
         "bunnyhouse.tex")
 end
 
-rabbithouse_recipe(
+bunnyhouse_recipe(
     {
         --  Ingredient("carrot", 5),
-     Ingredient("manrabbit_tail", 2)
-    --  , Ingredient("boards", 2) 
-}, TECH.NONE)
+        Ingredient("manrabbit_tail", 2)
+        --  , Ingredient("boards", 2)
+    }, TECH.NONE)
+
+-- local function rabbithouse_recipe(ingredientes, level)
+--     AddRecipe("rabbithouse", ingredientes, RECIPETABS.SURVIVAL, level,
+--         "rabbithouse_placer", nil, nil, nil, "wunny")
+-- end
+
+-- rabbithouse_recipe(
+--     {
+--         --  Ingredient("carrot", 5),
+--         Ingredient("manrabbit_tail", 2)
+--         --  , Ingredient("boards", 2)
+--     }, TECH.NONE)
+
 
 rabbithole_recipe({ Ingredient("carrot", 2), Ingredient("rabbit", 2), Ingredient("shovel", 1) }, TECH.NONE)
 STRINGS.RECIPE_DESC.RABBITHOLE = "A new home for the rabbits."
