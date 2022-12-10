@@ -258,7 +258,7 @@ local function OnSanityDelta(inst, data)
 		inst.components.combat.damagemultiplier = 1.1
 		inst.components.health:SetAbsorptionAmount(0.1)
 		TUNING.WUNNY_HUNGER_RATE = 1.2
-		
+
 		inst.components.beard.prize = "beardhair"
 		inst:AddTag("playermonster")
 		inst:AddTag("monster")
@@ -274,7 +274,7 @@ local function OnSanityDelta(inst, data)
 		-- Becoming bunny
 		inst.isbeardlord = false
 		inst.components.sanity.dapperness = 0
-		
+
 		inst.components.health:SetAbsorptionAmount(0)
 		TUNING.WUNNY_HUNGER_RATE = 1
 		inst.components.combat:SetAttackPeriod(TUNING.WILSON_ATTACK_PERIOD)
@@ -603,7 +603,7 @@ local master_postinit = function(inst)
 		local ents = TheSim:FindEntities(pos.x, pos.y, pos.z, 6)
 		for k, v in pairs(ents) do
 			if v.prefab then
-				if v.prefab == "bunnyman" then
+				if v.prefab == "bunnyman" or v.prefab == "newbunnyman" then
 					if v.components.follower.leader == nil
 					then
 						if v.components.combat:TargetIs(inst) then
@@ -634,12 +634,9 @@ local master_postinit = function(inst)
 					local item = SpawnPrefab("carrot")
 					inst.components.inventory:GiveItem(item, nil, inst:GetPosition())
 				end
-			end
-
-		elseif victim and victim.prefab then
-			if victim.prefab == "bunnyman" or victim.prefab:HasTag("manrabbit") then
+			elseif victim.prefab == "bunnyman" or victim.prefab == "newbunnyman" then
 				inst.components.sanity:DoDelta(-10)
-				local dropChance = math.random(0, 1)
+				local dropChance = math.random(0, 2)
 				if dropChance == 1 then
 					local item = SpawnPrefab("manrabbit_tail")
 					inst.components.inventory:GiveItem(item, nil, inst:GetPosition())
