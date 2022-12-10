@@ -613,6 +613,9 @@ local master_postinit = function(inst)
 					end
 				end
 			end
+			if v.prefab == "rabbit" then
+				v.components.inventoryitem.canbepickedup = true
+			end
 		end
 	end)
 

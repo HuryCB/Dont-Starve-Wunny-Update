@@ -378,7 +378,7 @@ local function fn()
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem.nobounce = true
-    inst.components.inventoryitem.canbepickedup = true
+    inst.components.inventoryitem.canbepickedup = false
     inst.components.inventoryitem.canbepickedupalive = true
     inst.components.inventoryitem:SetSinks(true)
 
