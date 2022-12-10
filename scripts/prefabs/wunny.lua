@@ -423,27 +423,27 @@ local BEARD_BITS = { 1, 3, 9 }
 
 local function OnGrowShortBeard(inst, skinname)
 	if skinname == nil then
-		inst.AnimState:OverrideSymbol("beard", "beard", "beard_short")
+		inst.AnimState:OverrideSymbol("beard", "beard_silk", "beardsilk_short")
 	else
-		inst.AnimState:OverrideSkinSymbol("beard", skinname, "beard_short")
+		inst.AnimState:OverrideSkinSymbol("beard", skinname, "beardsilk_short")
 	end
 	inst.components.beard.bits = BEARD_BITS[1]
 end
 
 local function OnGrowMediumBeard(inst, skinname)
 	if skinname == nil then
-		inst.AnimState:OverrideSymbol("beard", "beard", "beard_medium")
+		inst.AnimState:OverrideSymbol("beard", "beard", "beardsilk_medium")
 	else
-		inst.AnimState:OverrideSkinSymbol("beard", skinname, "beard_medium")
+		inst.AnimState:OverrideSkinSymbol("beard", skinname, "beardsilk_medium")
 	end
 	inst.components.beard.bits = BEARD_BITS[2]
 end
 
 local function OnGrowLongBeard(inst, skinname)
 	if skinname == nil then
-		inst.AnimState:OverrideSymbol("beard", "beard", "beard_long")
+		inst.AnimState:OverrideSymbol("beard", "beard", "beardsilk_long")
 	else
-		inst.AnimState:OverrideSkinSymbol("beard", skinname, "beard_long")
+		inst.AnimState:OverrideSkinSymbol("beard", skinname, "beardsilk_long")
 	end
 	inst.components.beard.bits = BEARD_BITS[3]
 end
@@ -601,6 +601,7 @@ local master_postinit = function(inst)
 	inst:DoPeriodicTask(.1, function()
 		local pos = Vector3(inst.Transform:GetWorldPosition())
 		local ents = TheSim:FindEntities(pos.x, pos.y, pos.z, 6)
+		-- local isNearbyRabbit = false
 		for k, v in pairs(ents) do
 			if v.prefab then
 				if v.prefab == "bunnyman" or v.prefab == "newbunnyman" then
@@ -614,9 +615,20 @@ local master_postinit = function(inst)
 				end
 			end
 			if v.prefab == "rabbit" then
+				-- isNearbyRabbit = true
 				v.components.inventoryitem.canbepickedup = true
 			end
 		end
+
+		-- local pos = Vector3(inst.Transform:GetWorldPosition())
+		-- local ents = TheSim:FindEntities(pos.x, pos.y, pos.z, 24)
+		-- for k, v in pairs(ents) do
+		-- 	if v.prefab == "rabbit" then
+		-- 		-- if isNearbyRabbit == false then
+		-- 			v.components.inventoryitem.canbepickedup = false
+		-- 		-- end
+		-- 	end
+		-- end
 	end)
 
 	inst:RemoveTag("scarytoprey")
