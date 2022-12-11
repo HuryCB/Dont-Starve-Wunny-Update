@@ -219,7 +219,8 @@ local function OnNewTarget(inst, data)
 end
 
 local function is_meat(item)
-    return item.components.edible ~= nil and item.components.edible.foodtype == FOODTYPE.MEAT and not item:HasTag("smallcreature")
+    return false
+    -- return item.components.edible ~= nil and item.components.edible.foodtype == FOODTYPE.MEAT and not item:HasTag("smallcreature")
 end
 
 local RETARGET_MUST_TAGS = { "_combat", "_health" }
