@@ -94,9 +94,13 @@ local function fn()
     inst.components.edible.sanityvalue = -TUNING.SANITY_MED
     --]]
 
+   
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/bunnybat.xml"
+    inst.components.inventoryitem.imagename = "bunnybat"
+
 
     MakeHauntableLaunchAndPerish(inst)
 
