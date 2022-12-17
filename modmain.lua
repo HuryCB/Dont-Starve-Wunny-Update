@@ -11,7 +11,6 @@ PrefabFiles = {
     "coolerpack",
     "beardlordhat",
     "bunnybat",
-    "bunnyhouse",
     "newbunnyhouse",
     "everythingbunnyhouse",
     "everythingbunnyman",
@@ -218,7 +217,6 @@ STRINGS.RECIPE_DESC.RABBITHOLE = "A new home for the rabbits."
 
 --newbunnymanhouse
 local function bunnyhouse_recipe(ingredientes, level)
-    AddRecipe("bunnyhouse", ingredientes, RECIPETABS.SURVIVAL, level,
     AddRecipe("newbunnyhouse", ingredientes, RECIPETABS.SURVIVAL, level,
         "rabbithouse_placer", nil, nil, nil, "wunny", "images/inventoryimages/bunnyhouse.xml",
         "bunnyhouse.tex")
@@ -226,7 +224,10 @@ end
 
 bunnyhouse_recipe(
     {
+        Ingredient("carrot", 5),
         Ingredient("manrabbit_tail", 2)
+        , Ingredient("boards", 2)
+        , Ingredient("axe", 1)
     }, TECH.NONE)
 
 --everythingbunnyman house
@@ -238,10 +239,15 @@ end
 
 everythingbunnyhouse_recipe(
     {
+        Ingredient("carrot", 5),
         Ingredient("manrabbit_tail", 2)
+        , Ingredient("boards", 2)
+        , Ingredient("axe", 1)
+        , Ingredient("pickaxe", 1)
+        , Ingredient("spear", 1)
     }, TECH.NONE)
 
---DEFAULT RABBIT HOUSE
+--DEFAULT RABBIT HOUSE for crafting options
 -- rabbithouse_recipe(
 --     {
 --         Ingredient("carrot", 5),
@@ -268,16 +274,22 @@ AddRecipe("lucy",
     "lucy.tex")
 
 AddRecipe("bunnybat",
-    { Ingredient("manrabbit_tail", 1), Ingredient("twigs", 2), Ingredient("meat", 2) },
+    { 
+        Ingredient("manrabbit_tail", 1)
+        , Ingredient("twigs", 2)
+        , Ingredient("meat", 2) 
+    },
     RECIPETABS.WAR,
     TECH.NONE,
     nil,
     nil,
     nil,
     nil,
-    "wunny",
+    "wunny"
+    ,
     "images/inventoryimages/bunnybat.xml",
-    "bunnybat.tex")
+    "bunnybat.tex"
+)
 
 AddRecipe("birchnuthat",
     { Ingredient("manrabbit_tail", 1)

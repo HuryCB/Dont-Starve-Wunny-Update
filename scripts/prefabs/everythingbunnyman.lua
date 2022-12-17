@@ -103,6 +103,8 @@ local function OnTimerDone(inst, data)
 		inst.AnimState:SetBuild("everythingmanrabbit_build")
 		if inst.clearbeardlordtask == nil then
 			inst.beardlord = nil
+            inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE * 110/100)
+            inst.components.combat:SetAttackPeriod(TUNING.BUNNYMAN_ATTACK_PERIOD * 90/100)
 		end
 	end
 end
@@ -123,6 +125,8 @@ local function SetForcedBeardLord(inst, duration)
 		inst.components.timer:StartTimer("forcenightmare", duration)
 	end
 	inst.beardlord = true
+    inst.components.combat:SetDefaultDamage(66)
+    inst.components.combat:SetAttackPeriod(0.9)
 	inst.AnimState:SetBuild("manrabbit_beard_build")
 	inst:ListenForEvent("timerdone", OnTimerDone)
 end
@@ -309,11 +313,17 @@ local function fn()
 
     inst.AnimState:SetBuild("everythingmanrabbit_build")
 
-    MakeCharacterPhysics(inst, 50, .5)
+    -- MakeCharacterPhysics(inst, 50, .5)
+    MakeCharacterPhysics(inst, 75, .75)
 
+    -- inst.DynamicShadow:SetSize(1.5, .75)
     inst.DynamicShadow:SetSize(1.5, .75)
     inst.Transform:SetFourFaced()
-    inst.Transform:SetScale(1.25, 1.25, 1.25)
+    -- inst.Transform:SetScale(1.25, 1.25, 1.25)
+    inst.Transform:SetScale(1.35, 1.35, 1.35)
+    -- inst.Transform:SetScale(1.56, 1.56, 1.56)
+    -- inst.Transform:SetScale(2.5, 2.5, 2.5)
+    -- inst.Transform:SetScale(2, 2, 2)
 
     inst:AddTag("cavedweller")
     inst:AddTag("character")
@@ -437,15 +447,15 @@ local function fn()
     inst.components.sleeper.sleeptestfn = NocturnalSleepTest
     inst.components.sleeper.waketestfn = NocturnalWakeTest
 
-    inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE)
-    inst.components.combat:SetAttackPeriod(TUNING.BUNNYMAN_ATTACK_PERIOD)
+    inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE * 110/100)
+    inst.components.combat:SetAttackPeriod(TUNING.BUNNYMAN_ATTACK_PERIOD * 90/100)
     inst.components.combat:SetKeepTargetFunction(NormalKeepTargetFn)
     inst.components.combat:SetRetargetFunction(3, NormalRetargetFn)
 
     inst.components.locomotor.runspeed = TUNING.BUNNYMAN_RUN_SPEED * 120/100
     inst.components.locomotor.walkspeed = TUNING.BUNNYMAN_WALK_SPEED * 120/100
 
-    inst.components.health:SetMaxHealth(TUNING.BUNNYMAN_HEALTH)
+    inst.components.health:SetMaxHealth(TUNING.BUNNYMAN_HEALTH * 110/100)
 
     MakeHauntablePanic(inst)
 
