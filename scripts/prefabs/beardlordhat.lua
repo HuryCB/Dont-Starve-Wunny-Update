@@ -78,7 +78,7 @@ local function fn()
 	
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("beardlordhat")
+    inst.AnimState:SetBank("birchnuthat")
     inst.AnimState:SetBuild("beardlordhat")
     inst.AnimState:PlayAnimation("idle")
 
