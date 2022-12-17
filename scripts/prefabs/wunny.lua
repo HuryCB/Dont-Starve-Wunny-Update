@@ -283,7 +283,6 @@ local function OnSanityDelta(inst, data)
 		inst.components.sanity:SetPercent(0)
 		inst.components.combat.damagemultiplier = 1.1
 		inst.components.health:SetAbsorptionAmount(0.1)
-		TUNING.WUNNY_HUNGER_RATE = 1.2
 
 		inst.components.beard.prize = "beardhair"
 		inst:AddTag("playermonster")
@@ -317,7 +316,6 @@ local function OnSanityDelta(inst, data)
 		-- inst.components.sanity.dapperness = 0
 
 		inst.components.health:SetAbsorptionAmount(0)
-		TUNING.WUNNY_HUNGER_RATE = 1
 		inst.components.combat:SetAttackPeriod(TUNING.WILSON_ATTACK_PERIOD)
 		if TheWorld:HasTag("cave") then
 			inst.components.combat.damagemultiplier = 0.5
@@ -689,7 +687,7 @@ local master_postinit = function(inst)
 			-- -- * TUNING.WILSON_HUNGER_RATE *
 			-- --  TUNING.WUNNY_HUNGER_RATE
 			-- ) --1.20
-			inst.components.hunger.hungerrate = inst.runningSpeed * TUNING.WUNNY_HUNGER_RATE
+			inst.components.hunger.hungerrate = inst.runningSpeed * TUNING.WILSON_HUNGER_RATE
 		else
 		-- 	inst.components.hunger:SetRate(
 		-- 		-- 1 
@@ -697,7 +695,7 @@ local master_postinit = function(inst)
 		-- 	TUNING.WILSON_HUNGER_RATE 
 		-- 	-- * TUNING.WUNNY_HUNGER_RATE
 		-- )
-		inst.components.hunger.hungerrate = TUNING.WUNNY_HUNGER_RATE
+		inst.components.hunger.hungerrate = TUNING.WILSON_HUNGER_RATE
 		end
 	end)
 

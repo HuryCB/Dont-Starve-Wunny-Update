@@ -20,8 +20,8 @@ STRINGS.RECIPE_DESC.BIRCHNUTHAT = "Gives insulation instead of water protection"
 STRINGS.NAMES.BUNNYBAT = "Bunny bat"
 STRINGS.RECIPE_DESC.BUNNYBAT = "Just like ham bat"
 
-STRINGS.NAMES.BUNNYHOUSE = "Better Bunnyhouse"
-STRINGS.RECIPE_DESC.BUNNYHOUSE = "Wurt isn't the only one who can upgrade their own..."
+STRINGS.NAMES.NEWBUNNYHOUSE = "Better Bunnyhouse"
+STRINGS.RECIPE_DESC.NEWBUNNYHOUSE = "Wurt isn't the only one who can upgrade their own..."
 
 STRINGS.NAMES.EVERYTHINGBUNNYHOUSE = "Everything Bunnyhouse"
 STRINGS.RECIPE_DESC.EVERYTHINGBUNNYHOUSE = "These bunny can do everything! Mine, chop, destroy them better..."

@@ -234,4 +234,4 @@ local function fn()
 end
 
 return Prefab("everythingbunnyhouse", fn, assets, prefabs),
-    MakePlacer("everythingbunnyhouse_placer", "everythingbunnyhouse", "everythingbunnyhouse", "idle")
+    MakePlacer("rabbithouse_placer", "rabbit_house", "rabbit_house", "idle")

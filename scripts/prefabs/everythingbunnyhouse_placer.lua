@@ -1,2 +1,2 @@
 require "prefabutil"
-MakePlacer("everythingbunnyhouse_placer", "everythingbunnyhouse", "everythingbunnyhouse", "idle")
+MakePlacer("rabbithouse_placer", "rabbit_house", "rabbit_house", "idle")
