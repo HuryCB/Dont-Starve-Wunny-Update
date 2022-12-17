@@ -11,6 +11,7 @@ local prefabs =
 {
     "pigman",
     "bunnyman",
+    "newbunnyman",
     "everythingbunnyman",
     "splash_sink",
 }

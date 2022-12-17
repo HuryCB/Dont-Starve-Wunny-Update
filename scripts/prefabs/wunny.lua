@@ -45,6 +45,10 @@ TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
 
 	"manrabbit_tail",
 	"manrabbit_tail",
+	"manrabbit_tail",
+	"manrabbit_tail",
+	"manrabbit_tail",
+	"manrabbit_tail",
 
 	-- "bernie_inactive",
 	-- "lucy",

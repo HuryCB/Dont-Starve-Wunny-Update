@@ -12,6 +12,7 @@ PrefabFiles = {
     "bunnybat",
     "bunnyhouse",
     "everythingbunnyhouse",
+    "everythingbunnyman",
     "newbunnyman",
     -- "beardlordback"
 }
@@ -66,6 +67,8 @@ Assets = {
     Asset("ATLAS", "images/inventoryimages/coolerpack.xml"),
     Asset("IMAGE", "images/inventoryimages/coolerpack.tex"),
     Asset("ANIM", "anim/swap_coolerpack.zip"),
+
+    Asset("ANIM", "anim/everythingmanrabbit_build.zip"),
 }
 
 AddMinimapAtlas("images/map_icons/wunny.xml")
