@@ -2,6 +2,7 @@ PrefabFiles = {
     "wunny",
     "wunny_none",
     "rabbithole_placer",
+    "everythingbunnyhouse_placer",
     "rabbithouse",
     "wunnyrabbithouse",
     "carrot",
@@ -229,7 +230,7 @@ bunnyhouse_recipe(
 --everythingbunnyman house
 local function everythingbunnyhouse_recipe(ingredientes, level)
     AddRecipe("everythingbunnyhouse", ingredientes, RECIPETABS.SURVIVAL, level,
-        "rabbithouse_placer", nil, nil, nil, "wunny", "images/inventoryimages/bunnyhouse.xml",
+        "everythingbunnyhouse_placer", nil, nil, nil, "wunny", "images/inventoryimages/bunnyhouse.xml",
         "bunnyhouse.tex")
 end
 
