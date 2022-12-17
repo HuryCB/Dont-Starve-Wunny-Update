@@ -22,6 +22,9 @@ STRINGS.RECIPE_DESC.BUNNYBAT = "Just like ham bat"
 
 STRINGS.NAMES.BUNNYHOUSE = "Better Bunnyhouse"
 STRINGS.RECIPE_DESC.BUNNYHOUSE = "Wurt isn't the only one who can upgrade their own..."
+
+STRINGS.NAMES.BUNNYHOUSE = "Everything Bunnyhouse"
+STRINGS.RECIPE_DESC.BUNNYHOUSE = "These bunny can do everything! Mine, chop, destroy them better..."
 -- TRINGS.RECIPE_DESC.LUCY = "Woodie's axe for Wunny"
 
 -- STRINGS.NAMES.CACTUSMACE = "Cactus Bat"

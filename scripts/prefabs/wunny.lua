@@ -178,6 +178,8 @@ end
 -- When the character is revived from human
 local function onbecamehuman(inst)
 	-- Set speed when not a ghost (optional)
+	--resistencia da willow
+	inst.components.freezable:SetResistance(3)
 	inst.components.locomotor:SetExternalSpeedMultiplier(inst, "wunny_speed_mod", 1)
 end
 
@@ -505,6 +507,23 @@ local function OnGrowLongBeard(inst, skinname)
 	inst.components.beard.bits = BEARD_BITS[3]
 end
 
+local function sanityfn(inst)--, dt)
+    local delta = inst.components.temperature:IsFreezing() and -TUNING.SANITYAURA_LARGE or 0
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local max_rad = 10
+    -- local ents = TheSim:FindEntities(x, y, z, max_rad, FIRE_TAGS)
+    for i, v in ipairs(ents) do
+        if v.components.burnable ~= nil and v.components.burnable:IsBurning() then
+            local rad = v.components.burnable:GetLargestLightRadius() or 1
+            local sz = TUNING.SANITYAURA_TINY * math.min(max_rad, rad) / max_rad
+            local distsq = inst:GetDistanceSqToInst(v) - 9
+            -- shift the value so that a distance of 3 is the minimum
+            delta = delta + sz / math.max(1, distsq)
+        end
+    end
+    return delta
+end
+
 local master_postinit = function(inst)
 
 	inst.nivelDaBarba = 0
@@ -523,7 +542,7 @@ local master_postinit = function(inst)
 
 	inst.starting_inventory = start_inv[TheNet:GetServerGameMode()] or start_inv.default
 
-	inst.components.combat:SetAttackPeriod(TUNING.WILSON_ATTACK_PERIOD * 110 / 100)
+	inst.components.combat:SetAttackPeriod(TUNING.WILSON_ATTACK_PERIOD)
 	inst.soundsname = "willow"
 	inst:AddTag("wunny")
 
@@ -553,6 +572,9 @@ local master_postinit = function(inst)
 	inst:AddTag("pyromaniac")
 	inst:AddTag("expertchef")
 	inst:AddTag("bernieowner")
+	-- inst.components.sanity.custom_rate_fn = sanityfn
+	inst.components.temperature.inherentinsulation = -TUNING.INSULATION_TINY
+	inst.components.temperature:SetFreezingHurtRate(TUNING.WILSON_HEALTH / TUNING.WILLOW_FREEZING_KILL_TIME)
 
 	--winona
 	inst:AddTag("handyperson")
