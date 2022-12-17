@@ -3,6 +3,7 @@ PrefabFiles = {
     "wunny_none",
     "rabbithole_placer",
     "rabbithouse",
+    "wunnyrabbithouse",
     "carrot",
     "birchnuthat",
     "bunnyback",
@@ -215,22 +216,19 @@ end
 
 bunnyhouse_recipe(
     {
-        --  Ingredient("carrot", 5),
+        Ingredient("carrot", 5),
         Ingredient("manrabbit_tail", 2)
-        --  , Ingredient("boards", 2)
+        , Ingredient("boards", 2)
     }, TECH.NONE)
 
--- local function rabbithouse_recipe(ingredientes, level)
---     AddRecipe("rabbithouse", ingredientes, RECIPETABS.SURVIVAL, level,
---         "rabbithouse_placer", nil, nil, nil, "wunny")
--- end
+    AddRecipe("wunnyrabbithouse", ingredientes, RECIPETABS.SURVIVAL, level,
 
--- rabbithouse_recipe(
---     {
---         --  Ingredient("carrot", 5),
---         Ingredient("manrabbit_tail", 2)
---         --  , Ingredient("boards", 2)
---     }, TECH.NONE)
+rabbithouse_recipe(
+    {
+        Ingredient("carrot", 5),
+        Ingredient("manrabbit_tail", 2)
+        , Ingredient("boards", 2)
+    }, TECH.NONE)
 
 
 rabbithole_recipe({ Ingredient("carrot", 2), Ingredient("rabbit", 2), Ingredient("shovel", 1) }, TECH.NONE)
@@ -250,8 +248,7 @@ AddRecipe("lucy",
     "lucy.tex")
 
 AddRecipe("bunnybat",
-    { Ingredient("axe", 1),
-    },
+    { Ingredient("manrabbit_tail", 1), Ingredient("twigs", 2), Ingredient("meat", 2) },
     RECIPETABS.WAR,
     TECH.NONE,
     nil,

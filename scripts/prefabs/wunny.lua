@@ -246,14 +246,21 @@ local function SetSkin(inst)
 	inst.components.skinner:SetSkinMode("normal_skin", "wilson")
 end
 
+local BEARDLORD_SANITY_THRESOLD = 0.4 -- 50 sanity
 local function OnSanityDelta(inst, data)
+	-- local BEARD_BITS = { 1, 3, 9 }
+
 	if not inst.isbeardlord and data.newpercent < BEARDLORD_SANITY_THRESOLD then
 		-- Becoming beardlord
 		-- inst.components.sanity.current = 0
 		inst.isbeardlord = true
-		inst.components.sanity.dapperness = -TUNING.DAPPERNESS_TINY
+		print("barba do beard")
+		print(inst.nivelDaBarba)
+		-- inst.components.sanity.dapperness = -TUNING.DAPPERNESS_TINY
+
+
 		inst.components.combat:SetAttackPeriod(0.5)
-		inst.components.sanity:DoDelta(-TUNING.WUNNY_SANITY)
+		-- inst.components.sanity:DoDelta(-TUNING.WUNNY_SANITY)
 		inst.components.sanity:SetPercent(0)
 		inst.components.combat.damagemultiplier = 1.1
 		inst.components.health:SetAbsorptionAmount(0.1)
@@ -270,10 +277,25 @@ local function OnSanityDelta(inst, data)
 		end
 		-- inst.components.sanityaura.aura = -TUNING.SANITYAURA_SMALL
 		-- SetSkin(inst)
+		print("monster de barba")
+		print(inst.nivelDaBarba)
+		-- if inst.nivelDaBarba == 1
+		-- then
+		-- 	inst.AnimState:OverrideSymbol("beard", "beard", "beard_short")
+		-- 	inst.AnimState:OverrideSymbol("beard", "beard_silk", "beard_short")
+		-- elseif inst.nivelDaBarba == 2
+		-- then
+		-- 	inst.AnimState:OverrideSymbol("beard", "beard", "beard_medium")
+		-- elseif inst.nivelDaBarba == 3
+		-- then
+		-- 	inst.AnimState:OverrideSymbol("beard", "beard", "beard_long")
+		-- end
+
 	elseif inst.isbeardlord and data.newpercent >= BEARDLORD_SANITY_THRESOLD then
 		-- Becoming bunny
 		inst.isbeardlord = false
-		inst.components.sanity.dapperness = 0
+
+		-- inst.components.sanity.dapperness = 0
 
 		inst.components.health:SetAbsorptionAmount(0)
 		TUNING.WUNNY_HUNGER_RATE = 1
@@ -286,6 +308,8 @@ local function OnSanityDelta(inst, data)
 		inst.components.beard.prize = "manrabbit_tail"
 		inst:RemoveTag("playermonster")
 		inst:RemoveTag("monster")
+		inst.components.builder.science_bonus = 1
+
 		-- inst.components.sanityaura.aura = 0
 		inst.components.skinner:SetSkinMode("normal_skin", "wilson")
 		if inst.components.eater ~= nil then
@@ -303,6 +327,18 @@ local function OnSanityDelta(inst, data)
 		-- local bonus = LOW_SANITY_BONUS_THRESHOLD - inst.components.sanity.current
 		-- AdjustLowSanityStats(inst, bonus > 0 and bonus or 0)
 	end
+	-- print("barba sã")
+	-- print(inst.nivelDaBarba)
+	-- if inst.nivelDaBarba == 1
+	-- then
+	-- 	inst.AnimState:OverrideSymbol("beard", "beard_silk", "beardsilk_short")
+	-- elseif inst.nivelDaBarba == 2
+	-- then
+	-- 	inst.AnimState:OverrideSymbol("beard", "beard_silk", "beardsilk_medium")
+	-- elseif inst.nivelDaBarba == 3
+	-- then
+	-- 	inst.AnimState:OverrideSymbol("beard", "beard_silk", "beardsilk_long")
+	-- end
 end
 
 --is incave
@@ -415,24 +451,42 @@ local function CarrotPreserverRate(inst, item)
 end
 
 local function OnResetBeard(inst)
+	inst.nivelDaBarba = 0
+
 	inst.AnimState:ClearOverrideSymbol("beard")
 end
 
-local BEARD_DAYS = { 4, 8, 16 }
+local BEARD_DAYS = { 4, 8, 16 } --mudar depois para 4, 8 ,16
 local BEARD_BITS = { 1, 3, 9 }
 
 local function OnGrowShortBeard(inst, skinname)
-	if skinname == nil then
-		inst.AnimState:OverrideSymbol("beard", "beard_silk", "beardsilk_short")
-	else
-		inst.AnimState:OverrideSkinSymbol("beard", skinname, "beardsilk_short")
-	end
+	inst.nivelDaBarba = 1
+	print("teste barba short")
+	print(inst.nivelDaBarba)
+
+	-- if inst.isbeardlord then
+	-- 	if skinname == nil then
+	-- 		inst.AnimState:OverrideSymbol("beard", "beard_silk", "beard_short")
+	-- 	else
+	-- 		inst.AnimState:OverrideSkinSymbol("beard", skinname, "beard_short")
+	-- 	end
+	-- end
+	-- if not inst.isbeardlord then
+		if skinname == nil then
+			inst.AnimState:OverrideSymbol("beard", "beard_silk", "beardsilk_short")
+		else
+			inst.AnimState:OverrideSkinSymbol("beard", skinname, "beardsilk_short")
+		end
+	-- end
 	inst.components.beard.bits = BEARD_BITS[1]
 end
 
 local function OnGrowMediumBeard(inst, skinname)
+	inst.nivelDaBarba = 2
+	print("teste barba medi")
+	print(inst.nivelDaBarba)
 	if skinname == nil then
-		inst.AnimState:OverrideSymbol("beard", "beard", "beardsilk_medium")
+		inst.AnimState:OverrideSymbol("beard", "beard_silk", "beardsilk_medium")
 	else
 		inst.AnimState:OverrideSkinSymbol("beard", skinname, "beardsilk_medium")
 	end
@@ -440,8 +494,11 @@ local function OnGrowMediumBeard(inst, skinname)
 end
 
 local function OnGrowLongBeard(inst, skinname)
+	inst.nivelDaBarba = 3
+	print("teste barba long")
+	print(inst.nivelDaBarba)
 	if skinname == nil then
-		inst.AnimState:OverrideSymbol("beard", "beard", "beardsilk_long")
+		inst.AnimState:OverrideSymbol("beard", "beard_silk", "beardsilk_long")
 	else
 		inst.AnimState:OverrideSkinSymbol("beard", skinname, "beardsilk_long")
 	end
@@ -450,7 +507,7 @@ end
 
 local master_postinit = function(inst)
 
-
+	inst.nivelDaBarba = 0
 
 
 	--beard
@@ -604,7 +661,9 @@ local master_postinit = function(inst)
 		-- local isNearbyRabbit = false
 		for k, v in pairs(ents) do
 			if v.prefab then
-				if v.prefab == "bunnyman" or v.prefab == "newbunnyman" then
+				if v.prefab == "bunnyman"
+					or v.prefab == "newbunnyman"
+				then
 					if v.components.follower.leader == nil
 					then
 						if v.components.combat:TargetIs(inst) then

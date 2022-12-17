@@ -27,7 +27,7 @@ local prefabs =
 local beardlordloot = { "beardhair", "beardhair", "monstermeat" }
 local forced_beardlordloot = { "nightmarefuel", "beardhair", "beardhair", "monstermeat" }
 
-local brain = require("brains/bunnymanbrain")
+local brain = require("brains/newbunnymanbrain")
 
 local MAX_TARGET_SHARES = 5
 local SHARE_TARGET_DIST = 30
@@ -219,8 +219,8 @@ local function OnNewTarget(inst, data)
 end
 
 local function is_meat(item)
-    return false
     -- return item.components.edible ~= nil and item.components.edible.foodtype == FOODTYPE.MEAT and not item:HasTag("smallcreature")
+    return false
 end
 
 local RETARGET_MUST_TAGS = { "_combat", "_health" }
@@ -433,8 +433,8 @@ local function fn()
     inst.components.combat:SetKeepTargetFunction(NormalKeepTargetFn)
     inst.components.combat:SetRetargetFunction(3, NormalRetargetFn)
 
-    inst.components.locomotor.runspeed = TUNING.BUNNYMAN_RUN_SPEED
-    inst.components.locomotor.walkspeed = TUNING.BUNNYMAN_WALK_SPEED
+    inst.components.locomotor.runspeed = TUNING.BUNNYMAN_RUN_SPEED * 120/100
+    inst.components.locomotor.walkspeed = TUNING.BUNNYMAN_WALK_SPEED * 120/100
 
     inst.components.health:SetMaxHealth(TUNING.BUNNYMAN_HEALTH)
 

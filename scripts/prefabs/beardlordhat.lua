@@ -97,7 +97,7 @@ local function fn()
 	end
 	
 	inst:AddComponent("armor")
-	inst.components.armor:InitCondition(550, 0.85)
+	inst.components.armor:InitCondition(650, 0.85)
 	
     inst:AddComponent("inspectable")
 
