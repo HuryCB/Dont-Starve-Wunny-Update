@@ -21,6 +21,7 @@ PrefabFiles = {
 	"monstermeat",
 	"nightmarefuel",
 	"carrot",
+	"boards",
 	"manrabbit_tail",
 	"carrot_cooked",
 }
@@ -42,6 +43,14 @@ TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
 
 	"carrot",
 	"carrot",
+	"carrot",
+	"carrot",
+	"carrot",
+	"carrot",
+	"carrot",
+	"carrot",
+	"carrot",
+	"carrot",
 
 	"manrabbit_tail",
 	"manrabbit_tail",
@@ -50,6 +59,10 @@ TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
 	"manrabbit_tail",
 	"manrabbit_tail",
 
+	"boards",
+	"boards",
+	"boards",
+	"boards",
 	-- "bernie_inactive",
 	-- "lucy",
 	-- "spidereggsack",
@@ -534,7 +547,8 @@ local master_postinit = function(inst)
 
 	inst.nivelDaBarba = 0
 
-	inst.components.builder.science_bonus = 1
+	-- inst.components.builder.science_bonus = 1--voltar, mudar para este depois
+	inst.components.builder.science_bonus = 2
 
 	--beard
 	inst:AddComponent("beard")

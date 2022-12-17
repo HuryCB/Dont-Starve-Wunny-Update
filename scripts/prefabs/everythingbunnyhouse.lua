@@ -3,7 +3,7 @@ require "prefabutil"
 
 local assets =
 {
-    Asset("ANIM", "anim/rabbit_house.zip"),
+    Asset("ANIM", "anim/everythingbunnyhouse.zip"),
     Asset("MINIMAP_IMAGE", "rabbit_house"),
 }
 
@@ -181,7 +181,7 @@ local function fn()
     inst.Light:SetColour(180/255, 195/255, 50/255)
 
     inst.AnimState:SetBank("rabbithouse")
-    inst.AnimState:SetBuild("rabbit_house")
+    inst.AnimState:SetBuild("everythingbunnyhouse")
     inst.AnimState:PlayAnimation("idle", true)
 
     inst:AddTag("cavedweller")
@@ -234,4 +234,4 @@ local function fn()
 end
 
 return Prefab("everythingbunnyhouse", fn, assets, prefabs),
-    MakePlacer("rabbithouse_placer", "rabbithouse", "rabbit_house", "idle")
+    MakePlacer("everythingbunnyhouse_placer", "everythingbunnyhouse", "everythingbunnyhouse", "idle")
