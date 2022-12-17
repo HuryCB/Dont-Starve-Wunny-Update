@@ -11,6 +11,7 @@ PrefabFiles = {
     "beardlordhat",
     "bunnybat",
     "bunnyhouse",
+    "everythingbunnyhouse",
     "newbunnyman",
     -- "beardlordback"
 }
@@ -207,9 +208,11 @@ local function rabbithole_recipe(ingredients, level)
     AddRecipe("rabbithole", ingredients, RECIPETABS.SURVIVAL, level,
         "rabbithouse_placer", spacing, nil, nil, "wunny", "images/inventoryimages/rabbithole.xml")
 end
+
 rabbithole_recipe({ Ingredient("carrot", 2), Ingredient("rabbit", 2), Ingredient("shovel", 1) }, TECH.NONE)
 STRINGS.RECIPE_DESC.RABBITHOLE = "A new home for the rabbits."
 
+--newbunnymanhouse
 local function bunnyhouse_recipe(ingredientes, level)
     AddRecipe("bunnyhouse", ingredientes, RECIPETABS.SURVIVAL, level,
         "rabbithouse_placer", nil, nil, nil, "wunny", "images/inventoryimages/bunnyhouse.xml",
@@ -217,6 +220,18 @@ local function bunnyhouse_recipe(ingredientes, level)
 end
 
 bunnyhouse_recipe(
+    {
+        Ingredient("manrabbit_tail", 2)
+    }, TECH.NONE)
+
+--everythingbunnyman house
+local function everythingbunnyhouse_recipe(ingredientes, level)
+    AddRecipe("everythingbunnyhouse", ingredientes, RECIPETABS.SURVIVAL, level,
+        "rabbithouse_placer", nil, nil, nil, "wunny", "images/inventoryimages/bunnyhouse.xml",
+        "bunnyhouse.tex")
+end
+
+everythingbunnyhouse_recipe(
     {
         Ingredient("manrabbit_tail", 2)
     }, TECH.NONE)
