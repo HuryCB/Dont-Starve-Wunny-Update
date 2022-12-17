@@ -689,7 +689,7 @@ local master_postinit = function(inst)
 			-- -- * TUNING.WILSON_HUNGER_RATE *
 			-- --  TUNING.WUNNY_HUNGER_RATE
 			-- ) --1.20
-			inst.components.hunger.hungerrate = inst.runningSpeed * TUNING.WUNNY_HUNGER_RATE * 5
+			inst.components.hunger.hungerrate = inst.runningSpeed * TUNING.WUNNY_HUNGER_RATE
 		else
 		-- 	inst.components.hunger:SetRate(
 		-- 		-- 1 

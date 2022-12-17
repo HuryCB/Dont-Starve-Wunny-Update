@@ -5,6 +5,7 @@ local actionhandlers =
     ActionHandler(ACTIONS.GOHOME, "gohome"),
     ActionHandler(ACTIONS.EAT, "eat"),
     ActionHandler(ACTIONS.CHOP, "chop"),
+    ActionHandler(ACTIONS.MINE, "mine"),
     ActionHandler(ACTIONS.PICKUP, "pickup"),
     ActionHandler(ACTIONS.EQUIP, "pickup"),
     ActionHandler(ACTIONS.ADDFUEL, "pickup"),
@@ -24,6 +25,10 @@ local events =
     EventHandler("doaction", function(inst, data)
         if data.action == ACTIONS.CHOP and not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) then
             inst.sg:GoToState("chop", data.target)
+        end
+
+        if data.action == ACTIONS.MINE and not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) then
+            inst.sg:GoToState("mine", data.target)
         end
     end),
 }
@@ -135,6 +140,32 @@ local states =
         onenter = function(inst)
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("atk")
+        end,
+
+        timeline =
+        {
+            TimeEvent(13 * FRAMES, function(inst)
+                inst:PerformBufferedAction()
+            end),
+        },
+
+        events =
+        {
+            EventHandler("animover", function(inst)
+                inst.sg:GoToState("idle")
+            end),
+        },
+    },
+
+    ----MINING
+	State{
+        name = "mine",
+        tags = { "mining" },
+
+        onenter = function(inst)
+            inst.Physics:Stop()
+            inst.AnimState:PlayAnimation("atk")
+			inst.SoundEmitter:PlaySound("dontstarve/wilson/use_pick_rock")  
         end,
 
         timeline =
