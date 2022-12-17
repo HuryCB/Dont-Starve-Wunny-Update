@@ -690,6 +690,7 @@ local master_postinit = function(inst)
 			if v.prefab then
 				if v.prefab == "bunnyman"
 					or v.prefab == "newbunnyman"
+					or v.prefab == "everythingbunnyman"
 				then
 					if v.components.follower.leader == nil
 					then
@@ -697,6 +698,8 @@ local master_postinit = function(inst)
 							v.components.combat:SetTarget(nil)
 						end
 						inst.components.leader:AddFollower(v)
+						--lose hunger on befriending
+						inst.components.hunger:DoDelta(-5)
 					end
 				end
 			end
