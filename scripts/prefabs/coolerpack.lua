@@ -13,13 +13,23 @@ local function onequip(inst, owner)
     owner.AnimState:OverrideSymbol("swap_body", "swap_coolerpack", "coolerpack")
     owner.AnimState:OverrideSymbol("swap_body", "swap_coolerpack", "swap_body")
     
-	inst.components.container:Open(owner)
+    if owner.components.hunger ~= nil then
+        owner.components.hunger.burnratemodifiers:SetModifier(inst, TUNING.BUNNYPACK_HUNGER)
+        -- owner.components.hunger:DoDelta(-5)
+    end
+
+    inst.components.container:Open(owner)
     
 end
 
 local function onunequip(inst, owner)
     owner.AnimState:ClearOverrideSymbol("swap_body")
     owner.AnimState:ClearOverrideSymbol("coolerpack")
+
+    if owner.components.hunger ~= nil then
+        owner.components.hunger.burnratemodifiers:RemoveModifier(inst)
+    end
+
     inst.components.container:Close(owner)
 end
 
@@ -66,7 +76,7 @@ local function fn()
 	inst.components.equippable.equipslot = EQUIPSLOTS.BODY
 
     inst.components.equippable:SetOnEquip(onequip)
-    inst.components.equippable.dapperness = -TUNING.DAPPERNESS_TINY
+    -- inst.components.equippable.dapperness = -TUNING.DAPPERNESS_TINY
     inst.components.equippable:SetOnUnequip(onunequip)
 
     inst:AddComponent("container")

@@ -6,7 +6,7 @@ PrefabFiles = {
     "wunnyrabbithouse",
     "carrot",
     "birchnuthat",
-    "bunnyback",
+    -- "bunnyback",
     "coolerpack",
     "beardlordhat",
     "bunnybat",
@@ -60,8 +60,6 @@ Assets = {
     Asset("ATLAS", "images/inventoryimages/beardlordhat.xml"),
 
     Asset("ATLAS", "images/inventoryimages/bunnyhouse.xml"),
-    -- Asset("ATLAS", "images/inventoryimages/beardlordhat.tex"),
-
 
 
     Asset("ATLAS", "images/inventoryimages/coolerpack.xml"),
@@ -181,6 +179,7 @@ STRINGS.CHARACTER_SURVIVABILITY.wunny = "Grim"
 TUNING.WUNNY_SPEED = 6
 TUNING.WUNNY_RUNNING_HUNGER_RATE = 1
 TUNING.WUNNY_HUNGER_RATE = TUNING.WILSON_HUNGER_RATE
+TUNING.BUNNYPACK_HUNGER = 1.1--mudar para 1.1
 -- WUNNY_RUNNING_HUNGER_RATETUNNIN.WUNNY_IDLE_HUNGER_RATE = 1
 
 

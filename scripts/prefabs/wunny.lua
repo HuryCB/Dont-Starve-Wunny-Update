@@ -376,13 +376,13 @@ end
 
 local caveDay = function(inst)
 	inst.components.locomotor.runspeed = 7.2
-	TUNING.WUNNY_RUNNING_HUNGER_RATE = 1.2
+	inst.runningSpeed = 1.2
 	print("print caveday")
 end
 
 local caveDusk = function(inst)
 	inst.components.locomotor.runspeed = 7.8
-	TUNING.WUNNY_RUNNING_HUNGER_RATE = 1.3
+	inst.runningSpeed = 1.3
 	print("print cavedusk")
 end
 
@@ -390,7 +390,7 @@ local caveNight = function(inst)
 	if TheWorld.state.iscavenight
 	then
 		inst.components.locomotor.runspeed = 7.5
-		TUNING.WUNNY_RUNNING_HUNGER_RATE = 1.25
+		inst.runningSpeed = 1.25
 		print("print cavenight")
 	end
 end
@@ -417,17 +417,17 @@ end
 
 local surfaceDay = function(inst)
 	inst.components.locomotor.runspeed = 7.8
-	TUNING.WUNNY_RUNNING_HUNGER_RATE = 1.3
+	inst.runningSpeed = 1.3
 end
 
 local surfaceDusk = function(inst)
 	inst.components.locomotor.runspeed = 7.5
-	TUNING.WUNNY_RUNNING_HUNGER_RATE = 1.25
+	inst.runningSpeed = 1.25
 end
 
 local surfaceNight = function(inst)
 	inst.components.locomotor.runspeed = 7.2
-	TUNING.WUNNY_RUNNING_HUNGER_RATE = 1.2
+	inst.runningSpeed = 1.2
 end
 
 local surfaceBehaviour = function(inst)
@@ -529,6 +529,8 @@ local function sanityfn(inst)--, dt)
 end
 
 local master_postinit = function(inst)
+
+	inst.runningSpeed = 1
 
 	inst.nivelDaBarba = 0
 
@@ -668,9 +670,20 @@ local master_postinit = function(inst)
 
 	inst:ListenForEvent("locomote", function()
 		if inst.sg ~= nil and inst.sg:HasStateTag("moving") then
-			inst.components.hunger:SetRate(TUNING.WUNNY_RUNNING_HUNGER_RATE * TUNING.WILSON_HUNGER_RATE * TUNING.WUNNY_HUNGER_RATE) --1.20
+			-- inst.components.hunger:SetRate(
+			-- 	inst.runningSpeed 
+			-- -- * TUNING.WILSON_HUNGER_RATE *
+			-- --  TUNING.WUNNY_HUNGER_RATE
+			-- ) --1.20
+			inst.components.hunger.hungerrate = inst.runningSpeed * TUNING.WUNNY_HUNGER_RATE * 5
 		else
-			inst.components.hunger:SetRate(1 * TUNING.WILSON_HUNGER_RATE * TUNING.WUNNY_HUNGER_RATE)
+		-- 	inst.components.hunger:SetRate(
+		-- 		-- 1 
+		-- 	-- * 
+		-- 	TUNING.WILSON_HUNGER_RATE 
+		-- 	-- * TUNING.WUNNY_HUNGER_RATE
+		-- )
+		inst.components.hunger.hungerrate = TUNING.WUNNY_HUNGER_RATE
 		end
 	end)
 
