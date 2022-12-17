@@ -43,26 +43,26 @@ TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
 
 	"carrot",
 	"carrot",
-	"carrot",
-	"carrot",
-	"carrot",
-	"carrot",
-	"carrot",
-	"carrot",
-	"carrot",
-	"carrot",
+	-- "carrot",
+	-- "carrot",
+	-- "carrot",
+	-- "carrot",
+	-- "carrot",
+	-- "carrot",
+	-- "carrot",
+	-- "carrot",
 
 	"manrabbit_tail",
 	"manrabbit_tail",
-	"manrabbit_tail",
-	"manrabbit_tail",
-	"manrabbit_tail",
-	"manrabbit_tail",
+	-- "manrabbit_tail",
+	-- "manrabbit_tail",
+	-- "manrabbit_tail",
+	-- "manrabbit_tail",
 
-	"boards",
-	"boards",
-	"boards",
-	"boards",
+	-- "boards",
+	-- "boards",
+	-- "boards",
+	-- "boards",
 	-- "bernie_inactive",
 	-- "lucy",
 	-- "spidereggsack",
@@ -547,8 +547,8 @@ local master_postinit = function(inst)
 
 	inst.nivelDaBarba = 0
 
-	-- inst.components.builder.science_bonus = 1--voltar, mudar para este depois
-	inst.components.builder.science_bonus = 2
+	inst.components.builder.science_bonus = 1--voltar, mudar para este depois
+	-- inst.components.builder.science_bonus = 2
 
 	--beard
 	inst:AddComponent("beard")
