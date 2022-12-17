@@ -224,16 +224,16 @@ local function rabbithouse_recipe(ingredientes, level)
         "rabbithouse_placer", nil, nil, nil, "wunny")
 end
 
-rabbithouse_recipe(
-    {
-        Ingredient("carrot", 5),
-        Ingredient("manrabbit_tail", 2)
-        , Ingredient("boards", 2)
-    }, TECH.NONE)
 
-
-rabbithole_recipe({ Ingredient("carrot", 2), Ingredient("rabbit", 2), Ingredient("shovel", 1) }, TECH.NONE)
-STRINGS.RECIPE_DESC.RABBITHOLE = "A new home for the rabbits."
+--DEFAULT RABBIT HOUSE
+-- rabbithouse_recipe(
+--     {
+--         Ingredient("carrot", 5),
+--         Ingredient("manrabbit_tail", 2)
+--         , Ingredient("boards", 2)
+--     }, TECH.NONE)
+-- rabbithole_recipe({ Ingredient("carrot", 2), Ingredient("rabbit", 2), Ingredient("shovel", 1) }, TECH.NONE)
+-- STRINGS.RECIPE_DESC.RABBITHOLE = "A new home for the rabbits."
 
 AddRecipe("lucy",
     { Ingredient("axe", 1), Ingredient("goldenaxe", 1), Ingredient("moonglassaxe", 1)
