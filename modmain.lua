@@ -12,6 +12,7 @@ PrefabFiles = {
     "beardlordhat",
     "bunnybat",
     "bunnyhouse",
+    "newbunnyhouse",
     "everythingbunnyhouse",
     "everythingbunnyman",
     "newbunnyman",
@@ -218,6 +219,7 @@ STRINGS.RECIPE_DESC.RABBITHOLE = "A new home for the rabbits."
 --newbunnymanhouse
 local function bunnyhouse_recipe(ingredientes, level)
     AddRecipe("bunnyhouse", ingredientes, RECIPETABS.SURVIVAL, level,
+    AddRecipe("newbunnyhouse", ingredientes, RECIPETABS.SURVIVAL, level,
         "rabbithouse_placer", nil, nil, nil, "wunny", "images/inventoryimages/bunnyhouse.xml",
         "bunnyhouse.tex")
 end
