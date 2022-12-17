@@ -308,7 +308,7 @@ local function OnSanityDelta(inst, data)
 		inst.components.beard.prize = "manrabbit_tail"
 		inst:RemoveTag("playermonster")
 		inst:RemoveTag("monster")
-		inst.components.builder.science_bonus = 1
+		
 
 		-- inst.components.sanityaura.aura = 0
 		inst.components.skinner:SetSkinMode("normal_skin", "wilson")
@@ -509,6 +509,7 @@ local master_postinit = function(inst)
 
 	inst.nivelDaBarba = 0
 
+	inst.components.builder.science_bonus = 1
 
 	--beard
 	inst:AddComponent("beard")

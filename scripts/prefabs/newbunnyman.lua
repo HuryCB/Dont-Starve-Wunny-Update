@@ -32,6 +32,13 @@ local brain = require("brains/newbunnymanbrain")
 local MAX_TARGET_SHARES = 5
 local SHARE_TARGET_DIST = 30
 
+local function SuggestTreeTarget(inst, data)
+    local ba = inst:GetBufferedAction()
+    if data ~= nil and data.tree ~= nil and (ba == nil or ba.action ~= ACTIONS.CHOP) then
+        inst.tree_target = data.tree
+    end
+end
+
 local function DoShadowFx(inst, isnightmare)
 	local x, y, z = inst.Transform:GetWorldPosition()
 	local fx = SpawnPrefab("statue_transition_2")
@@ -424,6 +431,8 @@ local function fn()
     inst:ListenForEvent("attacked", OnAttacked)
     inst:ListenForEvent("newcombattarget", OnNewTarget)
 
+    inst:ListenForEvent("suggest_tree_target", SuggestTreeTarget)
+
     inst.components.sleeper:SetResistance(2)
     inst.components.sleeper.sleeptestfn = NocturnalSleepTest
     inst.components.sleeper.waketestfn = NocturnalWakeTest
@@ -441,7 +450,7 @@ local function fn()
     MakeHauntablePanic(inst)
 
     inst:SetBrain(brain)
-    inst:SetStateGraph("SGbunnyman")
+    inst:SetStateGraph("SGnewbunnyman")
 
 	--shadow_trap interaction
 	inst.has_nightmare_state = true

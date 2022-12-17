@@ -216,12 +216,13 @@ end
 
 bunnyhouse_recipe(
     {
-        Ingredient("carrot", 5),
         Ingredient("manrabbit_tail", 2)
-        , Ingredient("boards", 2)
     }, TECH.NONE)
 
+local function rabbithouse_recipe(ingredientes, level)
     AddRecipe("wunnyrabbithouse", ingredientes, RECIPETABS.SURVIVAL, level,
+        "rabbithouse_placer", nil, nil, nil, "wunny")
+end
 
 rabbithouse_recipe(
     {
