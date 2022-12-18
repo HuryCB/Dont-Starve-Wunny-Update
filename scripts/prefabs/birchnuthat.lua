@@ -117,7 +117,7 @@ local function fn()
 	--end
 
     inst:AddComponent("insulator")
-    inst.components.insulator:SetInsulation(TUNING.INSULATION_SMALL)
+    inst.components.insulator:SetInsulation(TUNING.INSULATION_TINY)
 
     return inst
 end

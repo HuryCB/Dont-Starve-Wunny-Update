@@ -490,9 +490,9 @@ local function OnGrowShortBeard(inst, skinname)
 	-- end
 	-- if not inst.isbeardlord then
 		if skinname == nil then
-			inst.AnimState:OverrideSymbol("beard", "beard_silk", "beardsilk_short")
+			inst.AnimState:OverrideSymbol("beard", "beard", "beard_short")
 		else
-			inst.AnimState:OverrideSkinSymbol("beard", skinname, "beardsilk_short")
+			inst.AnimState:OverrideSkinSymbol("beard", skinname, "beard_short")
 		end
 	-- end
 	inst.components.beard.bits = BEARD_BITS[1]
@@ -503,9 +503,9 @@ local function OnGrowMediumBeard(inst, skinname)
 	print("teste barba medi")
 	print(inst.nivelDaBarba)
 	if skinname == nil then
-		inst.AnimState:OverrideSymbol("beard", "beard_silk", "beardsilk_medium")
+		inst.AnimState:OverrideSymbol("beard", "beard", "beard_medium")
 	else
-		inst.AnimState:OverrideSkinSymbol("beard", skinname, "beardsilk_medium")
+		inst.AnimState:OverrideSkinSymbol("beard", skinname, "beard_medium")
 	end
 	inst.components.beard.bits = BEARD_BITS[2]
 end
@@ -515,9 +515,9 @@ local function OnGrowLongBeard(inst, skinname)
 	print("teste barba long")
 	print(inst.nivelDaBarba)
 	if skinname == nil then
-		inst.AnimState:OverrideSymbol("beard", "beard_silk", "beardsilk_long")
+		inst.AnimState:OverrideSymbol("beard", "beard", "beard_long")
 	else
-		inst.AnimState:OverrideSkinSymbol("beard", skinname, "beardsilk_long")
+		inst.AnimState:OverrideSkinSymbol("beard", skinname, "beard_long")
 	end
 	inst.components.beard.bits = BEARD_BITS[3]
 end
@@ -724,7 +724,7 @@ local master_postinit = function(inst)
 						end
 						inst.components.leader:AddFollower(v)
 						--lose hunger on befriending
-						inst.components.hunger:DoDelta(-5)
+						inst.components.hunger:DoDelta(-12.5)
 					end
 				end
 			end
