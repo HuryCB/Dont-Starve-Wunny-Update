@@ -141,8 +141,8 @@ end
 
 AddRecipe("coolerpack", { 
     Ingredient("manrabbit_tail", 4) --4
-    -- , Ingredient("silk", 6), 
-    -- Ingredient("rope", 2)
+    , Ingredient("silk", 6), 
+    Ingredient("rope", 2)
 },
     RECIPETABS.SURVIVAL
     , TECH.NONE, nil,
@@ -226,10 +226,10 @@ end
 
 bunnyhouse_recipe(
     {
-        -- Ingredient("carrot", 5),
+        Ingredient("carrot", 5),
         Ingredient("manrabbit_tail", 2)
-        -- , Ingredient("boards", 2)
-        -- , Ingredient("axe", 1)
+        , Ingredient("boards", 2)
+        , Ingredient("axe", 1)
     }, TECH.NONE)
 
 --everythingbunnyman house
@@ -241,12 +241,12 @@ end
 
 everythingbunnyhouse_recipe(
     {
-        -- Ingredient("carrot", 5),
+        Ingredient("carrot", 5),
         Ingredient("manrabbit_tail", 2)
-        -- , Ingredient("boards", 2)
-        -- , Ingredient("axe", 1)
-        -- , Ingredient("pickaxe", 1)
-        -- , Ingredient("spear", 1)
+        , Ingredient("boards", 2)
+        , Ingredient("axe", 1)
+        , Ingredient("pickaxe", 1)
+        , Ingredient("spear", 1)
     }, TECH.NONE)
 
 --DEFAULT RABBIT HOUSE for crafting options
@@ -278,8 +278,8 @@ AddRecipe("lucy",
 AddRecipe("bunnybat",
     { 
         Ingredient("manrabbit_tail", 1)
-        -- , Ingredient("twigs", 2)
-        -- , Ingredient("meat", 2) 
+        , Ingredient("twigs", 2)
+        , Ingredient("meat", 2) 
     },
     RECIPETABS.WAR,
     TECH.NONE,
