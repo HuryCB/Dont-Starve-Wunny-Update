@@ -143,7 +143,7 @@ local function CalcSanityAura(inst, observer)
     end
     return inst.components.follower ~= nil
         and inst.components.follower:GetLeader() == observer
-        and TUNING.SANITYAURA_SMALL
+        and TUNING.SANITYAURA_TINY
         or 0
 end
 

@@ -68,6 +68,9 @@ Assets = {
     Asset("ANIM", "anim/swap_coolerpack.zip"),
 
     Asset("ANIM", "anim/everythingmanrabbit_build.zip"),
+
+    Asset("ANIM", "anim/bat_bunny.zip"),
+    Asset("ANIM", "anim/swap_bat_bunny.zip"),
 }
 
 AddMinimapAtlas("images/map_icons/wunny.xml")

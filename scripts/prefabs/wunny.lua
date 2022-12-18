@@ -708,7 +708,7 @@ local master_postinit = function(inst)
 	-- Sanity rate
 	-- inst.components.sanity.night_drain_mult = 0
 
-	inst:DoPeriodicTask(.1, function()
+	inst:DoPeriodicTask(.2, function()
 		local pos = Vector3(inst.Transform:GetWorldPosition())
 		local ents = TheSim:FindEntities(pos.x, pos.y, pos.z, 6)
 		-- local isNearbyRabbit = false
