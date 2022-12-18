@@ -3,6 +3,7 @@ local MakePlayerCharacter = require "prefabs/player_common"
 local assets = {
 	Asset("SCRIPT", "scripts/prefabs/player_common.lua"),
 	Asset("ANIM", "anim/rabbit_hole.zip"),
+	Asset("ANIM", "anim/bunnybeard.zip"),
 }
 
 local prefabsItens = {
@@ -490,7 +491,7 @@ local function OnGrowShortBeard(inst, skinname)
 	-- end
 	-- if not inst.isbeardlord then
 		if skinname == nil then
-			inst.AnimState:OverrideSymbol("beard", "beard", "beard_short")
+			inst.AnimState:OverrideSymbol("beard", "bunnybeard", "beard_short")
 		else
 			inst.AnimState:OverrideSkinSymbol("beard", skinname, "beard_short")
 		end
@@ -503,7 +504,7 @@ local function OnGrowMediumBeard(inst, skinname)
 	print("teste barba medi")
 	print(inst.nivelDaBarba)
 	if skinname == nil then
-		inst.AnimState:OverrideSymbol("beard", "beard", "beard_medium")
+		inst.AnimState:OverrideSymbol("beard", "bunnybeard", "beard_medium")
 	else
 		inst.AnimState:OverrideSkinSymbol("beard", skinname, "beard_medium")
 	end
@@ -515,7 +516,7 @@ local function OnGrowLongBeard(inst, skinname)
 	print("teste barba long")
 	print(inst.nivelDaBarba)
 	if skinname == nil then
-		inst.AnimState:OverrideSymbol("beard", "beard", "beard_long")
+		inst.AnimState:OverrideSymbol("beard", "bunnybeard", "beard_long")
 	else
 		inst.AnimState:OverrideSkinSymbol("beard", skinname, "beard_long")
 	end
