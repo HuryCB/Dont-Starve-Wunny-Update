@@ -4,6 +4,7 @@ require "prefabutil"
 local assets =
 {
     Asset("ANIM", "anim/everythingbunnyhouse.zip"),
+    Asset("ANIM", "anim/rabbit_house.zip"),
     Asset("MINIMAP_IMAGE", "rabbit_house"),
 }
 
@@ -233,5 +234,6 @@ local function fn()
     return inst
 end
 
-return Prefab("everythingbunnyhouse", fn, assets, prefabs),
-    MakePlacer("rabbithouse_placer", "rabbit_house", "rabbit_house", "idle")
+return Prefab("everythingbunnyhouse", fn, assets, prefabs)
+-- -- ,
+    -- MakePlacer("rabbithouse_placer", "rabbit_house", "rabbit_house", "idle")
