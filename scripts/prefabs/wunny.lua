@@ -55,6 +55,10 @@ TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
 
 	"manrabbit_tail",
 	"manrabbit_tail",
+
+	-- "monstermeat",
+	-- "monstermeat",
+	-- "monstermeat",
 	-- "manrabbit_tail",
 	-- "manrabbit_tail",
 	-- "manrabbit_tail",
@@ -67,6 +71,9 @@ TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
 	-- "bernie_inactive",
 	-- "lucy",
 	-- "spidereggsack",
+	-- "pigskin",
+	-- "meat",
+	-- "meat",
 
 	-- "abigail_flower"
 }
@@ -286,7 +293,7 @@ local function OnSanityDelta(inst, data)
 		inst.components.health:SetAbsorptionAmount(0.1)
 
 		inst.components.beard.prize = "beardhair"
-		inst:AddTag("playermonster")
+		-- inst:AddTag("playermonster")
 		inst:AddTag("monster")
 		inst.components.skinner:SetSkinMode("beardlord_skin", "wilson")
 		if inst.components.eater ~= nil then
@@ -324,7 +331,7 @@ local function OnSanityDelta(inst, data)
 			inst.components.combat.damagemultiplier = 0.5
 		end
 		inst.components.beard.prize = "manrabbit_tail"
-		inst:RemoveTag("playermonster")
+		-- inst:RemoveTag("playermonster")
 		inst:RemoveTag("monster")
 		
 
@@ -567,18 +574,16 @@ local master_postinit = function(inst)
 
 	--Waxwell
 	inst:AddTag("shadowmagic")
-	inst:AddTag("dappereffects")
 	inst:AddTag("magician")
 	inst:AddTag("reader")
 
 	--Webber
 	inst:AddTag("spiderwhisperer")
-	inst:AddTag("dualsoul")
 	inst:AddTag(UPGRADETYPES.SPIDER .. "_upgradeuser")
 
 	--Wendy
-	inst:AddTag("ghostlyfriend")
-	inst:AddTag("elixirbrewer")
+	-- inst:AddTag("ghostlyfriend")
+	-- inst:AddTag("elixirbrewer")
 
 	--Wes
 	inst:AddTag("mime")
@@ -597,25 +602,22 @@ local master_postinit = function(inst)
 
 	--winona
 	inst:AddTag("handyperson")
-	inst:AddTag("fastbuilder")
-	inst:AddTag("hungrybuilder")
 
 	--wolfgang
 	-- inst:AddTag("strongman")
 
 	--Woodie
 	inst:AddTag("woodcutter")
-	inst:AddTag("polite")
-	inst:AddTag("werehuman")
+	-- inst:AddTag("werehuman")
 
 	--Wormwood
 	inst:AddTag("plantkin")
-	inst:AddTag("self_fertilizable")
+	-- inst:AddTag("self_fertilizable")
 
 	--Wortox
 	-- inst:AddTag("monster")
-	inst:AddTag("soulstealer")
-	inst:AddTag("souleater")
+	-- inst:AddTag("soulstealer")
+	-- inst:AddTag("souleater")
 
 	--Wurt
 	inst:AddTag("merm_builder")
@@ -630,7 +632,7 @@ local master_postinit = function(inst)
 	--Warly
 	inst:AddTag("masterchef")
 	inst:AddTag("professionalchef")
-	inst:AddTag("expertchef")
+	-- inst:AddTag("expertchef") -- já tem na Willow
 
 	--Walter
 	inst:AddTag("pebblemaker")
@@ -639,8 +641,8 @@ local master_postinit = function(inst)
 	inst:AddTag("slingshot_sharpshooter")
 	-- inst:AddTag("efficient_sleeper")
 	inst:AddTag("dogrider")
-	inst:AddTag("nowormholesanityloss")
-	inst:AddTag("storyteller") -- for storyteller component
+	inst:AddTag("nowormholesanityloss") -- talvez tirar para balancear
+	-- inst:AddTag("storyteller") -- for storyteller component
 
 	--Wanda
 	inst:AddTag("clockmaker")
