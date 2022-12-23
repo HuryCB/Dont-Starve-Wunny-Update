@@ -719,6 +719,7 @@ local master_postinit = function(inst)
 				if v.prefab == "bunnyman"
 					or v.prefab == "newbunnyman"
 					or v.prefab == "everythingbunnyman"
+					or v.prefab == "daybunnyman"
 				then
 					if v.components.follower.leader == nil
 					then
@@ -766,7 +767,7 @@ local master_postinit = function(inst)
 					local item = SpawnPrefab("carrot")
 					inst.components.inventory:GiveItem(item, nil, inst:GetPosition())
 				end
-			elseif victim.prefab == "bunnyman" or victim.prefab == "newbunnyman" then
+			elseif victim.prefab == "bunnyman" or victim.prefab == "newbunnyman" or victim.prefab == "everythingbunnyman" or victim.prefab == "daybunnyman"  then
 				inst.components.sanity:DoDelta(-10)
 				local dropChance = math.random(0, 2)
 				if dropChance == 1 then

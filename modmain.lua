@@ -12,9 +12,11 @@ PrefabFiles = {
     "beardlordhat",
     "bunnybat",
     "newbunnyhouse",
+    "daybunnyhouse",
     "everythingbunnyhouse",
     "everythingbunnyman",
     "newbunnyman",
+    "daybunnyman",
     -- "beardlordback"
 }
 
@@ -252,6 +254,21 @@ everythingbunnyhouse_recipe(
         , Ingredient("spear", 1)
     }, TECH.NONE)
 
+    local function day_recipe(ingredientes, level)
+        AddRecipe("daybunnyhouse", ingredientes, RECIPETABS.SURVIVAL, level,
+            "rabbithouse_placer", nil, nil, nil, "wunny", "images/inventoryimages/bunnyhouse.xml",
+            "bunnyhouse.tex")
+    end
+    
+    day_recipe(
+        {
+            -- Ingredient("carrot", 5),
+            Ingredient("manrabbit_tail", 2)
+            -- , Ingredient("boards", 2)
+            -- , Ingredient("axe", 1)
+            -- , Ingredient("pickaxe", 1)
+            -- , Ingredient("spear", 1)
+        }, TECH.NONE)
 --DEFAULT RABBIT HOUSE for crafting options
 -- rabbithouse_recipe(
 --     {
