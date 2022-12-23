@@ -56,6 +56,29 @@ TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
 	"manrabbit_tail",
 	"manrabbit_tail",
 
+	-- "tophat_magician",
+
+	-- "bookstation",
+	-- "book_birds",
+	-- "book_horticulture",
+	-- "book_silviculture",
+	-- "book_sleep",
+	-- "book_brimstone",
+	-- "book_tentacles",
+
+	-- "book_fish",
+	-- "book_fire",
+	-- "book_web",
+	-- "book_temperature",
+	-- "book_light",
+	-- "book_rain",
+	-- "book_moon",
+	-- "book_bees",
+	-- "book_research_station",
+
+	-- "book_horticulture_upgraded",
+	-- "book_light_upgraded",
+
 	-- "monstermeat",
 	-- "monstermeat",
 	-- "monstermeat",
@@ -333,7 +356,7 @@ local function OnSanityDelta(inst, data)
 		inst.components.beard.prize = "manrabbit_tail"
 		-- inst:RemoveTag("playermonster")
 		inst:RemoveTag("monster")
-		
+
 
 		-- inst.components.sanityaura.aura = 0
 		inst.components.skinner:SetSkinMode("normal_skin", "wilson")
@@ -497,11 +520,11 @@ local function OnGrowShortBeard(inst, skinname)
 	-- 	end
 	-- end
 	-- if not inst.isbeardlord then
-		if skinname == nil then
-			inst.AnimState:OverrideSymbol("beard", "bunnybeard", "beard_short")
-		else
-			inst.AnimState:OverrideSkinSymbol("beard", skinname, "beard_short")
-		end
+	if skinname == nil then
+		inst.AnimState:OverrideSymbol("beard", "bunnybeard", "beard_short")
+	else
+		inst.AnimState:OverrideSkinSymbol("beard", skinname, "beard_short")
+	end
 	-- end
 	inst.components.beard.bits = BEARD_BITS[1]
 end
@@ -530,21 +553,35 @@ local function OnGrowLongBeard(inst, skinname)
 	inst.components.beard.bits = BEARD_BITS[3]
 end
 
-local function sanityfn(inst)--, dt)
-    local delta = inst.components.temperature:IsFreezing() and -TUNING.SANITYAURA_LARGE or 0
-    local x, y, z = inst.Transform:GetWorldPosition()
-    local max_rad = 10
-    -- local ents = TheSim:FindEntities(x, y, z, max_rad, FIRE_TAGS)
-    for i, v in ipairs(ents) do
-        if v.components.burnable ~= nil and v.components.burnable:IsBurning() then
-            local rad = v.components.burnable:GetLargestLightRadius() or 1
-            local sz = TUNING.SANITYAURA_TINY * math.min(max_rad, rad) / max_rad
-            local distsq = inst:GetDistanceSqToInst(v) - 9
-            -- shift the value so that a distance of 3 is the minimum
-            delta = delta + sz / math.max(1, distsq)
-        end
-    end
-    return delta
+local function sanityfn(inst) --, dt)
+	local delta = inst.components.temperature:IsFreezing() and -TUNING.SANITYAURA_LARGE or 0
+	local x, y, z = inst.Transform:GetWorldPosition()
+	local max_rad = 10
+	-- local ents = TheSim:FindEntities(x, y, z, max_rad, FIRE_TAGS)
+	for i, v in ipairs(ents) do
+		if v.components.burnable ~= nil and v.components.burnable:IsBurning() then
+			local rad = v.components.burnable:GetLargestLightRadius() or 1
+			local sz = TUNING.SANITYAURA_TINY * math.min(max_rad, rad) / max_rad
+			local distsq = inst:GetDistanceSqToInst(v) - 9
+			-- shift the value so that a distance of 3 is the minimum
+			delta = delta + sz / math.max(1, distsq)
+		end
+	end
+	return delta
+end
+
+local SHADOWCREATURE_MUST_TAGS = { "shadowcreature", "_combat", "locomotor" }
+local SHADOWCREATURE_CANT_TAGS = { "INLIMBO", "notaunt" }
+local function OnReadFn(inst, book)
+	if inst.components.sanity:IsInsane() then
+
+		local x, y, z = inst.Transform:GetWorldPosition()
+		local ents = TheSim:FindEntities(x, y, z, 16, SHADOWCREATURE_MUST_TAGS, SHADOWCREATURE_CANT_TAGS)
+
+		if #ents < TUNING.BOOK_MAX_SHADOWCREATURES then
+			TheWorld.components.shadowcreaturespawner:SpawnShadowCreature(inst)
+		end
+	end
 end
 
 local master_postinit = function(inst)
@@ -553,7 +590,7 @@ local master_postinit = function(inst)
 
 	inst.nivelDaBarba = 0
 
-	inst.components.builder.science_bonus = 1--voltar, mudar para este depois
+	inst.components.builder.science_bonus = 1 --voltar, mudar para este depois
 	-- inst.components.builder.science_bonus = 2
 
 	--beard
@@ -576,6 +613,8 @@ local master_postinit = function(inst)
 	inst:AddTag("shadowmagic")
 	inst:AddTag("magician")
 	inst:AddTag("reader")
+	inst:AddComponent("magician")
+	inst:AddComponent("reader")
 
 	--Webber
 	inst:AddTag("spiderwhisperer")
@@ -591,6 +630,8 @@ local master_postinit = function(inst)
 
 	--wickerbottom
 	inst:AddTag("bookbuilder")
+	inst:AddComponent("reader")
+	inst.components.reader:SetOnReadFn(OnReadFn)
 
 	--willow
 	inst:AddTag("pyromaniac")
@@ -686,19 +727,19 @@ local master_postinit = function(inst)
 	inst:ListenForEvent("locomote", function()
 		if inst.sg ~= nil and inst.sg:HasStateTag("moving") then
 			-- inst.components.hunger:SetRate(
-			-- 	inst.runningSpeed 
+			-- 	inst.runningSpeed
 			-- -- * TUNING.WILSON_HUNGER_RATE *
 			-- --  TUNING.WUNNY_HUNGER_RATE
 			-- ) --1.20
 			inst.components.hunger.hungerrate = inst.runningSpeed * TUNING.WILSON_HUNGER_RATE
 		else
-		-- 	inst.components.hunger:SetRate(
-		-- 		-- 1 
-		-- 	-- * 
-		-- 	TUNING.WILSON_HUNGER_RATE 
-		-- 	-- * TUNING.WUNNY_HUNGER_RATE
-		-- )
-		inst.components.hunger.hungerrate = TUNING.WILSON_HUNGER_RATE
+			-- 	inst.components.hunger:SetRate(
+			-- 		-- 1
+			-- 	-- *
+			-- 	TUNING.WILSON_HUNGER_RATE
+			-- 	-- * TUNING.WUNNY_HUNGER_RATE
+			-- )
+			inst.components.hunger.hungerrate = TUNING.WILSON_HUNGER_RATE
 		end
 	end)
 
@@ -767,7 +808,8 @@ local master_postinit = function(inst)
 					local item = SpawnPrefab("carrot")
 					inst.components.inventory:GiveItem(item, nil, inst:GetPosition())
 				end
-			elseif victim.prefab == "bunnyman" or victim.prefab == "newbunnyman" or victim.prefab == "everythingbunnyman" or victim.prefab == "daybunnyman"  then
+			elseif victim.prefab == "bunnyman" or victim.prefab == "newbunnyman" or victim.prefab == "everythingbunnyman" or
+				victim.prefab == "daybunnyman" then
 				inst.components.sanity:DoDelta(-10)
 				local dropChance = math.random(0, 2)
 				if dropChance == 1 then
