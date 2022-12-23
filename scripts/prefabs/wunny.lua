@@ -39,11 +39,36 @@ local NORMAL_SKINS = {
 TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
 	"rabbit",
 	"rabbit",
+	"rabbit",
+	"rabbit",
+	"boards",
+	"boards",
+	"boards",
+	"boards",
+	"boards",
+	"boards",
+	"boards",
+	"tophat",
+	"tophat",
+	"nightmarefuel",
+	"nightmarefuel",
+	"nightmarefuel",
+	"nightmarefuel",
+	"nightmarefuel",
+	"nightmarefuel",
+	"nightmarefuel",
+	"nightmarefuel",
+	"nightmarefuel",
+	"nightmarefuel",
+	"nightmarefuel",
+	"nightmarefuel",
+	"silk",
+	"waxwelljournal",
+	-- "shovel",
 
-	"shovel",
+	-- "carrot",
+	-- "carrot",
 
-	"carrot",
-	"carrot",
 	-- "carrot",
 	-- "carrot",
 	-- "carrot",
@@ -210,10 +235,26 @@ local function OnRemoveEntity(inst)
 	end
 end
 
-local function OnDespawn(inst)
+local function ForceDespawnShadowMinions(inst)
+    local todespawn = {}
+    for k, v in pairs(inst.components.petleash:GetPets()) do
+        if v:HasTag("shadowminion") then
+            table.insert(todespawn, v)
+        end
+    end
+    for i, v in ipairs(todespawn) do
+        inst.components.petleash:DespawnPet(v)
+    end
+end
+
+local function OnDespawn(inst, migrationdata)
 	if inst.woby ~= nil then
 		inst.woby:OnPlayerLinkDespawn()
 		inst.woby:PushEvent("player_despawn")
+	end
+
+	if migrationdata ~= nil then
+		ForceDespawnShadowMinions(inst)
 	end
 end
 
@@ -234,10 +275,27 @@ end
 local function onbecameghost(inst)
 	-- Remove speed modifier when becoming a ghost
 	-- inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "wunny_speed_mod")
+	for k, v in pairs(inst.components.petleash:GetPets()) do
+		if v:HasTag("shadowminion") then
+			inst:RemoveEventCallback("onremove", inst._onpetlost, v)
+			inst.components.sanity:RemoveSanityPenalty(v)
+			if v._killtask == nil then
+				v._killtask = v:DoTaskInTime(math.random(), KillPet)
+			end
+		end
+	end
+	if not GetGameModeProperty("no_sanity") then
+		inst.components.sanity.ignore = false
+		inst.components.sanity:SetPercent(.5, true)
+		inst.components.sanity.ignore = true
+	end
 end
 
 -- When loading or spawning the character
 local function onload(inst, data)
+	inst.components.magician:StopUsing()
+    -- OnSkinsChanged(inst, {nofx = true})
+
 	inst:ListenForEvent("ms_respawnedfromghost", onbecamehuman)
 	inst:ListenForEvent("ms_becameghost", onbecameghost)
 
@@ -584,6 +642,51 @@ local function OnReadFn(inst, book)
 	end
 end
 
+local function OnDeath(inst)
+    for k, v in pairs(inst.components.petleash:GetPets()) do
+        if v:HasTag("shadowminion") and v._killtask == nil then
+            v._killtask = v:DoTaskInTime(math.random(), KillPet)
+        end
+    end
+end
+
+local function KillPet(pet)
+	if pet.components.health:IsInvincible() then
+		--reschedule
+		pet._killtask = pet:DoTaskInTime(.5, KillPet)
+	else
+		pet.components.health:Kill()
+	end
+end
+
+local function OnSpawnPet(inst, pet)
+    if pet:HasTag("shadowminion") then
+        if not (inst.components.health:IsDead() or inst:HasTag("playerghost")) then
+			--if not inst.components.builder.freebuildmode then
+	            inst.components.sanity:AddSanityPenalty(pet, TUNING.SHADOWWAXWELL_SANITY_PENALTY[string.upper(pet.prefab)])
+			--end
+            inst:ListenForEvent("onremove", inst._onpetlost, pet)
+            pet.components.skinner:CopySkinsFromPlayer(inst)
+        elseif pet._killtask == nil then
+            pet._killtask = pet:DoTaskInTime(math.random(), KillPet)
+        end
+    elseif inst._OnSpawnPet ~= nil then
+        inst:_OnSpawnPet(pet)
+    end
+end
+
+local function OnDespawnPet(inst, pet)
+    if pet:HasTag("shadowminion") then
+		if not inst.is_snapshot_user_session and pet.sg ~= nil then
+			pet.sg:GoToState("quickdespawn")
+		else
+			pet:Remove()
+		end
+    elseif inst._OnDespawnPet ~= nil then
+        inst:_OnDespawnPet(pet)
+    end
+end
+
 local master_postinit = function(inst)
 
 	inst.runningSpeed = 1
@@ -615,6 +718,25 @@ local master_postinit = function(inst)
 	inst:AddTag("reader")
 	inst:AddComponent("magician")
 	inst:AddComponent("reader")
+
+	inst.components.reader:SetSanityPenaltyMultiplier(TUNING.MAXWELL_READING_SANITY_MULT)
+    inst.components.reader:SetOnReadFn(OnReadFn)
+
+	if inst.components.petleash ~= nil then
+        inst._OnSpawnPet = inst.components.petleash.onspawnfn
+        inst._OnDespawnPet = inst.components.petleash.ondespawnfn
+		inst.components.petleash:SetMaxPets(inst.components.petleash:GetMaxPets() + 6)
+    else
+        inst:AddComponent("petleash")
+		inst.components.petleash:SetMaxPets(6)
+    end
+
+	inst.components.petleash:SetOnSpawnFn(OnSpawnPet)
+    inst.components.petleash:SetOnDespawnFn(OnDespawnPet)
+
+	inst._onpetlost = function(pet) inst.components.sanity:RemoveSanityPenalty(pet) end
+
+	inst:ListenForEvent("death", OnDeath)
 
 	--Webber
 	inst:AddTag("spiderwhisperer")
@@ -832,7 +954,7 @@ local master_postinit = function(inst)
 	-- 		OnInsane(inst)
 	-- 	end
 	-- end)
-	inst.components.petleash:SetMaxPets(0) -- walter can only have Woby as a pet
+	-- inst.components.petleash:SetMaxPets(0) -- walter can only have Woby as a pet
 
 	inst._wobybuck_damage = 0
 	inst:ListenForEvent("timerdone", OnTimerDone)
