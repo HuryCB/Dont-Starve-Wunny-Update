@@ -27,7 +27,7 @@ local prefabs =
 local beardlordloot = { "beardhair", "beardhair", "monstermeat" }
 local forced_beardlordloot = { "nightmarefuel", "beardhair", "beardhair", "monstermeat" }
 
-local brain = require("brains/everythingbunnymanbrain")
+local brain = require("brains/ultrabunnymanbrain")
 
 local MAX_TARGET_SHARES = 5
 local SHARE_TARGET_DIST = 30
@@ -216,6 +216,16 @@ local function OnGetItemFromPlayer(inst, giver, item)
         inst.components.inventory:Equip(item)
         inst.AnimState:Show("hat")
     end
+
+    --n adianta, n é possível tentar dar armadura
+    -- if item.components.equippable ~= nil and item.components.equippable.equipslot == EQUIPSLOTS.BODY then
+    --     local current = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+    --     if current ~= nil then
+    --         inst.components.inventory:DropItem(current)
+    --     end
+    --     inst.components.inventory:Equip(item)
+    --     inst.AnimState:Show("body")
+    -- end
 end
 
 local function OnRefuseItem(inst, item)
@@ -250,8 +260,11 @@ local function NormalRetargetFn(inst)
             TUNING.PIG_TARGET_DIST,
             function(guy)
                 return inst.components.combat:CanTarget(guy)
-                    and (guy:HasTag("monster")
-                        or guy:HasTag("wonkey")
+                    and 
+                    (
+                        -- guy:HasTag("monster")--talvez tirando isso para de atacar spider
+                        -- or
+                         guy:HasTag("wonkey")
                         or guy:HasTag("pirate")
                         or (guy.components.inventory ~= nil and
                             guy:IsNear(inst, TUNING.BUNNYMAN_SEE_MEAT_DIST) and
@@ -309,6 +322,57 @@ local function OnLoad(inst)
     end
 end
 
+local function SleepTest()
+    return false
+end
+
+function StandardWakeChecks(inst)
+    return (inst.components.combat ~= nil and inst.components.combat.target ~= nil)
+        or (inst.components.burnable ~= nil and inst.components.burnable:IsBurning())
+        or (inst.components.freezable ~= nil and inst.components.freezable:IsFrozen())
+        or (inst.components.teamattacker ~= nil and inst.components.teamattacker.inteam)
+        or (inst.components.health ~= nil and inst.components.health.takingfiredamage)
+end
+
+local CAMPFIRE_TAGS = { "campfire", "fire" }
+local function NormalShouldSleep(inst)
+    return DefaultSleepTest(inst)
+        and (inst.components.follower == nil or inst.components.follower.leader == nil
+            or (FindEntity(inst, 6, nil, CAMPFIRE_TAGS) ~= nil and inst:IsInLight()))
+end
+
+function DefaultSleepTest(inst)
+    local watchlight = inst.LightWatcher ~= nil or (inst.components.sleeper and inst.components.sleeper.watchlight)
+    return StandardSleepChecks(inst)
+            -- sleep in the overworld at night
+        and (not TheWorld:HasTag("cave") and TheWorld.state.isnight
+            -- in caves, sleep at night if we have a lightwatcher and are in the dark
+            or (TheWorld:HasTag("cave") and TheWorld.state.iscavenight and (not watchlight or not inst:IsInLight())))
+end
+
+local function ShouldSleep(inst)
+    return
+    -- local sleeper = inst.components.sleeper
+    -- if sleeper == nil then
+    --     return
+    -- end
+    -- sleeper.lasttesttime = GetTime()
+    -- if sleeper.sleeptestfn ~= nil and sleeper.sleeptestfn(inst) then
+    --     sleeper:GoToSleep()
+    -- end
+end
+
+function DefaultWakeTest(inst)
+    local watchlight = inst.LightWatcher ~= nil or (inst.components.sleeper and inst.components.sleeper.watchlight)
+
+    return StandardWakeChecks(inst)
+        -- wake when it's not night
+        or (not TheWorld:HasTag("cave") and not TheWorld.state.isnight)
+        -- in caves, wake if it's not night and we've got a light shining on us
+        or (TheWorld:HasTag("cave") and not TheWorld.state.iscavenight and (not watchlight or inst:IsInLight()))
+end
+
+
 local function fn()
     local inst = CreateEntity()
 
@@ -334,9 +398,9 @@ local function fn()
 
     inst:AddTag("cavedweller")
     inst:AddTag("character")
-    inst:AddTag("pig")
-    inst:AddTag("manrabbit")
-    inst:AddTag("scarytoprey")
+    -- inst:AddTag("pig")
+    -- inst:AddTag("manrabbit")
+    -- inst:AddTag("scarytoprey")
 
     inst.AnimState:SetBank("manrabbit")
     inst.AnimState:PlayAnimation("idle_loop", true)
@@ -434,7 +498,9 @@ local function fn()
     ------------------------------------------
 
     inst:AddComponent("sleeper")
-    inst.components.sleeper.watchlight = true
+    inst.components.sleeper.watchlight = false
+    inst.components.sleeper:SetSleepTest(ShouldSleep)
+    inst.components.sleeper:SetWakeTest(DefaultWakeTest)
 
     ------------------------------------------
     MakeMediumFreezableCharacter(inst, "pig_torso")
@@ -451,8 +517,8 @@ local function fn()
     inst:ListenForEvent("suggest_tree_target", SuggestTreeTarget)
 
     inst.components.sleeper:SetResistance(2)
-    inst.components.sleeper.sleeptestfn = NocturnalSleepTest
-    inst.components.sleeper.waketestfn = NocturnalWakeTest
+    inst.components.sleeper.sleeptestfn = NormalShouldSleep
+    inst.components.sleeper.waketestfn = DefaultWakeTest
 
     inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE * 110 / 100)
     inst.components.combat:SetAttackPeriod(TUNING.BUNNYMAN_ATTACK_PERIOD * 90 / 100)
@@ -467,7 +533,7 @@ local function fn()
     MakeHauntablePanic(inst)
 
     inst:SetBrain(brain)
-    inst:SetStateGraph("SGeverythingbunnyman")
+    inst:SetStateGraph("SGultrabunnyman")
 
     --shadow_trap interaction
     inst.has_nightmare_state = true
@@ -478,4 +544,4 @@ local function fn()
     return inst
 end
 
-return Prefab("everythingbunnyman", fn, assets, prefabs)
+return Prefab("ultrabunnyman", fn, assets, prefabs)

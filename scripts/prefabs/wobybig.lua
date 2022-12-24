@@ -72,7 +72,11 @@ local function SetRunSpeed(inst, speed)
     local rider = inst.components.rideable:GetRider()
     if rider and rider.player_classified ~= nil then
 
-        -- speed = speed * (rider.components.locomotor.runspeed - 6)
+        
+        speed = speed + (rider.components.locomotor.runspeed - 6)
+        -- inst.components.equippable.walkspeedmult = TUNING.CANE_SPEED_MULT
+        -- inst.components.locomotor:SetExternalSpeedMultiplier(inst, "teste", 2)
+        -- speed = speed * rider.components.locomotor:GetSpeedMultiplier()
         rider.player_classified.riderrunspeed:set(speed)
     end
 
@@ -114,6 +118,10 @@ local function OnRiderChanged(inst, data)
             -- The SG won't listen for the event right now, so we wait a frame
             inst:DoTaskInTime(0, function() inst:PushEvent("transform") end)
         end
+    end
+
+    if data.newrider ~= nil then
+        print("multiplier do novo montador ", data.newrider.components.locomotor:GetSpeedMultiplier())
     end
 end
 
@@ -251,7 +259,7 @@ local function fn()
     inst.components.sleeper.waketestfn = ShouldWakeUp
 
     inst:AddComponent("hunger")
-    inst.components.hunger:SetMax(TUNING.WOBY_BIG_HUNGER * 4 )
+    inst.components.hunger:SetMax(TUNING.WOBY_BIG_HUNGER)--se for mt alto, a porcentagem vai ficar baixa
     inst.components.hunger:SetRate(TUNING.WOBY_BIG_HUNGER_RATE)
     inst.components.hunger:SetOverrideStarveFn(OnStarving)
 

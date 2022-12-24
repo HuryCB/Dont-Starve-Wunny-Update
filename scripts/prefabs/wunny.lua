@@ -64,6 +64,11 @@ TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
 	"nightmarefuel",
 	"silk",
 	"waxwelljournal",
+	"cane",
+
+	"monstermeat",
+	"monstermeat",
+	"monstermeat",
 	-- "shovel",
 
 	-- "carrot",
@@ -80,6 +85,7 @@ TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
 
 	"manrabbit_tail",
 	"manrabbit_tail",
+	"armorwood",
 
 	-- "tophat_magician",
 
@@ -118,7 +124,7 @@ TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
 	-- "boards",
 	-- "bernie_inactive",
 	-- "lucy",
-	-- "spidereggsack",
+	"spidereggsack",
 	-- "pigskin",
 	-- "meat",
 	-- "meat",
@@ -476,12 +482,14 @@ end
 
 local caveDay = function(inst)
 	inst.components.locomotor.runspeed = 7.2
+	inst.components.locomotor.walkspeed = 7.2
 	inst.runningSpeed = 1.2
 	print("print caveday")
 end
 
 local caveDusk = function(inst)
 	inst.components.locomotor.runspeed = 7.8
+	inst.components.locomotor.walkspeed = 7.8
 	inst.runningSpeed = 1.3
 	print("print cavedusk")
 end
@@ -490,6 +498,7 @@ local caveNight = function(inst)
 	if TheWorld.state.iscavenight
 	then
 		inst.components.locomotor.runspeed = 7.5
+		inst.components.locomotor.walkspeed = 7.5
 		inst.runningSpeed = 1.25
 		print("print cavenight")
 	end
@@ -517,16 +526,19 @@ end
 
 local surfaceDay = function(inst)
 	inst.components.locomotor.runspeed = 7.8
+	inst.components.locomotor.walkspeed = 7.8
 	inst.runningSpeed = 1.3
 end
 
 local surfaceDusk = function(inst)
 	inst.components.locomotor.runspeed = 7.5
+	inst.components.locomotor.walkspeed = 7.5
 	inst.runningSpeed = 1.25
 end
 
 local surfaceNight = function(inst)
 	inst.components.locomotor.runspeed = 7.2
+	inst.components.locomotor.walkspeed = 7.2
 	inst.runningSpeed = 1.2
 end
 
@@ -687,7 +699,34 @@ local function OnDespawnPet(inst, pet)
     end
 end
 
+local function currentspeedup(self,speedupamount) self.inst.currentspeedup:set(speedupamount) end
+
+local function OnEquip(inst, data)
+	print("equipou e ", inst.components.locomotor:GetSpeedMultiplier())
+	-- _G.speedMultiplier = inst.components.locomotor:GetSpeedMultiplier()
+    -- if data.eslot == EQUIPSLOTS.HEAD and not data.item:HasTag("open_top_hat") then
+    --     --V2C: HAH! There's no "beard" in "player_wormwood" build.
+    --     --     This hides the flower, which uses the beard symbol.
+    --     inst.AnimState:OverrideSymbol("beard", "player_wormwood", "beard")
+    -- end
+end
+
+local function OnUnequip(inst, data)
+	print("desequipou e ", inst.components.locomotor:GetSpeedMultiplier())
+	-- _G.speedMultiplier = inst.components.locomotor:GetSpeedMultiplier()
+    -- if data.eslot == EQUIPSLOTS.HEAD then
+    --     inst.AnimState:ClearOverrideSymbol("beard")
+    -- end
+end
+
 local master_postinit = function(inst)
+	-- print("speed ", GLOBAL.net_shortint(inst.GUID,"currentspeedup"))
+	-- print("speed ", currentspeedup)
+	-- print("speed ",  inst.components.equippable.walkspeedmult)
+	-- print("Runspeed ", inst.components.locomotor:GetRunSpeed())
+	-- print("Multspeed ", inst.components.locomotor:GetSpeedMultiplier())
+	-- print("Walkspeed ", inst.components.locomotor:GetWalkSpeed())
+	
 
 	inst.runningSpeed = 1
 
@@ -806,6 +845,8 @@ local master_postinit = function(inst)
 	inst:AddTag("dogrider")
 	inst:AddTag("nowormholesanityloss") -- talvez tirar para balancear
 	-- inst:AddTag("storyteller") -- for storyteller component
+	inst:ListenForEvent("equip", OnEquip)
+    inst:ListenForEvent("unequip", OnUnequip)
 
 	--Wanda
 	inst:AddTag("clockmaker")
@@ -854,6 +895,10 @@ local master_postinit = function(inst)
 			-- --  TUNING.WUNNY_HUNGER_RATE
 			-- ) --1.20
 			inst.components.hunger.hungerrate = inst.runningSpeed * TUNING.WILSON_HUNGER_RATE
+			print("Runspeed ", inst.components.locomotor:GetRunSpeed())
+			print("Multspeed ", inst.components.locomotor:GetSpeedMultiplier())
+			print("Walkspeed ", inst.components.locomotor:GetWalkSpeed())
+			-- print("TUNING SPEED", _G.speedMultiplier)
 		else
 			-- 	inst.components.hunger:SetRate(
 			-- 		-- 1
@@ -883,6 +928,7 @@ local master_postinit = function(inst)
 					or v.prefab == "newbunnyman"
 					or v.prefab == "everythingbunnyman"
 					or v.prefab == "daybunnyman"
+					or v.prefab == "ultrabunnyman"
 				then
 					if v.components.follower.leader == nil
 					then
@@ -930,8 +976,12 @@ local master_postinit = function(inst)
 					local item = SpawnPrefab("carrot")
 					inst.components.inventory:GiveItem(item, nil, inst:GetPosition())
 				end
-			elseif victim.prefab == "bunnyman" or victim.prefab == "newbunnyman" or victim.prefab == "everythingbunnyman" or
-				victim.prefab == "daybunnyman" then
+			elseif victim.prefab == "bunnyman" 
+			or victim.prefab == "newbunnyman" 
+			or victim.prefab == "everythingbunnyman" 
+			or victim.prefab == "daybunnyman" 
+			or victim.prefab == "ultrabunnyman" 
+				then
 				inst.components.sanity:DoDelta(-10)
 				local dropChance = math.random(0, 2)
 				if dropChance == 1 then

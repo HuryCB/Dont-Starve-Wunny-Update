@@ -15,6 +15,8 @@ PrefabFiles = {
     "daybunnyhouse",
     "everythingbunnyhouse",
     "everythingbunnyman",
+    "ultrabunnyhouse",
+    "ultrabunnyman",
     "newbunnyman",
     "daybunnyman",
     -- "beardlordback"
@@ -82,6 +84,9 @@ local STRINGS = GLOBAL.STRINGS
 local RECIPETABS = GLOBAL.RECIPETABS
 local Ingredient = GLOBAL.Ingredient
 local TECH = GLOBAL.TECH
+local _G = GLOBAL
+
+-- _G.speedMultiplier = 1
 
 modimport("strings.lua")
 
@@ -253,7 +258,9 @@ everythingbunnyhouse_recipe(
         , Ingredient("pickaxe", 1)
         , Ingredient("spear", 1)
     }, TECH.NONE)
+--end everything
 
+--start daybunny
     local function day_recipe(ingredientes, level)
         AddRecipe("daybunnyhouse", ingredientes, RECIPETABS.SURVIVAL, level,
             "rabbithouse_placer", nil, nil, nil, "wunny", "images/inventoryimages/bunnyhouse.xml",
@@ -269,6 +276,28 @@ everythingbunnyhouse_recipe(
             -- , Ingredient("pickaxe", 1)
             -- , Ingredient("spear", 1)
         }, TECH.NONE)
+--end daybunny
+
+--start ultragbunnyman house
+local function ultrabunnyhouse_recipe(ingredientes, level)
+    AddRecipe("ultrabunnyhouse", ingredientes, RECIPETABS.SURVIVAL, level,
+        "rabbithouse_placer", nil, nil, nil, "wunny", "images/inventoryimages/bunnyhouse.xml",
+        "bunnyhouse.tex")
+end
+
+ultrabunnyhouse_recipe(
+    {
+        -- Ingredient("carrot", 5),
+        Ingredient("manrabbit_tail", 2)
+        -- , Ingredient("boards", 2)
+        -- , Ingredient("axe", 1)
+        -- , Ingredient("pickaxe", 1)
+        -- , Ingredient("spear", 1)
+    }, TECH.NONE)
+--end ultragbunnyman house
+
+
+
 --DEFAULT RABBIT HOUSE for crafting options
 -- rabbithouse_recipe(
 --     {
