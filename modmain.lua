@@ -19,6 +19,8 @@ PrefabFiles = {
     "ultrabunnyman",
     "newbunnyman",
     "daybunnyman",
+
+    "wunnyslingshot",
     -- "beardlordback"
 }
 
@@ -309,6 +311,21 @@ ultrabunnyhouse_recipe(
 --     AddRecipe("wunnyrabbithouse", ingredientes, RECIPETABS.SURVIVAL, level,
 --         "rabbithouse_placer", nil, nil, nil, "wunny")
 -- end
+
+AddRecipe("wunnyslingshot",
+{
+    Ingredient("twigs", 1)
+    -- , Ingredient("mosquitosack", 2)
+},RECIPETABS.WAR,
+TECH.NONE,
+nil,
+nil,
+nil,
+nil,
+"wunny",
+nil,
+"lucy.tex"
+)
 
 
 AddRecipe("lucy",
