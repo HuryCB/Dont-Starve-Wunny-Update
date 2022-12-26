@@ -71,12 +71,20 @@ Assets = {
 
     Asset("ATLAS", "images/inventoryimages/coolerpack.xml"),
     Asset("IMAGE", "images/inventoryimages/coolerpack.tex"),
+
+    Asset("IMAGE", "images/inventoryimages/slingshot.tex"),
+    
     Asset("ANIM", "anim/swap_coolerpack.zip"),
 
     Asset("ANIM", "anim/everythingmanrabbit_build.zip"),
 
     Asset("ANIM", "anim/bat_bunny.zip"),
     Asset("ANIM", "anim/swap_bat_bunny.zip"),
+
+    Asset("ANIM", "anim/slingshot.zip"),
+    Asset("ANIM", "anim/swap_slingshot.zip"),
+
+
 }
 
 AddMinimapAtlas("images/map_icons/wunny.xml")
@@ -271,12 +279,12 @@ everythingbunnyhouse_recipe(
     
     day_recipe(
         {
-            -- Ingredient("carrot", 5),
+            Ingredient("carrot", 5),
             Ingredient("manrabbit_tail", 2)
-            -- , Ingredient("boards", 2)
-            -- , Ingredient("axe", 1)
-            -- , Ingredient("pickaxe", 1)
-            -- , Ingredient("spear", 1)
+            , Ingredient("boards", 2)
+            , Ingredient("axe", 1)
+            , Ingredient("pickaxe", 1)
+            , Ingredient("spear", 1)
         }, TECH.NONE)
 --end daybunny
 
@@ -289,12 +297,13 @@ end
 
 ultrabunnyhouse_recipe(
     {
-        -- Ingredient("carrot", 5),
+        Ingredient("carrot", 5),
         Ingredient("manrabbit_tail", 2)
-        -- , Ingredient("boards", 2)
-        -- , Ingredient("axe", 1)
-        -- , Ingredient("pickaxe", 1)
-        -- , Ingredient("spear", 1)
+        , Ingredient("boards", 2)
+        , Ingredient("axe", 1)
+        , Ingredient("pickaxe", 1)
+        , Ingredient("spear", 1)
+        , Ingredient("livinglog", 1)
     }, TECH.NONE)
 --end ultragbunnyman house
 
@@ -314,8 +323,11 @@ ultrabunnyhouse_recipe(
 
 AddRecipe("wunnyslingshot",
 {
-    Ingredient("twigs", 1)
-    -- , Ingredient("mosquitosack", 2)
+    Ingredient("twigs", 2)
+    , Ingredient("mosquitosack", 3)
+    , Ingredient("livinglog", 1)
+    , Ingredient("silk", 1)
+
 },RECIPETABS.WAR,
 TECH.NONE,
 nil,
@@ -323,8 +335,9 @@ nil,
 nil,
 nil,
 "wunny",
+-- "images/inventoryimages/slingshot.xml",
 nil,
-"lucy.tex"
+"slingshot.tex"
 )
 
 

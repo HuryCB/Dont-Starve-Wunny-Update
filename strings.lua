@@ -25,6 +25,16 @@ STRINGS.RECIPE_DESC.NEWBUNNYHOUSE = "Wurt isn't the only one who can upgrade the
 
 STRINGS.NAMES.EVERYTHINGBUNNYHOUSE = "Everything Bunnyhouse"
 STRINGS.RECIPE_DESC.EVERYTHINGBUNNYHOUSE = "These bunny can do everything! Mine, chop, destroy them better..."
+
+STRINGS.NAMES.DAYBUNNYHOUSE = "Day Bunnyhouse"
+STRINGS.RECIPE_DESC.DAYBUNNYHOUSE = "These bunny works during the day"
+
+STRINGS.NAMES.ULTRABUNNYHOUSE = "Ultra Bunnyhouse"
+STRINGS.RECIPE_DESC.ULTRABUNNYHOUSE = "Better than 'everything', works all day and don't attack monsters on sight"
+
+STRINGS.NAMES.WUNNYSLINGSHOT = "Longer slingshot"
+STRINGS.RECIPE_DESC.WUNNYSLINGSHOT = "A longer slingshot, but it costs your mind..."
+
 -- TRINGS.RECIPE_DESC.LUCY = "Woodie's axe for Wunny"
 
 -- STRINGS.NAMES.CACTUSMACE = "Cactus Bat"
