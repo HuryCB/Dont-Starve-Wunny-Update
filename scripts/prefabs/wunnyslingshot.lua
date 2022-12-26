@@ -2,6 +2,9 @@ local assets =
 {
     Asset("ANIM", "anim/slingshot.zip"),
     Asset("ANIM", "anim/swap_slingshot.zip"),
+
+    Asset("IMAGE", "images/inventoryimages/slingshot.tex"),
+    Asset("ATLAS", "images/inventoryimages/slingshot.xml"),
 }
 
 local prefabs =
@@ -135,6 +138,9 @@ local function fn()
 	inst.components.container.canbeopened = false
     inst:ListenForEvent("itemget", OnAmmoLoaded)
     inst:ListenForEvent("itemlose", OnAmmoUnloaded)
+
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/slingshot.xml"
+    inst.components.inventoryitem.imagename = "slingshot"
 
     MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
     MakeSmallPropagator(inst)

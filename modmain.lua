@@ -72,17 +72,17 @@ Assets = {
     Asset("ATLAS", "images/inventoryimages/coolerpack.xml"),
     Asset("IMAGE", "images/inventoryimages/coolerpack.tex"),
 
-    Asset("IMAGE", "images/inventoryimages/slingshot.tex"),
     
     Asset("ANIM", "anim/swap_coolerpack.zip"),
-
+    
     Asset("ANIM", "anim/everythingmanrabbit_build.zip"),
-
+    
     Asset("ANIM", "anim/bat_bunny.zip"),
     Asset("ANIM", "anim/swap_bat_bunny.zip"),
-
+    
     Asset("ANIM", "anim/slingshot.zip"),
     Asset("ANIM", "anim/swap_slingshot.zip"),
+    Asset("IMAGE", "images/inventoryimages/slingshot.tex"),
 
 
 }
