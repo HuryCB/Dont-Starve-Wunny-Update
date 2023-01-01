@@ -120,9 +120,9 @@ local function OnRiderChanged(inst, data)
         end
     end
 
-    if data.newrider ~= nil then
-        print("multiplier do novo montador ", data.newrider.components.locomotor:GetSpeedMultiplier())
-    end
+    -- if data.newrider ~= nil then
+        -- print("multiplier do novo montador ", data.newrider.components.locomotor:GetSpeedMultiplier())
+    -- end
 end
 
 local function OnRiderSleep(inst, data)

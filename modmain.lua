@@ -191,6 +191,56 @@ AddPrefabPostInit("world_network", function(inst)
     end
 end)
 
+--------------------------------------------------------------------------
+--[[ slingshot ]]
+--------------------------------------------------------------------------
+
+-- local params = {}
+-- local containers = { MAXITEMSLOTS = 0 }
+
+-- containers.params = params
+
+-- function containers.widgetsetup(container, prefab, data)
+--     local t = data or params[prefab or container.inst.prefab]
+--     if t ~= nil then
+--         for k, v in pairs(t) do
+--             container[k] = v
+--         end
+--         container:SetNumSlots(container.widget.slotpos ~= nil and #container.widget.slotpos or 0)
+--     end
+-- end
+
+-- params.slingshot =
+-- {
+--     widget =
+--     {
+--         slotpos =
+--         {
+--             Vector3(0,   32 + 4,  0),
+--         },
+--         slotbg =
+--         {
+--             { image = "slingshot_ammo_slot.tex" },
+--         },
+--         animbank = "ui_cookpot_1x2",
+--         animbuild = "ui_cookpot_1x2",
+--         pos = Vector3(0, 15, 0),
+--     },
+--     usespecificslotsforitems = true,
+--     type = "hand_inv",
+--     excludefromcrafting = true,
+-- }
+
+-- function params.slingshot.itemtestfn(container, item, slot)
+-- 	return item:HasTag("slingshotammo")
+-- end
+
+
+-- for k, v in pairs(params) do
+--     containers.MAXITEMSLOTS = math.max(containers.MAXITEMSLOTS, v.widget.slotpos ~= nil and #v.widget.slotpos or 0)
+-- end
+--------------------------------------------------------------------------
+
 -- The character select screen lines
 STRINGS.CHARACTER_TITLES.wunny = "The Bunnylord"
 STRINGS.CHARACTER_NAMES.wunny = "Wunny MODED"

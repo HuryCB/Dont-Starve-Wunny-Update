@@ -25,6 +25,7 @@ PrefabFiles = {
 	"boards",
 	"manrabbit_tail",
 	"carrot_cooked",
+	"wunnyslingshot",
 }
 
 local BEARDLORD_SKINS = {
@@ -37,6 +38,7 @@ local NORMAL_SKINS = {
 
 -- Custom starting inventory
 TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
+	-- "wunnyslingshot",
 	"rabbit",
 	"rabbit",
 	-- "rabbit",
@@ -366,6 +368,87 @@ end
 local common_postinit = function(inst)
 	-- Minimap icon
 	inst.MiniMapEntity:SetIcon("wunny.tex")
+
+	--Webber
+	inst:AddTag("spiderwhisperer")
+	inst:AddTag(UPGRADETYPES.SPIDER .. "_upgradeuser")
+
+	--Wendy
+	-- inst:AddTag("ghostlyfriend")
+	-- inst:AddTag("elixirbrewer")
+
+	--Wes
+	inst:AddTag("mime")
+	inst:AddTag("balloonomancer")
+
+	--wickerbottom
+	inst:AddTag("bookbuilder")
+	
+
+	--willow
+	inst:AddTag("pyromaniac")
+	inst:AddTag("expertchef")
+	inst:AddTag("bernieowner")
+	-- inst.components.sanity.custom_rate_fn = sanityfn
+	
+	--winona
+	inst:AddTag("handyperson")
+
+	--wolfgang
+	-- inst:AddTag("strongman")
+
+	--Woodie
+	inst:AddTag("woodcutter")
+	-- inst:AddTag("werehuman")
+
+	--Wormwood
+	inst:AddTag("plantkin")
+	-- inst:AddTag("self_fertilizable")
+
+	--Wortox
+	-- inst:AddTag("monster")
+	-- inst:AddTag("soulstealer")
+	-- inst:AddTag("souleater")
+
+	--Wurt
+	inst:AddTag("merm_builder")
+
+	--wx78
+	-- inst:AddTag("batteryuser")          -- from batteryuser component
+	-- inst:AddTag("chessfriend")
+	-- inst:AddTag("HASHEATER")            -- from heater component
+	-- inst:AddTag("soulless")
+	-- inst:AddTag("upgrademoduleowner")
+
+	--Warly
+	inst:AddTag("masterchef")
+	inst:AddTag("professionalchef")
+
+	--Walter
+	inst:AddTag("pebblemaker")
+	inst:AddTag("pinetreepioneer")
+	-- inst:AddTag("allergictobees")
+	inst:AddTag("slingshot_sharpshooter")
+	-- inst:AddTag("efficient_sleeper")
+	inst:AddTag("dogrider")
+	inst:AddTag("nowormholesanityloss") -- talvez tirar para balancear
+	-- inst:AddTag("storyteller") -- for storyteller component
+	
+
+	--Wanda
+	inst:AddTag("clockmaker")
+	inst:AddTag("pocketwatchcaster")
+
+	--Wigfrid
+	inst:AddTag("valkyrie")
+	-- inst:AddTag("battlesinger")
+
+	--Wilson
+	inst:AddTag("bearded")
+
+	inst:AddTag("shadowmagic")
+	inst:AddTag("magician")
+	inst:AddTag("reader")
 end
 
 local function OnSave(inst, data)
@@ -394,8 +477,8 @@ local function OnSanityDelta(inst, data)
 		-- Becoming beardlord
 		-- inst.components.sanity.current = 0
 		inst.isbeardlord = true
-		print("barba do beard")
-		print(inst.nivelDaBarba)
+		-- print("barba do beard")
+		-- print(inst.nivelDaBarba)
 		-- inst.components.sanity.dapperness = -TUNING.DAPPERNESS_TINY
 
 
@@ -416,8 +499,8 @@ local function OnSanityDelta(inst, data)
 		end
 		-- inst.components.sanityaura.aura = -TUNING.SANITYAURA_SMALL
 		-- SetSkin(inst)
-		print("monster de barba")
-		print(inst.nivelDaBarba)
+		-- print("monster de barba")
+		-- print(inst.nivelDaBarba)
 		-- if inst.nivelDaBarba == 1
 		-- then
 		-- 	inst.AnimState:OverrideSymbol("beard", "beard", "beard_short")
@@ -451,7 +534,7 @@ local function OnSanityDelta(inst, data)
 		-- inst.components.sanityaura.aura = 0
 		inst.components.skinner:SetSkinMode("normal_skin", "wilson")
 		if inst.components.eater ~= nil then
-			inst.components.eater:SetDiet({ FOODGROUP.VEGETARIAN }, { FOODGROUP.VEGETARIAN })
+			inst.components.eater:SetDiet({ FOODGROUP.VEGETARIAN }, { FOODGROUP.VEGETARIAN,  FOODTYPE.GOODIES })
 			inst.components.eater:SetStrongStomach(false)
 			inst.components.eater:SetCanEatRawMeat(false)
 		end
@@ -510,14 +593,14 @@ local caveDay = function(inst)
 	inst.components.locomotor.runspeed = 7.2
 	inst.components.locomotor.walkspeed = 7.2
 	inst.runningSpeed = 1.2
-	print("print caveday")
+	-- print("print caveday")
 end
 
 local caveDusk = function(inst)
 	inst.components.locomotor.runspeed = 7.8
 	inst.components.locomotor.walkspeed = 7.8
 	inst.runningSpeed = 1.3
-	print("print cavedusk")
+	-- print("print cavedusk")
 end
 
 local caveNight = function(inst)
@@ -526,7 +609,7 @@ local caveNight = function(inst)
 		inst.components.locomotor.runspeed = 7.5
 		inst.components.locomotor.walkspeed = 7.5
 		inst.runningSpeed = 1.25
-		print("print cavenight")
+		-- print("print cavenight")
 	end
 end
 
@@ -605,8 +688,8 @@ local BEARD_BITS = { 1, 3, 9 }
 
 local function OnGrowShortBeard(inst, skinname)
 	inst.nivelDaBarba = 1
-	print("teste barba short")
-	print(inst.nivelDaBarba)
+	-- print("teste barba short")
+	-- print(inst.nivelDaBarba)
 
 	-- if inst.isbeardlord then
 	-- 	if skinname == nil then
@@ -627,8 +710,8 @@ end
 
 local function OnGrowMediumBeard(inst, skinname)
 	inst.nivelDaBarba = 2
-	print("teste barba medi")
-	print(inst.nivelDaBarba)
+	-- print("teste barba medi")
+	-- print(inst.nivelDaBarba)
 	if skinname == nil then
 		inst.AnimState:OverrideSymbol("beard", "bunnybeard", "beard_medium")
 	else
@@ -639,8 +722,8 @@ end
 
 local function OnGrowLongBeard(inst, skinname)
 	inst.nivelDaBarba = 3
-	print("teste barba long")
-	print(inst.nivelDaBarba)
+	-- print("teste barba long")
+	-- print(inst.nivelDaBarba)
 	if skinname == nil then
 		inst.AnimState:OverrideSymbol("beard", "bunnybeard", "beard_long")
 	else
@@ -728,7 +811,7 @@ end
 local function currentspeedup(self,speedupamount) self.inst.currentspeedup:set(speedupamount) end
 
 local function OnEquip(inst, data)
-	print("equipou e ", inst.components.locomotor:GetSpeedMultiplier())
+	-- print("equipou e ", inst.components.locomotor:GetSpeedMultiplier())
 	-- _G.speedMultiplier = inst.components.locomotor:GetSpeedMultiplier()
     -- if data.eslot == EQUIPSLOTS.HEAD and not data.item:HasTag("open_top_hat") then
     --     --V2C: HAH! There's no "beard" in "player_wormwood" build.
@@ -738,7 +821,7 @@ local function OnEquip(inst, data)
 end
 
 local function OnUnequip(inst, data)
-	print("desequipou e ", inst.components.locomotor:GetSpeedMultiplier())
+	-- print("desequipou e ", inst.components.locomotor:GetSpeedMultiplier())
 	-- _G.speedMultiplier = inst.components.locomotor:GetSpeedMultiplier()
     -- if data.eslot == EQUIPSLOTS.HEAD then
     --     inst.AnimState:ClearOverrideSymbol("beard")
@@ -752,7 +835,15 @@ local master_postinit = function(inst)
 	-- print("Runspeed ", inst.components.locomotor:GetRunSpeed())
 	-- print("Multspeed ", inst.components.locomotor:GetSpeedMultiplier())
 	-- print("Walkspeed ", inst.components.locomotor:GetWalkSpeed())
+
+	-- inst:ListenForEvent("equip", OnEquip)
+    -- inst:ListenForEvent("unequip", OnUnequip)
 	
+	inst.components.temperature.inherentinsulation = -TUNING.INSULATION_TINY
+	inst.components.temperature:SetFreezingHurtRate(TUNING.WILSON_HEALTH / TUNING.WILLOW_FREEZING_KILL_TIME)
+
+
+	inst:AddComponent("reader")
 
 	inst.runningSpeed = 1
 
@@ -778,11 +869,8 @@ local master_postinit = function(inst)
 	inst:AddTag("wunny")
 
 	--Waxwell
-	inst:AddTag("shadowmagic")
-	inst:AddTag("magician")
-	inst:AddTag("reader")
+	
 	inst:AddComponent("magician")
-	inst:AddComponent("reader")
 
 	inst.components.reader:SetSanityPenaltyMultiplier(TUNING.MAXWELL_READING_SANITY_MULT)
     inst.components.reader:SetOnReadFn(OnReadFn)
@@ -803,105 +891,6 @@ local master_postinit = function(inst)
 
 	inst:ListenForEvent("death", OnDeath)
 
-	--Webber
-	inst:AddTag("spiderwhisperer")
-	inst:AddTag(UPGRADETYPES.SPIDER .. "_upgradeuser")
-
-	--Wendy
-	-- inst:AddTag("ghostlyfriend")
-	-- inst:AddTag("elixirbrewer")
-
-	--Wes
-	inst:AddTag("mime")
-	inst:AddTag("balloonomancer")
-
-	--wickerbottom
-	inst:AddTag("bookbuilder")
-	inst:AddComponent("reader")
-	inst.components.reader:SetOnReadFn(OnReadFn)
-
-	--willow
-	inst:AddTag("pyromaniac")
-	inst:AddTag("expertchef")
-	inst:AddTag("bernieowner")
-	-- inst.components.sanity.custom_rate_fn = sanityfn
-	inst.components.temperature.inherentinsulation = -TUNING.INSULATION_TINY
-	inst.components.temperature:SetFreezingHurtRate(TUNING.WILSON_HEALTH / TUNING.WILLOW_FREEZING_KILL_TIME)
-
-	--winona
-	inst:AddTag("handyperson")
-
-	--wolfgang
-	-- inst:AddTag("strongman")
-
-	--Woodie
-	inst:AddTag("woodcutter")
-	-- inst:AddTag("werehuman")
-
-	--Wormwood
-	inst:AddTag("plantkin")
-	-- inst:AddTag("self_fertilizable")
-
-	--Wortox
-	-- inst:AddTag("monster")
-	-- inst:AddTag("soulstealer")
-	-- inst:AddTag("souleater")
-
-	--Wurt
-	inst:AddTag("merm_builder")
-
-	--wx78
-	-- inst:AddTag("batteryuser")          -- from batteryuser component
-	-- inst:AddTag("chessfriend")
-	-- inst:AddTag("HASHEATER")            -- from heater component
-	-- inst:AddTag("soulless")
-	-- inst:AddTag("upgrademoduleowner")
-
-	--Warly
-	inst:AddTag("masterchef")
-	inst:AddTag("professionalchef")
-	-- inst:AddTag("expertchef") -- já tem na Willow
-
-	--Walter
-	inst:AddTag("pebblemaker")
-	inst:AddTag("pinetreepioneer")
-	-- inst:AddTag("allergictobees")
-	inst:AddTag("slingshot_sharpshooter")
-	-- inst:AddTag("efficient_sleeper")
-	inst:AddTag("dogrider")
-	inst:AddTag("nowormholesanityloss") -- talvez tirar para balancear
-	-- inst:AddTag("storyteller") -- for storyteller component
-	inst:ListenForEvent("equip", OnEquip)
-    inst:ListenForEvent("unequip", OnUnequip)
-
-	--Wanda
-	inst:AddTag("clockmaker")
-	inst:AddTag("pocketwatchcaster")
-
-	--Wigfrid
-	inst:AddTag("valkyrie")
-	-- inst:AddTag("battlesinger")
-
-	--Wilson
-	inst:AddTag("bearded")
-
-	--TAGS COM ERRO
-	-- inst:AddTag("engineering")
-	-- inst:AddTag("handyperson")
-	-- inst:AddTag("masterchef")
-	-- inst:AddTag("professionalchef")
-	-- inst:AddTag("merm_builder")
-	-- inst:AddTag("battlesinger")
-	-- inst:AddTag("pebblemaker")
-	-- inst:AddTag("pinetreepioneer")
-	-- inst:AddTag("bookbuilder")
-	-- inst:AddTag("spiderwhisperer")
-	-- inst:AddTag("plantkin")
-	-- inst:AddTag("clockmaker")
-	-- inst:AddTag("balloonomancer")
-	-- inst:AddTag("slingshot_sharpshooter")
-	-- inst:AddTag("pocketwatchcaster")
-
 	inst.components.foodaffinity:AddFoodtypeAffinity(FOODTYPE.VEGGIE, 1.33)
 	inst.components.foodaffinity:AddPrefabAffinity("carrot", 1.5)
 	inst.components.foodaffinity:AddPrefabAffinity("carrot_cooked", 1.5)
@@ -910,7 +899,7 @@ local master_postinit = function(inst)
 	inst.components.preserver:SetPerishRateMultiplier(CarrotPreserverRate)
 
 	if inst.components.eater ~= nil then
-		inst.components.eater:SetDiet({ FOODGROUP.VEGETARIAN }, { FOODGROUP.VEGETARIAN })
+		inst.components.eater:SetDiet({ FOODGROUP.VEGETARIAN }, { FOODGROUP.VEGETARIAN, FOODTYPE.GOODIES })
 	end
 
 	inst:ListenForEvent("locomote", function()
@@ -921,9 +910,9 @@ local master_postinit = function(inst)
 			-- --  TUNING.WUNNY_HUNGER_RATE
 			-- ) --1.20
 			inst.components.hunger.hungerrate = inst.runningSpeed * TUNING.WILSON_HUNGER_RATE
-			print("Runspeed ", inst.components.locomotor:GetRunSpeed())
-			print("Multspeed ", inst.components.locomotor:GetSpeedMultiplier())
-			print("Walkspeed ", inst.components.locomotor:GetWalkSpeed())
+			-- print("Runspeed ", inst.components.locomotor:GetRunSpeed())
+			-- print("Multspeed ", inst.components.locomotor:GetSpeedMultiplier())
+			-- print("Walkspeed ", inst.components.locomotor:GetWalkSpeed())
 			-- print("TUNING SPEED", _G.speedMultiplier)
 		else
 			-- 	inst.components.hunger:SetRate(
