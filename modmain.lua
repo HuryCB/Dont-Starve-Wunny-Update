@@ -72,14 +72,14 @@ Assets = {
     Asset("ATLAS", "images/inventoryimages/coolerpack.xml"),
     Asset("IMAGE", "images/inventoryimages/coolerpack.tex"),
 
-    
+
     Asset("ANIM", "anim/swap_coolerpack.zip"),
-    
+
     Asset("ANIM", "anim/everythingmanrabbit_build.zip"),
-    
+
     Asset("ANIM", "anim/bat_bunny.zip"),
     Asset("ANIM", "anim/swap_bat_bunny.zip"),
-    
+
     Asset("ANIM", "anim/slingshot.zip"),
     Asset("ANIM", "anim/swap_slingshot.zip"),
     Asset("IMAGE", "images/inventoryimages/slingshot.tex"),
@@ -159,9 +159,9 @@ function params.coolerpack.itemtestfn(container, item, slot)
     return true
 end
 
-AddRecipe("coolerpack", { 
+AddRecipe("coolerpack", {
     Ingredient("manrabbit_tail", 4) --4
-    , Ingredient("silk", 6), 
+    , Ingredient("silk", 6),
     Ingredient("rope", 2)
 },
     RECIPETABS.SURVIVAL
@@ -252,7 +252,7 @@ STRINGS.CHARACTER_SURVIVABILITY.wunny = "Grim"
 TUNING.WUNNY_SPEED = 6
 TUNING.WUNNY_RUNNING_HUNGER_RATE = 1
 TUNING.WUNNY_HUNGER_RATE = TUNING.WILSON_HUNGER_RATE
-TUNING.BUNNYPACK_HUNGER = 1.1--mudar para 1.1
+TUNING.BUNNYPACK_HUNGER = 1.1 --mudar para 1.1
 -- WUNNY_RUNNING_HUNGER_RATETUNNIN.WUNNY_IDLE_HUNGER_RATE = 1
 
 
@@ -321,21 +321,21 @@ everythingbunnyhouse_recipe(
 --end everything
 
 --start daybunny
-    local function day_recipe(ingredientes, level)
-        AddRecipe("daybunnyhouse", ingredientes, RECIPETABS.SURVIVAL, level,
-            "rabbithouse_placer", nil, nil, nil, "wunny", "images/inventoryimages/bunnyhouse.xml",
-            "bunnyhouse.tex")
-    end
-    
-    day_recipe(
-        {
-            Ingredient("carrot", 5),
-            Ingredient("manrabbit_tail", 2)
-            , Ingredient("boards", 2)
-            , Ingredient("axe", 1)
-            , Ingredient("pickaxe", 1)
-            , Ingredient("spear", 1)
-        }, TECH.NONE)
+local function day_recipe(ingredientes, level)
+    AddRecipe("daybunnyhouse", ingredientes, RECIPETABS.SURVIVAL, level,
+        "rabbithouse_placer", nil, nil, nil, "wunny", "images/inventoryimages/bunnyhouse.xml",
+        "bunnyhouse.tex")
+end
+
+day_recipe(
+    {
+        Ingredient("carrot", 5),
+        Ingredient("manrabbit_tail", 2)
+        , Ingredient("boards", 2)
+        , Ingredient("axe", 1)
+        , Ingredient("pickaxe", 1)
+        , Ingredient("spear", 1)
+    }, TECH.NONE)
 --end daybunny
 
 --start ultragbunnyman house
@@ -372,30 +372,34 @@ ultrabunnyhouse_recipe(
 -- end
 
 AddRecipe("wunnyslingshot",
-{
-    Ingredient("twigs", 2)
-    , Ingredient("mosquitosack", 3)
-    , Ingredient("livinglog", 1)
-    , Ingredient("silk", 1)
+    {
+        Ingredient("twigs", 2)
+        , Ingredient("mosquitosack", 3)
+        , Ingredient("livinglog", 1)
+        , Ingredient("silk", 1)
 
-},RECIPETABS.WAR,
-TECH.NONE,
-nil,
-nil,
-nil,
-nil,
-"wunny",
--- "images/inventoryimages/slingshot.xml",
-nil,
-"slingshot.tex"
+    }, RECIPETABS.WAR,
+    TECH.NONE,
+    nil,
+    nil,
+    nil,
+    nil,
+    "wunny",
+    -- "images/inventoryimages/slingshot.xml",
+    nil,
+    "slingshot.tex"
 )
 
 
 AddRecipe("lucy",
-    { Ingredient("axe", 1), Ingredient("goldenaxe", 1), Ingredient("moonglassaxe", 1)
+    { 
+        Ingredient("axe", 1),
+        Ingredient("goldenaxe", 1),
+         Ingredient("livinglog", 1),
+         Ingredient("nightmarefuel", 1),
     },
-    RECIPETABS.WAR,
-    TECH.NONE,
+    RECIPETABS.SURVIVAL,
+    TECH.MAGIC_TWO,
     nil,
     nil,
     nil,
@@ -405,10 +409,10 @@ AddRecipe("lucy",
     "lucy.tex")
 
 AddRecipe("bunnybat",
-    { 
+    {
         Ingredient("manrabbit_tail", 1)
         , Ingredient("twigs", 2)
-        , Ingredient("meat", 2) 
+        , Ingredient("meat", 2)
     },
     RECIPETABS.WAR,
     TECH.NONE,

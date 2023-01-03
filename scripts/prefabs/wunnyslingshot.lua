@@ -12,6 +12,7 @@ local prefabs =
     "slingshotammo_rock_proj",
 }
 
+local PROJECTILE_DELAY = 1 * FRAMES
 
 local function OnEquip(inst, owner)
     local skin_build = inst:GetSkinBuild()
@@ -138,6 +139,7 @@ local function fn()
     inst:ListenForEvent("itemget", OnAmmoLoaded)
     inst:ListenForEvent("itemlose", OnAmmoUnloaded)
 
+    inst.components.equippable.dapperness = -TUNING.DAPPERNESS_SMALL
 
     MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
     MakeSmallPropagator(inst)
