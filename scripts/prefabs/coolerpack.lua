@@ -48,13 +48,13 @@ local function fn()
     inst.AnimState:SetBuild("swap_coolerpack")
     inst.AnimState:PlayAnimation("anim")
 	
-    inst.MiniMapEntity:SetIcon("swap_coolerpack.png")
+    inst.MiniMapEntity:SetIcon("piggyback.png")
     
     inst.foleysound = "dontstarve/movement/foley/backpack"
 	
 	-- inst:AddTag("fridge")
 
-   
+    inst:AddTag("backpack")
 
     MakeInventoryFloatable(inst, "small", 0.1, 0.85)
 

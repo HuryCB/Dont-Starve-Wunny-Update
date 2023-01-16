@@ -9,28 +9,28 @@ if not STRINGS.CHARACTERS.WATHGRITHR then
 end
 
 STRINGS.NAMES.BEARDLORDHAT = "Beardlord hat"
-STRINGS.RECIPE_DESC.BEARDLORDHAT = "550 hp, 85% dmg reduction, loses small sanity on use, and gives insulation"
+STRINGS.RECIPE_DESC.BEARDLORDHAT = "550 hp, 85% dmg reduction, loses small sanity on use, and gives small insulation"
 
 STRINGS.NAMES.COOLERPACK = "Bunnyman backpack"
-STRINGS.RECIPE_DESC.COOLERPACK = "Does not slow you down, but makes you lose sanity"
+STRINGS.RECIPE_DESC.COOLERPACK = "Increases hunger rate instead of slowing down (10%)"
 
 STRINGS.NAMES.BIRCHNUTHAT = "Bunnyman hat"
-STRINGS.RECIPE_DESC.BIRCHNUTHAT = "Gives insulation instead of water protection"
+STRINGS.RECIPE_DESC.BIRCHNUTHAT = "Gives tiny insulation instead of water protection"
 
-STRINGS.NAMES.BUNNYBAT = "Bunny bat"
-STRINGS.RECIPE_DESC.BUNNYBAT = "Just like ham bat"
+STRINGS.NAMES.batbunny = "Bunny bat"
+STRINGS.RECIPE_DESC.batbunny = "Just like ham bat"
 
-STRINGS.NAMES.NEWBUNNYHOUSE = "Better Bunnyhouse"
-STRINGS.RECIPE_DESC.NEWBUNNYHOUSE = "Wurt isn't the only one who can upgrade their own..."
+STRINGS.NAMES.NEWBUNNYHOUSE = "Chopping Bunnyhouse"
+STRINGS.RECIPE_DESC.NEWBUNNYHOUSE = "Twice the time to spawn, and these bunnymen can chop!"
 
 STRINGS.NAMES.EVERYTHINGBUNNYHOUSE = "Everything Bunnyhouse"
-STRINGS.RECIPE_DESC.EVERYTHINGBUNNYHOUSE = "These bunny can do everything! Mine, chop, destroy them better..."
+STRINGS.RECIPE_DESC.EVERYTHINGBUNNYHOUSE = "Twice the time to spawn, can chop, mine, and are better for combat! (110%: atk damage, health, and becoming beardlord changes the atk correctly)"
 
 STRINGS.NAMES.DAYBUNNYHOUSE = "Day Bunnyhouse"
-STRINGS.RECIPE_DESC.DAYBUNNYHOUSE = "These bunny works during the day"
+STRINGS.RECIPE_DESC.DAYBUNNYHOUSE = "Like 'EverythingBunnyhouse', but these bunnymen are diurnal!"
 
 STRINGS.NAMES.ULTRABUNNYHOUSE = "Ultra Bunnyhouse"
-STRINGS.RECIPE_DESC.ULTRABUNNYHOUSE = "Better than 'everything', works all day and don't attack monsters on sight"
+STRINGS.RECIPE_DESC.ULTRABUNNYHOUSE = "Like 'EverythingBunnyhouse', but these don't sleep and aren't agressive to monsters"
 
 STRINGS.NAMES.WUNNYSLINGSHOT = "Longer slingshot"
 STRINGS.RECIPE_DESC.WUNNYSLINGSHOT = "A longer slingshot, but it costs your mind..."

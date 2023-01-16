@@ -202,9 +202,9 @@ local function OnGetItemFromPlayer(inst, giver, item)
                 )
             end
         end
-        if inst.components.sleeper:IsAsleep() then
-            inst.components.sleeper:WakeUp()
-        end
+        -- if inst.components.sleeper:IsAsleep() then
+        --     inst.components.sleeper:WakeUp()
+        -- end
     end
 
     --I wear hats
@@ -230,9 +230,9 @@ end
 
 local function OnRefuseItem(inst, item)
     inst.sg:GoToState("refuse")
-    if inst.components.sleeper:IsAsleep() then
-        inst.components.sleeper:WakeUp()
-    end
+    -- if inst.components.sleeper:IsAsleep() then
+    --     inst.components.sleeper:WakeUp()
+    -- end
 end
 
 local function OnAttacked(inst, data)
@@ -497,10 +497,10 @@ local function fn()
 
     ------------------------------------------
 
-    inst:AddComponent("sleeper")
-    inst.components.sleeper.watchlight = false
-    inst.components.sleeper:SetSleepTest(ShouldSleep)
-    inst.components.sleeper:SetWakeTest(DefaultWakeTest)
+    -- inst:AddComponent("sleeper")
+    -- inst.components.sleeper.watchlight = false
+    -- inst.components.sleeper:SetSleepTest(ShouldSleep)
+    -- inst.components.sleeper:SetWakeTest(DefaultWakeTest)
 
     ------------------------------------------
     MakeMediumFreezableCharacter(inst, "pig_torso")
@@ -516,9 +516,9 @@ local function fn()
 
     inst:ListenForEvent("suggest_tree_target", SuggestTreeTarget)
 
-    inst.components.sleeper:SetResistance(2)
-    inst.components.sleeper.sleeptestfn = NormalShouldSleep
-    inst.components.sleeper.waketestfn = DefaultWakeTest
+    -- inst.components.sleeper:SetResistance(2)
+    -- inst.components.sleeper.sleeptestfn = NormalShouldSleep
+    -- inst.components.sleeper.waketestfn = DefaultWakeTest
 
     inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE * 110 / 100)
     inst.components.combat:SetAttackPeriod(TUNING.BUNNYMAN_ATTACK_PERIOD * 90 / 100)

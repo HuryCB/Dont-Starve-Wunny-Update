@@ -75,7 +75,7 @@ local function fn()
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
     -- inst.components.equippable.walkspeedmult = TUNING.PIGGYBACK_SPEED_MULT
-    inst.components.equippable.dapperness = -TUNING.DAPPERNESS_TINY
+    -- inst.components.equippable.dapperness = -TUNING.DAPPERNESS_TINY
 
     inst:AddComponent("waterproofer")
     inst.components.waterproofer:SetEffectiveness(0)
