@@ -3,12 +3,12 @@ local assets =
     Asset("ANIM", "anim/manrabbit_basic.zip"),
     Asset("ANIM", "anim/manrabbit_actions.zip"),
     Asset("ANIM", "anim/manrabbit_attacks.zip"),
-    Asset("ANIM", "anim/everythingmanrabbit_build.zip"),
+    Asset("ANIM", "anim/shadowmanrabbit_build.zip"),
     Asset("ANIM", "anim/manrabbit_boat_jump.zip"),
 
-    Asset("ANIM", "anim/manrabbit_beard_build.zip"),
-    Asset("ANIM", "anim/manrabbit_beard_basic.zip"),
-    Asset("ANIM", "anim/manrabbit_beard_actions.zip"),
+    Asset("ANIM", "anim/shadowmanrabbit_build.zip"),
+    -- Asset("ANIM", "anim/manrabbit_beard_basic.zip"),
+    -- Asset("ANIM", "anim/manrabbit_beard_actions.zip"),
     Asset("SOUND", "sound/bunnyman.fsb"),
 }
 
@@ -25,9 +25,9 @@ local prefabs =
 }
 
 local beardlordloot = { "beardhair", "beardhair", "monstermeat" }
-local forced_beardlordloot = { "nightmarefuel", "beardhair", "beardhair", "monstermeat" }
+local forced_beardlordloot = { "nightmarefuel" }
 
-local brain = require("brains/ultrabunnymanbrain")
+local brain = require("brains/shadowbunnymanbrain")
 
 local MAX_TARGET_SHARES = 5
 local SHARE_TARGET_DIST = 30
@@ -81,8 +81,8 @@ local function ClearObservedBeardlord(inst)
     inst.clearbeardlordtask = nil
     if not IsForcedNightmare(inst) then
         inst.beardlord = nil
-        inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE * 110 / 100)
-        inst.components.combat:SetAttackPeriod(TUNING.BUNNYMAN_ATTACK_PERIOD * 90 / 100)
+        inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE * 100 / 100)
+        inst.components.combat:SetAttackPeriod(TUNING.BUNNYMAN_ATTACK_PERIOD * 100 / 100)
     end
 end
 
@@ -106,11 +106,11 @@ local function OnTimerDone(inst, data)
             DoShadowFx(inst, false)
         end
         inst:RemoveEventCallback("timerdone", OnTimerDone)
-        inst.AnimState:SetBuild("everythingmanrabbit_build")
+        -- inst.AnimState:SetBuild("shadowmanrabbit_build")
         if inst.clearbeardlordtask == nil then
             inst.beardlord = nil
-            inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE * 110 / 100)
-            inst.components.combat:SetAttackPeriod(TUNING.BUNNYMAN_ATTACK_PERIOD * 90 / 100)
+            inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE * 100 / 100)
+            inst.components.combat:SetAttackPeriod(TUNING.BUNNYMAN_ATTACK_PERIOD * 100 / 100)
         end
     end
 end
@@ -133,7 +133,7 @@ local function SetForcedBeardLord(inst, duration)
     inst.beardlord = true
     inst.components.combat:SetDefaultDamage(66)
     inst.components.combat:SetAttackPeriod(0.9)
-    inst.AnimState:SetBuild("manrabbit_beard_build")
+    -- inst.AnimState:SetBuild("shadowmanrabbit_build")
     inst:ListenForEvent("timerdone", OnTimerDone)
 end
 
@@ -266,6 +266,7 @@ local function NormalRetargetFn(inst)
                         -- or
                          guy:HasTag("wonkey")
                         or guy:HasTag("pirate")
+                        or guy:HasTag("shadowcreature")
                         -- or (guy.components.inventory ~= nil and
                         --     guy:IsNear(inst, TUNING.BUNNYMAN_SEE_MEAT_DIST) and
                         --     guy.components.inventory:FindItem(is_meat) ~= nil)
@@ -302,20 +303,20 @@ local function GetStatus(inst)
 end
 
 local function LootSetupFunction(lootdropper)
-    local guy = lootdropper.inst.causeofdeath
-    if IsForcedNightmare(lootdropper.inst) then
-        -- forced beard lord
-        lootdropper:SetLoot(forced_beardlordloot)
-    elseif IsCrazyGuy(guy ~= nil and guy.components.follower ~= nil and guy.components.follower.leader or guy) then
+    -- local guy = lootdropper.inst.causeofdeath
+    -- if IsForcedNightmare(lootdropper.inst) then
+    --     -- forced beard lord
+    --     lootdropper:SetLoot(forced_beardlordloot)
+    -- elseif IsCrazyGuy(guy ~= nil and guy.components.follower ~= nil and guy.components.follower.leader or guy) then
         -- beard lord
-        lootdropper:SetLoot(beardlordloot)
-    else
-        -- regular loot
-        lootdropper:AddRandomLoot("carrot", 3)
-        lootdropper:AddRandomLoot("meat", 3)
-        lootdropper:AddRandomLoot("manrabbit_tail", 2)
-        lootdropper.numrandomloot = 1
-    end
+        lootdropper:SetLoot(forced_beardlordloot)
+    -- else
+    --     -- regular loot
+    --     lootdropper:AddRandomLoot("carrot", 3)
+    --     lootdropper:AddRandomLoot("meat", 3)
+    --     lootdropper:AddRandomLoot("manrabbit_tail", 2)
+    --     lootdropper.numrandomloot = 1
+    -- end
 end
 
 local function OnLoad(inst)
@@ -374,6 +375,14 @@ function DefaultWakeTest(inst)
         or (TheWorld:HasTag("cave") and not TheWorld.state.iscavenight and (not watchlight or inst:IsInLight()))
 end
 
+local function OnKill(inst, data)
+    local victim = data.victim
+    if victim and victim:HasTag("shadow") then
+        if inst._playerlink ~= nil and victim.sanityreward ~= nil then
+            inst._playerlink.components.sanity:DoDelta(victim.sanityreward / SANITY_REWARD)
+        end
+    end
+end
 
 local function fn()
     local inst = CreateEntity()
@@ -384,7 +393,7 @@ local function fn()
     inst.entity:AddDynamicShadow()
     inst.entity:AddNetwork()
 
-    inst.AnimState:SetBuild("everythingmanrabbit_build")
+    inst.AnimState:SetBuild("shadowmanrabbit_build")
 
     -- MakeCharacterPhysics(inst, 50, .5)
     MakeCharacterPhysics(inst, 75, .75)
@@ -400,9 +409,10 @@ local function fn()
 
     inst:AddTag("cavedweller")
     inst:AddTag("character")
+    inst:AddTag("crazy")
 
     -- inst:AddTag("crazy")
-    -- inst:AddTag("pig")
+-- inst:AddTag("pig")
     -- inst:AddTag("manrabbit")
     -- inst:AddTag("scarytoprey")
 
@@ -410,7 +420,7 @@ local function fn()
     inst.AnimState:PlayAnimation("idle_loop", true)
     inst.AnimState:Hide("hat")
 
-    inst.AnimState:SetClientsideBuildOverride("insane", "everythingmanrabbit_build", "manrabbit_beard_build")
+    inst.AnimState:SetClientsideBuildOverride("insane", "shadowmanrabbit_build", "shadowmanrabbit_build")
 
     --trader (from trader component) added to pristine state for optimization
     inst:AddTag("trader")
@@ -524,28 +534,30 @@ local function fn()
     -- inst.components.sleeper.sleeptestfn = NormalShouldSleep
     -- inst.components.sleeper.waketestfn = DefaultWakeTest
 
-    inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE * 110 / 100)
-    inst.components.combat:SetAttackPeriod(TUNING.BUNNYMAN_ATTACK_PERIOD * 90 / 100)
+    inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE * 100 / 100)
+    inst.components.combat:SetAttackPeriod(TUNING.BUNNYMAN_ATTACK_PERIOD * 100 / 100)
     inst.components.combat:SetKeepTargetFunction(NormalKeepTargetFn)
     inst.components.combat:SetRetargetFunction(3, NormalRetargetFn)
 
     inst.components.locomotor.runspeed = TUNING.BUNNYMAN_RUN_SPEED * 120 / 100
     inst.components.locomotor.walkspeed = TUNING.BUNNYMAN_WALK_SPEED * 120 / 100
 
-    inst.components.health:SetMaxHealth(TUNING.BUNNYMAN_HEALTH * 110 / 100)
+    inst.components.health:SetMaxHealth(TUNING.BUNNYMAN_HEALTH * 100 / 100)
 
     MakeHauntablePanic(inst)
 
     inst:SetBrain(brain)
-    inst:SetStateGraph("SGultrabunnyman")
+    inst:SetStateGraph("SGbunnyman")
 
     --shadow_trap interaction
     inst.has_nightmare_state = true
     inst:ListenForEvent("ms_forcenightmarestate", OnForceNightmareState)
+
+    inst:ListenForEvent("killed", OnKill)
 
     inst.OnLoad = OnLoad
 
     return inst
 end
 
-return Prefab("ultrabunnyman", fn, assets, prefabs)
+return Prefab("shadowbunnyman", fn, assets, prefabs)

@@ -1,7 +1,7 @@
 local assets =
 {
-    Asset("ANIM", "anim/monstermeatbat.zip"),
-    Asset("ANIM", "anim/swap_monstermeatbat.zip"), 
+    Asset("ANIM", "anim/bat_bunny.zip"),
+    Asset("ANIM", "anim/swap_bat_bunny.zip"),
 }
 
 local function UpdateDamage(inst)
@@ -18,10 +18,16 @@ end
 
 local function onequip(inst, owner)
     UpdateDamage(inst)
+    local skin_build = inst:GetSkinBuild()
+    if skin_build ~= nil then
+        owner:PushEvent("equipskinneditem", inst:GetSkinName())
+        owner.AnimState:OverrideItemSkinSymbol("swap_object", skin_build, "swap_bat_bunny", inst.GUID, "swap_bat_bunny")
+    else
+        owner.AnimState:OverrideSymbol("swap_object", "swap_bat_bunny", "swap_bat_bunny")
+    end
 
-    owner.AnimState:OverrideSymbol("swap_object", "swap_monstermeatbat", "monstermeatbat")
-    owner.AnimState:Show("ARM_carry") 
-    owner.AnimState:Hide("ARM_normal") 
+    owner.AnimState:Show("ARM_carry")
+    owner.AnimState:Hide("ARM_normal")
 end
 
 local function onunequip(inst, owner)
@@ -43,8 +49,8 @@ local function fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("monstermeatbat")
-    inst.AnimState:SetBuild("monstermeatbat")
+    inst.AnimState:SetBank("ham_bat")
+    inst.AnimState:SetBuild("bat_bunny")
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("show_spoilage")
@@ -53,7 +59,7 @@ local function fn()
     --weapon (from weapon component) added to pristine state for optimization
     inst:AddTag("weapon")
 
-    local swap_data = {sym_build = "swap_ham_bat", bank = "ham_bat"}
+    local swap_data = {sym_build = "swap_bat_bunny", bank = "ham_bat"}
     MakeInventoryFloatable(inst, "med", nil, {1.0, 0.5, 1.0}, true, -13, swap_data)
 
     inst.entity:SetPristine()
@@ -88,9 +94,6 @@ local function fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/bat_bunny.xml"
-    inst.components.inventoryitem.imagename = "bat_bunny"
 
     MakeHauntableLaunchAndPerish(inst)
 

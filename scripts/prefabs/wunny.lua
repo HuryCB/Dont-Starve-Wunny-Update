@@ -469,7 +469,6 @@ local function SetSkin(inst)
 	inst.components.skinner:SetSkinMode("normal_skin", "wilson")
 end
 
-local BEARDLORD_SANITY_THRESOLD = 0.4 -- 50 sanity
 local function OnSanityDelta(inst, data)
 	-- local BEARD_BITS = { 1, 3, 9 }
 
@@ -944,6 +943,7 @@ local master_postinit = function(inst)
 					or v.prefab == "everythingbunnyman"
 					or v.prefab == "daybunnyman"
 					or v.prefab == "ultrabunnyman"
+					or v.prefab == "shadowbunnyman"
 				then
 					if v.components.follower.leader == nil
 					then
