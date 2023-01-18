@@ -996,6 +996,7 @@ local master_postinit = function(inst)
 			or victim.prefab == "everythingbunnyman" 
 			or victim.prefab == "daybunnyman" 
 			or victim.prefab == "ultrabunnyman" 
+			or victim.prefab == "shadowbunnyman" 
 				then
 				inst.components.sanity:DoDelta(-10)
 				local dropChance = math.random(0, 2)

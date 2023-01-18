@@ -433,6 +433,7 @@ local function fn()
     inst.components.talker.font = TALKINGFONT
     inst.components.talker.offset = Vector3(0, -500, 0)
     inst.components.talker:MakeChatter()
+    MakeFeedableSmallLivestockPristine(inst)
 
     inst.entity:SetPristine()
 
@@ -557,6 +558,19 @@ local function fn()
 
     inst.OnLoad = OnLoad
 
+    --remover isto
+    -- inst:AddComponent("inventoryitem")
+    -- inst.components.inventoryitem.nobounce = true
+    -- inst.components.inventoryitem.canbepickedup = true
+    -- inst.components.inventoryitem.canbepickedupalive = true
+    -- inst.components.inventoryitem:SetSinks(true)
+    -- inst.components.inventoryitem.imagename = "bunny"
+    -- inst.components.inventoryitem.atlasname = "images/inventoryimages/bunny.xml"
+    -- MakeFeedableSmallLivestock(inst, TUNING.RABBIT_PERISH_TIME, nil, nil)
+
+    -- --até aqui
+
+   
     return inst
 end
 
