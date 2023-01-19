@@ -298,6 +298,11 @@ local function OnLoad(inst)
 	end
 end
 
+local function OnPickup(inst)
+    -- inst:PushEvent("OnDropped")
+    
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -346,6 +351,7 @@ local function fn()
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
+        -- inst.OnEntityReplicated = function(inst) inst.replica.container:WidgetSetup("antlionhat") end
         return inst
     end
 
@@ -454,7 +460,7 @@ local function fn()
     MakeHauntablePanic(inst)
 
     inst:SetBrain(brain)
-    inst:SetStateGraph("SGbunnyman")
+    inst:SetStateGraph("SGeverythingbunnyman")
 
 	--shadow_trap interaction
 	inst.has_nightmare_state = true
@@ -462,15 +468,19 @@ local function fn()
 
 	inst.OnLoad = OnLoad
 
+    -- inst:AddComponent("container")
+    -- inst.components.container:WidgetSetup("antlionhat")
+
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem.nobounce = true
-    inst.components.inventoryitem.canbepickedup = true
+    inst.components.inventoryitem.canbepickedup = false
     inst.components.inventoryitem.canbepickedupalive = true
     inst.components.inventoryitem:SetSinks(true)
     inst.components.inventoryitem.imagename = "bunny"
     inst.components.inventoryitem.atlasname = "images/inventoryimages/bunny.xml"
     MakeFeedableSmallLivestock(inst, TUNING.RABBIT_PERISH_TIME, nil, nil)
 
+    -- inst:ListenForEvent("onpickup", OnPickup)
 
     return inst
 end

@@ -191,6 +191,7 @@ local function fn()
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
+        inst.OnEntityReplicated = function(inst) inst.replica.container:WidgetSetup("antlionhat") end
         return inst
     end
 
