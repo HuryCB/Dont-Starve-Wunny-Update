@@ -25,7 +25,7 @@ PrefabFiles = {
 	"boards",
 	"manrabbit_tail",
 	"carrot_cooked",
-	"wunnyslingshot",
+	-- "wunnyslingshot",
 }
 
 local BEARDLORD_SKINS = {
@@ -111,6 +111,23 @@ TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
 	-- "carrot",
 	-- "carrot",
 
+	"manrabbit_tail",
+	"manrabbit_tail",
+	"manrabbit_tail",
+	"manrabbit_tail",
+	"manrabbit_tail",
+	"manrabbit_tail",
+	"manrabbit_tail",
+	"manrabbit_tail",
+	"manrabbit_tail",
+	"manrabbit_tail",
+	"manrabbit_tail",
+	"manrabbit_tail",
+	"manrabbit_tail",
+	"manrabbit_tail",
+	"manrabbit_tail",
+	"manrabbit_tail",
+	"manrabbit_tail",
 	"manrabbit_tail",
 	"manrabbit_tail",
 	-- "armorwood",
@@ -469,6 +486,7 @@ local function SetSkin(inst)
 	inst.components.skinner:SetSkinMode("normal_skin", "wilson")
 end
 
+local BEARDLORD_SANITY_THRESOLD = 0.9 -- 50 sanity
 local function OnSanityDelta(inst, data)
 	-- local BEARD_BITS = { 1, 3, 9 }
 
@@ -839,8 +857,9 @@ local master_postinit = function(inst)
     -- inst:ListenForEvent("unequip", OnUnequip)
 	
 	inst.components.temperature.inherentinsulation = -TUNING.INSULATION_TINY
+	inst.components.temperature.inherentsummerinsulation = -TUNING.INSULATION_TINY
 	inst.components.temperature:SetFreezingHurtRate(TUNING.WILSON_HEALTH / TUNING.WILLOW_FREEZING_KILL_TIME)
-
+	inst.components.temperature:SetOverheatHurtRate(TUNING.WILSON_HEALTH / TUNING.WILLOW_FREEZING_KILL_TIME)
 
 	inst:AddComponent("reader")
 
@@ -877,10 +896,10 @@ local master_postinit = function(inst)
 	if inst.components.petleash ~= nil then
         inst._OnSpawnPet = inst.components.petleash.onspawnfn
         inst._OnDespawnPet = inst.components.petleash.ondespawnfn
-		inst.components.petleash:SetMaxPets(inst.components.petleash:GetMaxPets() + 6)
+		inst.components.petleash:SetMaxPets(inst.components.petleash:GetMaxPets() + 12)
     else
         inst:AddComponent("petleash")
-		inst.components.petleash:SetMaxPets(6)
+		inst.components.petleash:SetMaxPets(12)
     end
 
 	inst.components.petleash:SetOnSpawnFn(OnSpawnPet)
@@ -893,6 +912,11 @@ local master_postinit = function(inst)
 	inst.components.foodaffinity:AddFoodtypeAffinity(FOODTYPE.VEGGIE, 1.33)
 	inst.components.foodaffinity:AddPrefabAffinity("carrot", 1.5)
 	inst.components.foodaffinity:AddPrefabAffinity("carrot_cooked", 1.5)
+
+	-- inst:AddComponent("itemaffinity")
+    -- inst.components.itemaffinity:AddAffinity("rabbit", nil, TUNING.DAPPERNESS_MED, 1)
+    -- inst.components.itemaffinity:AddAffinity("dwarfbunnyman", nil, TUNING.DAPPERNESS_MED, 1)
+    -- inst.components.itemaffinity:AddAffinity(nil, "manrabbit", TUNING.DAPPERNESS_MED, 1)
 
 	inst:AddComponent("preserver")
 	inst.components.preserver:SetPerishRateMultiplier(CarrotPreserverRate)
@@ -944,6 +968,7 @@ local master_postinit = function(inst)
 					or v.prefab == "daybunnyman"
 					or v.prefab == "ultrabunnyman"
 					or v.prefab == "shadowbunnyman"
+					or v.prefab == "dwarfbunnyman"
 				then
 					if v.components.follower.leader == nil
 					then
@@ -956,7 +981,8 @@ local master_postinit = function(inst)
 					end
 				end
 			end
-			if v.prefab == "rabbit" then
+			if v.prefab == "rabbit" 
+				or v.prefab == "dwarfbunnyman" then
 				-- isNearbyRabbit = true
 				v.components.inventoryitem.canbepickedup = true
 			end
@@ -997,6 +1023,7 @@ local master_postinit = function(inst)
 			or victim.prefab == "daybunnyman" 
 			or victim.prefab == "ultrabunnyman" 
 			or victim.prefab == "shadowbunnyman" 
+			or victim.prefab == "dwarfbunnyman" 
 				then
 				inst.components.sanity:DoDelta(-10)
 				local dropChance = math.random(0, 2)

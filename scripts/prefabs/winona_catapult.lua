@@ -514,12 +514,16 @@ local function fn()
     inst._inittask = inst:DoTaskInTime(0, OnInit)
 
     inst:AddComponent("inventoryitem")
+    inst:AddComponent("inspectable")
+    inst.components.inspectable.getstatus = GetStatus
+
     inst.components.inventoryitem.nobounce = true
-    inst.components.inventoryitem.canbepickedup = true
+    -- inst.components.inventoryitem.canbepickedup = true
     -- inst.components.inventoryitem.canbepickedupalive = true
     inst.components.inventoryitem:SetSinks(true)
     inst.components.inventoryitem.imagename = "bunny"
     inst.components.inventoryitem.atlasname = "images/inventoryimages/bunny.xml"
+    inst.components.health.canmurder = false
     -- MakeFeedableSmallLivestock(inst, TUNING.RABBIT_PERISH_TIME, nil, nil)
 
 

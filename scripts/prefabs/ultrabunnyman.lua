@@ -3,7 +3,7 @@ local assets =
     Asset("ANIM", "anim/manrabbit_basic.zip"),
     Asset("ANIM", "anim/manrabbit_actions.zip"),
     Asset("ANIM", "anim/manrabbit_attacks.zip"),
-    Asset("ANIM", "anim/everythingmanrabbit_build.zip"),
+    Asset("ANIM", "anim/ultramanrabbit_build.zip"),
     Asset("ANIM", "anim/manrabbit_boat_jump.zip"),
 
     Asset("ANIM", "anim/manrabbit_beard_build.zip"),
@@ -106,7 +106,7 @@ local function OnTimerDone(inst, data)
             DoShadowFx(inst, false)
         end
         inst:RemoveEventCallback("timerdone", OnTimerDone)
-        inst.AnimState:SetBuild("everythingmanrabbit_build")
+        inst.AnimState:SetBuild("ultramanrabbit_build")
         if inst.clearbeardlordtask == nil then
             inst.beardlord = nil
             inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE * 110 / 100)
@@ -384,7 +384,7 @@ local function fn()
     inst.entity:AddDynamicShadow()
     inst.entity:AddNetwork()
 
-    inst.AnimState:SetBuild("everythingmanrabbit_build")
+    inst.AnimState:SetBuild("ultramanrabbit_build")
 
     -- MakeCharacterPhysics(inst, 50, .5)
     MakeCharacterPhysics(inst, 75, .75)
@@ -410,7 +410,7 @@ local function fn()
     inst.AnimState:PlayAnimation("idle_loop", true)
     inst.AnimState:Hide("hat")
 
-    inst.AnimState:SetClientsideBuildOverride("insane", "everythingmanrabbit_build", "manrabbit_beard_build")
+    inst.AnimState:SetClientsideBuildOverride("insane", "ultramanrabbit_build", "manrabbit_beard_build")
 
     --trader (from trader component) added to pristine state for optimization
     inst:AddTag("trader")

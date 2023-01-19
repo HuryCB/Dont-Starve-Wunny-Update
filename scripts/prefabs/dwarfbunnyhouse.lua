@@ -3,7 +3,7 @@ require "prefabutil"
 
 local assets =
 {
-    Asset("ANIM", "anim/rabbit_house.zip"),
+    Asset("ANIM", "anim/daybunnyhouse.zip"),
     Asset("MINIMAP_IMAGE", "rabbit_house"),
 }
 
@@ -172,6 +172,8 @@ local function fn()
     MakeObstaclePhysics(inst, 1)
 
     inst.MiniMapEntity:SetIcon("rabbit_house.png")
+
+    inst.Transform:SetScale(.75,.5,.5)
 --{anim="level1", sound="dontstarve/common/campfire", radius=2, intensity=.75, falloff=.33, colour = {197/255,197/255,170/255}},
     inst.Light:SetFalloff(1)
     inst.Light:SetIntensity(.5)
@@ -180,7 +182,7 @@ local function fn()
     inst.Light:SetColour(180/255, 195/255, 50/255)
 
     inst.AnimState:SetBank("rabbithouse")
-    inst.AnimState:SetBuild("rabbit_house")
+    inst.AnimState:SetBuild("daybunnyhouse")
     inst.AnimState:PlayAnimation("idle", true)
 
     inst:AddTag("cavedweller")
@@ -228,6 +230,9 @@ local function fn()
     MakeHauntableWork(inst)
 
     inst.OnPreLoad = OnPreLoad
+
+    -- inst:AddComponent("container")
+    -- inst.components.container:WidgetSetup("antlionhat")
 
     return inst
 end
