@@ -3,15 +3,13 @@ require "prefabutil"
 
 local assets =
 {
-    Asset("ANIM", "anim/daybunnyhouse.zip"),
+    Asset("ANIM", "anim/rabbit_house.zip"),
     Asset("MINIMAP_IMAGE", "rabbit_house"),
 }
 
 local prefabs =
 {
-    "pigman",
-    "bunnyman",
-    "dwarfbunnyman",
+    "bunnyking",
     "splash_sink",
 }
 
@@ -156,7 +154,7 @@ local function onignite(inst)
 end
 
 local function OnPreLoad(inst, data)
-    WorldSettings_Spawner_PreLoad(inst, data, TUNING.RABBITHOUSE_SPAWN_TIME * 2)
+    WorldSettings_Spawner_PreLoad(inst, data, TUNING.RABBITHOUSE_SPAWN_TIME)
 end
 
 local function fn()
@@ -172,8 +170,6 @@ local function fn()
     MakeObstaclePhysics(inst, 1)
 
     inst.MiniMapEntity:SetIcon("rabbit_house.png")
-
-    inst.Transform:SetScale(.5,.5,1)
 --{anim="level1", sound="dontstarve/common/campfire", radius=2, intensity=.75, falloff=.33, colour = {197/255,197/255,170/255}},
     inst.Light:SetFalloff(1)
     inst.Light:SetIntensity(.5)
@@ -182,7 +178,7 @@ local function fn()
     inst.Light:SetColour(180/255, 195/255, 50/255)
 
     inst.AnimState:SetBank("rabbithouse")
-    inst.AnimState:SetBuild("daybunnyhouse")
+    inst.AnimState:SetBuild("rabbit_house")
     inst.AnimState:PlayAnimation("idle", true)
 
     inst:AddTag("cavedweller")
@@ -204,8 +200,8 @@ local function fn()
     inst.components.workable:SetOnWorkCallback(onhit)
 
     inst:AddComponent("spawner")
-    WorldSettings_Spawner_SpawnDelay(inst, TUNING.RABBITHOUSE_SPAWN_TIME * 2, TUNING.RABBITHOUSE_ENABLED)
-    inst.components.spawner:Configure("dwarfbunnyman", TUNING.RABBITHOUSE_SPAWN_TIME * 2)
+    WorldSettings_Spawner_SpawnDelay(inst, TUNING.RABBITHOUSE_SPAWN_TIME, TUNING.RABBITHOUSE_ENABLED)
+    inst.components.spawner:Configure("bunnyking", TUNING.RABBITHOUSE_SPAWN_TIME)
     --inst.components.spawner.onoccupied = onoccupied
     inst.components.spawner.onvacate = onvacate
     inst.components.spawner:CancelSpawning()
@@ -231,11 +227,8 @@ local function fn()
 
     inst.OnPreLoad = OnPreLoad
 
-    -- inst:AddComponent("container")
-    -- inst.components.container:WidgetSetup("antlionhat")
-
     return inst
 end
 
-return Prefab("dwarfbunnyhouse", fn, assets, prefabs),
+return Prefab("bunnykinghouse", fn, assets, prefabs),
     MakePlacer("rabbithouse_placer", "rabbithouse", "rabbit_house", "idle")

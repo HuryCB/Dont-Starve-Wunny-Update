@@ -514,8 +514,6 @@ local function fn()
     inst._inittask = inst:DoTaskInTime(0, OnInit)
 
     inst:AddComponent("inventoryitem")
-    inst:AddComponent("inspectable")
-    inst.components.inspectable.getstatus = GetStatus
 
     inst.components.inventoryitem.nobounce = true
     -- inst.components.inventoryitem.canbepickedup = true
