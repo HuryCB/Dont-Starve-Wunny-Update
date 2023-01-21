@@ -332,13 +332,13 @@ bunnykinghouse_recipe(
 --end bunnykinghouse
 
 --dwarfunnymanhouse
-local function bunnyhouse_recipe(ingredientes, level)
+local function dwarfbunnyhouse_recipe(ingredientes, level)
     AddRecipe("dwarfbunnyhouse", ingredientes, RECIPETABS.SURVIVAL, level,
         "rabbithouse_placer", nil, nil, nil, "wunny", "images/inventoryimages/bunnyhouse.xml",
         "bunnyhouse.tex")
 end
 
-bunnyhouse_recipe(
+dwarfbunnyhouse_recipe(
     {
         -- Ingredient("carrot", 5),
         Ingredient("manrabbit_tail", 2)

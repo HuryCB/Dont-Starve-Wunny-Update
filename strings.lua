@@ -35,6 +35,12 @@ STRINGS.RECIPE_DESC.ULTRABUNNYHOUSE = "Like 'EverythingBunnyhouse', but these do
 STRINGS.NAMES.SHADOWBUNNYHOUSE = "Shadow Bunnyhouse"
 STRINGS.RECIPE_DESC.SHADOWBUNNYHOUSE = "It takes a Shadow Bunny to attack Shadow Creatures"
 
+STRINGS.NAMES.BUNNYKINGHOUSE = "King Bunnyhouse"
+STRINGS.RECIPE_DESC.BUNNYKINGHOUSE = "It takes a Shadow Bunny to attack Shadow Creatures"
+
+STRINGS.NAMES.DWARFBUNNYHOUSE = "Dwarf Bunnyhouse"
+STRINGS.RECIPE_DESC.DWARFBUNNYHOUSE = "Dwarfs!"
+
 STRINGS.NAMES.WUNNYSLINGSHOT = "Longer slingshot"
 STRINGS.RECIPE_DESC.WUNNYSLINGSHOT = "A longer slingshot, but it costs your mind..."
 

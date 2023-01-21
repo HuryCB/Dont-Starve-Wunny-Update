@@ -79,22 +79,52 @@ local function onstopcavedaydoortask(inst)
     inst.components.spawner:ReleaseChild()
 end
 
-local function OnStopCaveDay(inst)
-    --print(inst, "OnStopCaveDay")
-    if not inst:HasTag("burnt") and inst.components.spawner:IsOccupied() then
+-- local function OnStopCaveDay(inst)
+--     --print(inst, "OnStopCaveDay")
+--     if not inst:HasTag("burnt") and inst.components.spawner:IsOccupied() then
+--         if inst.doortask ~= nil then
+--             inst.doortask:Cancel()
+--         end
+--         inst.doortask = inst:DoTaskInTime(1 + math.random() * 2, onstopcavedaydoortask)
+--     end
+-- end
+
+local function onstartdaydoortask(inst)
+    inst.doortask = nil
+    if not inst:HasTag("burnt") then
+        inst.components.spawner:ReleaseChild()
+    end
+end
+
+local function onstartdaylighttask(inst)
+    if inst:IsLightGreaterThan(0.8) then -- they have their own light! make sure it's brighter than that out.
+        -- LightsOff(inst)
+        inst.doortask = inst:DoTaskInTime(1 + math.random() * 2, onstartdaydoortask)
+    elseif TheWorld.state.iscaveday then
+        inst.doortask = inst:DoTaskInTime(1 + math.random() * 2, onstartdaylighttask)
+    else
+        inst.doortask = nil
+    end
+end
+
+local function OnStartDay(inst)
+    --print(inst, "OnStartDay")
+    if not inst:HasTag("burnt")
+        and inst.components.spawner:IsOccupied() then
+
         if inst.doortask ~= nil then
             inst.doortask:Cancel()
         end
-        inst.doortask = inst:DoTaskInTime(1 + math.random() * 2, onstopcavedaydoortask)
+        inst.doortask = inst:DoTaskInTime(1 + math.random() * 2, onstartdaylighttask)
     end
 end
 
 local function SpawnCheckCaveDay(inst)
     inst.inittask = nil
-    inst:WatchWorldState("stopcaveday", OnStopCaveDay)
+    inst:WatchWorldState("stopcaveday", OnStartDay)
     if inst.components.spawner ~= nil and inst.components.spawner:IsOccupied() then
-        if not TheWorld.state.iscaveday or
-            (inst.components.burnable ~= nil and inst.components.burnable:IsBurning()) then
+        -- if not TheWorld.state.iscaveday or
+           if (inst.components.burnable ~= nil and inst.components.burnable:IsBurning()) then
             inst.components.spawner:ReleaseChild()
         end
     end

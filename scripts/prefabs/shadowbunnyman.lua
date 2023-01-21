@@ -260,18 +260,18 @@ local function NormalRetargetFn(inst)
             TUNING.PIG_TARGET_DIST,
             function(guy)
                 return inst.components.combat:CanTarget(guy)
-                    and 
+                    and
                     (
-                        -- guy:HasTag("monster")--talvez tirando isso para de atacar spider
-                        -- or
-                         guy:HasTag("wonkey")
+                    -- guy:HasTag("monster")--talvez tirando isso para de atacar spider
+                    -- or
+                    guy:HasTag("wonkey")
                         or guy:HasTag("pirate")
                         or guy:HasTag("shadowcreature")
-                        -- or (guy.components.inventory ~= nil and
-                        --     guy:IsNear(inst, TUNING.BUNNYMAN_SEE_MEAT_DIST) and
-                        --     guy.components.inventory:FindItem(is_meat) ~= nil)
-                        -- or guy:HasTag("shadowcreature")
-                        )
+                    -- or (guy.components.inventory ~= nil and
+                    --     guy:IsNear(inst, TUNING.BUNNYMAN_SEE_MEAT_DIST) and
+                    --     guy.components.inventory:FindItem(is_meat) ~= nil)
+                    -- or guy:HasTag("shadowcreature")
+                    )
             end,
             RETARGET_MUST_TAGS, -- see entityreplica.lua
             nil,
@@ -308,8 +308,8 @@ local function LootSetupFunction(lootdropper)
     --     -- forced beard lord
     --     lootdropper:SetLoot(forced_beardlordloot)
     -- elseif IsCrazyGuy(guy ~= nil and guy.components.follower ~= nil and guy.components.follower.leader or guy) then
-        -- beard lord
-        lootdropper:SetLoot(forced_beardlordloot)
+    -- beard lord
+    lootdropper:SetLoot(forced_beardlordloot)
     -- else
     --     -- regular loot
     --     lootdropper:AddRandomLoot("carrot", 3)
@@ -347,7 +347,7 @@ end
 function DefaultSleepTest(inst)
     local watchlight = inst.LightWatcher ~= nil or (inst.components.sleeper and inst.components.sleeper.watchlight)
     return StandardSleepChecks(inst)
-            -- sleep in the overworld at night
+        -- sleep in the overworld at night
         and (not TheWorld:HasTag("cave") and TheWorld.state.isnight
             -- in caves, sleep at night if we have a lightwatcher and are in the dark
             or (TheWorld:HasTag("cave") and TheWorld.state.iscavenight and (not watchlight or not inst:IsInLight())))
@@ -412,13 +412,15 @@ local function fn()
     inst:AddTag("crazy")
 
     -- inst:AddTag("crazy")
--- inst:AddTag("pig")
+    -- inst:AddTag("pig")
     -- inst:AddTag("manrabbit")
     -- inst:AddTag("scarytoprey")
 
     inst.AnimState:SetBank("manrabbit")
     inst.AnimState:PlayAnimation("idle_loop", true)
     inst.AnimState:Hide("hat")
+    inst.AnimState:Hide("ARM_carry")
+    inst.AnimState:Hide("HAIR_HAT")
 
     inst.AnimState:SetClientsideBuildOverride("insane", "shadowmanrabbit_build", "shadowmanrabbit_build")
 
@@ -570,7 +572,7 @@ local function fn()
 
     -- --até aqui
 
-   
+
     return inst
 end
 

@@ -6,7 +6,7 @@ local assets =
     Asset("ANIM", "anim/ultramanrabbit_build.zip"),
     Asset("ANIM", "anim/manrabbit_boat_jump.zip"),
 
-    Asset("ANIM", "anim/manrabbit_beard_build.zip"),
+    -- Asset("ANIM", "anim/manrabbit_beard_build.zip"),
     Asset("ANIM", "anim/manrabbit_beard_basic.zip"),
     Asset("ANIM", "anim/manrabbit_beard_actions.zip"),
     Asset("SOUND", "sound/bunnyman.fsb"),
@@ -260,17 +260,17 @@ local function NormalRetargetFn(inst)
             TUNING.PIG_TARGET_DIST,
             function(guy)
                 return inst.components.combat:CanTarget(guy)
-                    and 
+                    and
                     (
-                        -- guy:HasTag("monster")--talvez tirando isso para de atacar spider
-                        -- or
-                         guy:HasTag("wonkey")
+                    -- guy:HasTag("monster")--talvez tirando isso para de atacar spider
+                    -- or
+                    guy:HasTag("wonkey")
                         or guy:HasTag("pirate")
-                        -- or (guy.components.inventory ~= nil and
-                        --     guy:IsNear(inst, TUNING.BUNNYMAN_SEE_MEAT_DIST) and
-                        --     guy.components.inventory:FindItem(is_meat) ~= nil)
-                        -- or guy:HasTag("shadowcreature")
-                        )
+                    -- or (guy.components.inventory ~= nil and
+                    --     guy:IsNear(inst, TUNING.BUNNYMAN_SEE_MEAT_DIST) and
+                    --     guy.components.inventory:FindItem(is_meat) ~= nil)
+                    -- or guy:HasTag("shadowcreature")
+                    )
             end,
             RETARGET_MUST_TAGS, -- see entityreplica.lua
             nil,
@@ -346,7 +346,7 @@ end
 function DefaultSleepTest(inst)
     local watchlight = inst.LightWatcher ~= nil or (inst.components.sleeper and inst.components.sleeper.watchlight)
     return StandardSleepChecks(inst)
-            -- sleep in the overworld at night
+        -- sleep in the overworld at night
         and (not TheWorld:HasTag("cave") and TheWorld.state.isnight
             -- in caves, sleep at night if we have a lightwatcher and are in the dark
             or (TheWorld:HasTag("cave") and TheWorld.state.iscavenight and (not watchlight or not inst:IsInLight())))
@@ -373,7 +373,6 @@ function DefaultWakeTest(inst)
         -- in caves, wake if it's not night and we've got a light shining on us
         or (TheWorld:HasTag("cave") and not TheWorld.state.iscavenight and (not watchlight or inst:IsInLight()))
 end
-
 
 local function fn()
     local inst = CreateEntity()
@@ -409,6 +408,8 @@ local function fn()
     inst.AnimState:SetBank("manrabbit")
     inst.AnimState:PlayAnimation("idle_loop", true)
     inst.AnimState:Hide("hat")
+    inst.AnimState:Hide("ARM_carry")
+    inst.AnimState:Hide("HAIR_HAT")
 
     inst.AnimState:SetClientsideBuildOverride("insane", "ultramanrabbit_build", "manrabbit_beard_build")
 

@@ -1,7 +1,7 @@
 local assets =
 {
     Asset("ANIM", "anim/amulets.zip"),
-    Asset("ANIM", "anim/torso_amulets.zip"),
+    -- Asset("ANIM", "anim/torso_amulets.zip"),
 }
 
 --[[ Each amulet has a seperate onequip and onunequip function so we can also

@@ -6,7 +6,7 @@ local assets =
     Asset("ANIM", "anim/daymanrabbit_build.zip"),
     Asset("ANIM", "anim/manrabbit_boat_jump.zip"),
 
-    Asset("ANIM", "anim/manrabbit_beard_build.zip"),
+    -- Asset("ANIM", "anim/manrabbit_beard_build.zip"),
     Asset("ANIM", "anim/manrabbit_beard_basic.zip"),
     Asset("ANIM", "anim/manrabbit_beard_actions.zip"),
     Asset("SOUND", "sound/bunnyman.fsb"),
@@ -390,7 +390,9 @@ local function fn()
 
     inst.AnimState:SetBank("manrabbit")
     inst.AnimState:PlayAnimation("idle_loop", true)
-    inst.AnimState:Hide("hat")
+     inst.AnimState:Hide("hat")
+    inst.AnimState:Hide("ARM_carry")
+    inst.AnimState:Hide("HAIR_HAT")
 
     inst.AnimState:SetClientsideBuildOverride("insane", "daymanrabbit_build", "manrabbit_beard_build")
 

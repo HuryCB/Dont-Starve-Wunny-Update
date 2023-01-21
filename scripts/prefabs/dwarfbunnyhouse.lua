@@ -173,7 +173,7 @@ local function fn()
 
     inst.MiniMapEntity:SetIcon("rabbit_house.png")
 
-    inst.Transform:SetScale(.5,.5,1)
+    inst.Transform:SetScale(.625,.625,1)
 --{anim="level1", sound="dontstarve/common/campfire", radius=2, intensity=.75, falloff=.33, colour = {197/255,197/255,170/255}},
     inst.Light:SetFalloff(1)
     inst.Light:SetIntensity(.5)
