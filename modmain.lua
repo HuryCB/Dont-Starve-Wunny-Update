@@ -27,6 +27,8 @@ PrefabFiles = {
     "wunny_catapult",
     "bunnykinghouse",
     "bunnyking",
+    "wunny_spotlight",
+    "wunny_battery_low",
 
     -- "wunnyslingshot",
     -- "beardlordback"
@@ -80,6 +82,9 @@ Assets = {
 
     Asset("ATLAS", "images/inventoryimages/winona_catapult.xml"),
 
+    Asset("ATLAS", "images/inventoryimages/wunny_spotlight.xml"),
+
+    Asset("ATLAS", "images/inventoryimages/wunny_battery_low.xml"),
 
     Asset("ATLAS", "images/inventoryimages/coolerpack.xml"),
     Asset("IMAGE", "images/inventoryimages/coolerpack.tex"),
@@ -528,8 +533,8 @@ AddRecipe("wunny_catapult",
     "images/inventoryimages/winona_catapult.xml",
     "winona_catapult.tex")
 --end catapult
---catapult
-AddRecipe("winona_battery_low",
+--wunny_battery_low
+AddRecipe("wunny_battery_low",
     { Ingredient("manrabbit_tail", 1)
         -- , Ingredient("rope", 1)
     },
@@ -539,10 +544,25 @@ AddRecipe("winona_battery_low",
     nil,
     nil,
     nil,
+    "wunny",
+    "images/inventoryimages/wunny_battery_low.xml",
+    "wunny_battery_low.tex")
+--end wunny_battery_low
+--wunny_spotlight
+AddRecipe("wunny_spotlight",
+    { Ingredient("manrabbit_tail", 1)
+        -- , Ingredient("rope", 1)
+    },
+    RECIPETABS.WAR,
+    TECH.NONE,
     nil,
-    "images/inventoryimages/birchnuthat.xml",
-    "birchnuthat.tex")
---end catapult
+    nil,
+    nil,
+    nil,
+    "wunny",
+    "images/inventoryimages/wunny_spotlight.xml",
+    "wunny_spotlight.tex")
+--end wunny_spotlight
 
 AddRecipe("birchnuthat",
     { Ingredient("manrabbit_tail", 1)

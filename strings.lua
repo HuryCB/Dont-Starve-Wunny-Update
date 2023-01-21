@@ -47,6 +47,12 @@ STRINGS.RECIPE_DESC.WUNNYSLINGSHOT = "A longer slingshot, but it costs your mind
 STRINGS.NAMES.WUNNY_CATAPULT = "Wunny Catapult"
 STRINGS.RECIPE_DESC.WUNNY_CATAPULT = "Better than winona's"
 
+STRINGS.NAMES.WUNNY_BATTERY_LOW = "Wunny Battery Low"
+STRINGS.RECIPE_DESC.WUNNY_BATTERY_LOW = "Better than winona's"
+
+STRINGS.NAMES.WUNNY_SPOTLIGHT = "Wunny Spotlight"
+STRINGS.RECIPE_DESC.WUNNY_SPOTLIGHT = "Better than winona's"
+
 -- TRINGS.RECIPE_DESC.LUCY = "Woodie's axe for Wunny"
 
 -- STRINGS.NAMES.CACTUSMACE = "Cactus Bat"
