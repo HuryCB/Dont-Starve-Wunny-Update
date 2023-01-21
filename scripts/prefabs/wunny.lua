@@ -41,6 +41,7 @@ TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
 	-- "wunnyslingshot",
 	"rabbit",
 	"rabbit",
+	"armorwood",
 	-- "rabbit",
 	-- "rabbit",
 	-- "boards",
@@ -828,6 +829,7 @@ end
 local function currentspeedup(self,speedupamount) self.inst.currentspeedup:set(speedupamount) end
 
 local function OnEquip(inst, data)
+	print(data)
 	-- print("equipou e ", inst.components.locomotor:GetSpeedMultiplier())
 	-- _G.speedMultiplier = inst.components.locomotor:GetSpeedMultiplier()
     -- if data.eslot == EQUIPSLOTS.HEAD and not data.item:HasTag("open_top_hat") then
@@ -924,6 +926,8 @@ local master_postinit = function(inst)
 	if inst.components.eater ~= nil then
 		inst.components.eater:SetDiet({ FOODGROUP.VEGETARIAN }, { FOODGROUP.VEGETARIAN, FOODTYPE.GOODIES })
 	end
+
+	inst.components.locomotor:SetFasterOnGroundTile(WORLD_TILES.SAVANNA, true)
 
 	inst:ListenForEvent("locomote", function()
 		if inst.sg ~= nil and inst.sg:HasStateTag("moving") then

@@ -44,6 +44,9 @@ STRINGS.RECIPE_DESC.DWARFBUNNYHOUSE = "Dwarfs!"
 STRINGS.NAMES.WUNNYSLINGSHOT = "Longer slingshot"
 STRINGS.RECIPE_DESC.WUNNYSLINGSHOT = "A longer slingshot, but it costs your mind..."
 
+STRINGS.NAMES.WUNNY_CATAPULT = "Wunny Catapult"
+STRINGS.RECIPE_DESC.WUNNY_CATAPULT = "Better than winona's"
+
 -- TRINGS.RECIPE_DESC.LUCY = "Woodie's axe for Wunny"
 
 -- STRINGS.NAMES.CACTUSMACE = "Cactus Bat"

@@ -24,7 +24,7 @@ PrefabFiles = {
     "daybunnyman",
     "dwarfbunnyman",
     "rabbitamulet",
-    "winona_catapult",
+    "wunny_catapult",
     "bunnykinghouse",
     "bunnyking",
 
@@ -77,6 +77,8 @@ Assets = {
     Asset("ATLAS", "images/inventoryimages/bunny.xml"),
 
     Asset("ATLAS", "images/inventoryimages/bunnyhouse.xml"),
+
+    Asset("ATLAS", "images/inventoryimages/winona_catapult.xml"),
 
 
     Asset("ATLAS", "images/inventoryimages/coolerpack.xml"),
@@ -512,7 +514,22 @@ AddRecipe("lucy",
 --     "bat_bunny.tex"
 -- )
 --catapult
-AddRecipe("winona_catapult",
+AddRecipe("wunny_catapult",
+    { Ingredient("manrabbit_tail", 1)
+        -- , Ingredient("rope", 1)
+    },
+    RECIPETABS.WAR,
+    TECH.NONE,
+    nil,
+    nil,
+    nil,
+    nil,
+    "wunny",
+    "images/inventoryimages/winona_catapult.xml",
+    "winona_catapult.tex")
+--end catapult
+--catapult
+AddRecipe("winona_battery_low",
     { Ingredient("manrabbit_tail", 1)
         -- , Ingredient("rope", 1)
     },
@@ -526,6 +543,7 @@ AddRecipe("winona_catapult",
     "images/inventoryimages/birchnuthat.xml",
     "birchnuthat.tex")
 --end catapult
+
 AddRecipe("birchnuthat",
     { Ingredient("manrabbit_tail", 1)
         -- , Ingredient("rope", 1)

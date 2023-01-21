@@ -200,6 +200,9 @@ local function fn()
     MakeObstaclePhysics(inst, 1)
 
     inst.MiniMapEntity:SetIcon("rabbit_house.png")
+
+    inst.Transform:SetScale(2,2,2)
+
 --{anim="level1", sound="dontstarve/common/campfire", radius=2, intensity=.75, falloff=.33, colour = {197/255,197/255,170/255}},
     inst.Light:SetFalloff(1)
     inst.Light:SetIntensity(.5)
