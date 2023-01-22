@@ -499,18 +499,27 @@ end
 --------------------------------------------------------------------------
 
 local function ItemTradeTest(inst, item)
+    print("tentando botar gema")
+    print("gemas disponiveis: ",GEMSLOTS - (inst.components.fueled:GetCurrentSection() / 2))
+    print(GEMSLOTS)
+    print(inst.components.fueled:GetCurrentSection() / 2)
     if item == nil then
         return false
     elseif string.sub(item.prefab, -3) ~= "gem" then
         return false, "NOTGEM"
     elseif string.sub(item.prefab, -11, -4) == "precious" then
         return false, "WRONGGEM"
+    elseif GEMSLOTS - (inst.components.fueled:GetCurrentSection() / 2) < 1 then
+        return false
     end
     return true
 end
 
 local function OnGemGiven(inst, giver, item)
-    if #inst._gems < GEMSLOTS then
+    local availableGems = GEMSLOTS - (inst.components.fueled:GetCurrentSection() / 2)
+    print("só poderia colocar x gemas: ", availableGems)
+    print("GEMSLOTS: ", GEMSLOTS)
+    if #inst._gems < availableGems then
         table.insert(inst._gems, item.prefab)
         SetGem(inst, #inst._gems, item.prefab)
         if #inst._gems >= GEMSLOTS then
@@ -579,6 +588,7 @@ local function OnPickup(inst)
                 -- local fuelsection = inst.components.fueled:GetCurrentSection()
                 -- inst.components.fueled:ChangeSection(-1)
                 -- inst.components.fueled.sectionfn(fuelsection-1, fuelsection, inst)
+
             else
                 print("LoseGem: ")
                 print(inst._gems[i])
@@ -589,13 +599,15 @@ local function OnPickup(inst)
         if #inst._gems > 2 then
             print("caiu no sessao 2")
             local fuelsection = inst.components.fueled:GetCurrentSection()
-            inst.components.fueled:ChangeSection(-2)
-            inst.components.fueled.sectionfn(fuelsection - 2, fuelsection, inst)
+            print("fuel section ", fuelsection)
+            inst.components.fueled:ChangeSection(-4)
+            inst.components.fueled.sectionfn(fuelsection - 4, fuelsection, inst)
         elseif #inst._gems > 1 then
             print("caiu no sessao 1")
             local fuelsection = inst.components.fueled:GetCurrentSection()
-            inst.components.fueled:ChangeSection(-1)
-            inst.components.fueled.sectionfn(fuelsection - 1, fuelsection, inst)
+            print("fuel section ", fuelsection)
+            inst.components.fueled:ChangeSection(-2)
+            inst.components.fueled.sectionfn(fuelsection - 2, fuelsection, inst)
         end
     end
     -- if #inst._gemsn > 1 then
