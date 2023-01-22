@@ -64,7 +64,7 @@ local trading_items =
     },
 }
 
-local trading_filler = { "seeds", "kelp", "seeds", "seeds"}
+local trading_filler = { "seeds", "kelp", "seeds", "seeds" }
 
 local function DoShadowFx(inst, isnightmare)
     local x, y, z = inst.Transform:GetWorldPosition()
@@ -539,6 +539,22 @@ local function fn()
 
     inst.OnLoad = OnLoad
 
+    --chapeu
+    local hat = SpawnPrefab("ruinshat")
+    print("tentando spawnar chapeu")
+    if hat then
+        inst.components.inventory:Equip(hat)
+    end
+
+    local armor = SpawnPrefab("armorwood")
+    if armor then
+        inst.components.inventory:Equip(armor)
+    end
+
+    local spear = SpawnPrefab("cane")
+    if spear then
+        inst.components.inventory:Equip(spear)
+    end
     return inst
 end
 

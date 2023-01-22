@@ -142,6 +142,9 @@ local function oninit(inst)
             inst.components.spawner:GoHome(child)
         end
     end
+    if inst.components.spawner ~= nil and inst.components.spawner:IsOccupied() then
+        inst.components.spawner:ReleaseChild()
+    end
 end
 
 local function onsave(inst, data)

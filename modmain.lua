@@ -30,6 +30,7 @@ PrefabFiles = {
     "wunny_spotlight",
     "wunny_battery_low",
     "wunny_battery_high",
+    -- "modhats",
 
     -- "wunnyslingshot",
     -- "beardlordback"
