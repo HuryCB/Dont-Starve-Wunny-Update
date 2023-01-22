@@ -19,12 +19,12 @@ local events =
     CommonHandlers.OnAttacked(nil, TUNING.BUNNYMAN_MAX_STUN_LOCKS),
     CommonHandlers.OnDeath(),
     CommonHandlers.OnHop(),
-	CommonHandlers.OnSink(),
+    CommonHandlers.OnSink(),
 }
 
 local states =
 {
-    State{
+    State {
         name = "funnyidle",
         tags = { "busy" },
 
@@ -57,7 +57,7 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "death",
         tags = { "busy" },
 
@@ -71,7 +71,7 @@ local states =
         end,
     },
 
-    State{
+    State {
         name = "abandon",
         tags = { "busy" },
 
@@ -92,7 +92,7 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "attack",
         tags = { "attack", "busy" },
 
@@ -121,7 +121,7 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "eat",
         tags = { "busy" },
 
@@ -146,7 +146,7 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "hit",
         tags = { "busy" },
 
@@ -154,8 +154,35 @@ local states =
             inst.SoundEmitter:PlaySound("dontstarve/creatures/bunnyman/hurt")
             inst.AnimState:PlayAnimation("hit")
             inst.Physics:Stop()
-			CommonHandlers.UpdateHitRecoveryDelay(inst)
+            CommonHandlers.UpdateHitRecoveryDelay(inst)
         end,
+
+        events =
+        {
+            EventHandler("animover", function(inst)
+                inst.sg:GoToState("idle")
+            end),
+        },
+    },
+
+    State {
+        name = "trade",
+        tags = { "busy" },
+
+        onenter = function(inst)
+            inst.Physics:Stop()
+            -- inst:TradeItem()
+            inst.SoundEmitter:PlaySound("dontstarve/creatures/bunnyman/happy")
+            inst.AnimState:PlayAnimation("idle_happy")
+
+        end,
+
+        timeline =
+        {
+            TimeEvent(22 * FRAMES, function(inst) inst:TradeItem() end),
+            -- TimeEvent(23 * FRAMES,
+            --     function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/bunnyman/happy") end),
+        },
 
         events =
         {
@@ -195,19 +222,19 @@ CommonStates.AddRunStates(states, {
 }, nil, true)
 
 CommonStates.AddSleepStates(states,
-{
-    sleeptimeline =
     {
-        TimeEvent(35 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/bunnyman/sleep") end),
-    },
-})
+        sleeptimeline =
+        {
+            TimeEvent(35 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/bunnyman/sleep") end),
+        },
+    })
 
 CommonStates.AddIdle(states, "funnyidle")
 CommonStates.AddSimpleState(states, "refuse", "pig_reject", { "busy" })
 CommonStates.AddFrozenStates(states)
 CommonStates.AddSimpleActionState(states, "pickup", "pig_pickup", 10 * FRAMES, { "busy" })
 CommonStates.AddSimpleActionState(states, "gohome", "pig_pickup", 4 * FRAMES, { "busy" })
-CommonStates.AddHopStates(states, true, { pre = "boat_jump_pre", loop = "boat_jump_loop", pst = "boat_jump_pst"})
+CommonStates.AddHopStates(states, true, { pre = "boat_jump_pre", loop = "boat_jump_loop", pst = "boat_jump_pst" })
 CommonStates.AddSinkAndWashAsoreStates(states)
 
 return StateGraph("bunnyking", states, events, "idle", actionhandlers)

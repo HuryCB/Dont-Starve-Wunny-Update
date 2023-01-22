@@ -81,6 +81,7 @@ local function fn()
 
     inst:AddComponent("container")
     inst.components.container:WidgetSetup("coolerpack")
+    -- inst.components.container:WidgetSetup("krampus_sack")
 
     MakeHauntableLaunchAndDropFirstItem(inst)
 

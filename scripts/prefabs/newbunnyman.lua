@@ -139,9 +139,9 @@ end
 local function CalcSanityAura(inst, observer)
     if IsCrazyGuy(observer) then
         SetObserverdBeardLord(inst)
-        return -TUNING.SANITYAURA_SMALL
+        return 0
     elseif IsForcedNightmare(inst) then
-        return -TUNING.SANITYAURA_SMALL
+        return 0
     end
     return inst.components.follower ~= nil
         and inst.components.follower:GetLeader() == observer

@@ -630,6 +630,7 @@ end
 local function OnDropped(inst)
     -- OnAddFuel(inst)
     OnBuilt(inst)
+    StartBattery(inst)
     -- inst:PushEvent("OnDropped")
     -- TurnOnNitreGenerator(inst)
     --    BroadcastCircuitChanged(inst)

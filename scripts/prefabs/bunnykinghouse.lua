@@ -23,8 +23,8 @@ local function getstatus(inst)
 end
 
 --local function onoccupied(inst, child)
-    --inst.SoundEmitter:PlaySound("dontstarve/pig/pig_in_hut", "pigsound")
-    --inst.SoundEmitter:PlaySound("dontstarve/common/pighouse_door")
+--inst.SoundEmitter:PlaySound("dontstarve/pig/pig_in_hut", "pigsound")
+--inst.SoundEmitter:PlaySound("dontstarve/common/pighouse_door")
 --end
 
 local function onvacate(inst, child)
@@ -124,7 +124,7 @@ local function SpawnCheckCaveDay(inst)
     inst:WatchWorldState("stopcaveday", OnStartDay)
     if inst.components.spawner ~= nil and inst.components.spawner:IsOccupied() then
         -- if not TheWorld.state.iscaveday or
-           if (inst.components.burnable ~= nil and inst.components.burnable:IsBurning()) then
+        if (inst.components.burnable ~= nil and inst.components.burnable:IsBurning()) then
             inst.components.spawner:ReleaseChild()
         end
     end
@@ -160,6 +160,9 @@ local function onbuilt(inst)
     inst.AnimState:PlayAnimation("place")
     inst.AnimState:PushAnimation("idle")
     inst.SoundEmitter:PlaySound("dontstarve/common/rabbit_hutch_craft")
+    if inst.components.spawner ~= nil and inst.components.spawner:IsOccupied() then
+        inst.components.spawner:ReleaseChild()
+    end
 end
 
 local function onburntup(inst)
@@ -201,14 +204,14 @@ local function fn()
 
     inst.MiniMapEntity:SetIcon("rabbit_house.png")
 
-    inst.Transform:SetScale(2,2,2)
+    inst.Transform:SetScale(2, 2, 2)
 
---{anim="level1", sound="dontstarve/common/campfire", radius=2, intensity=.75, falloff=.33, colour = {197/255,197/255,170/255}},
+    --{anim="level1", sound="dontstarve/common/campfire", radius=2, intensity=.75, falloff=.33, colour = {197/255,197/255,170/255}},
     inst.Light:SetFalloff(1)
     inst.Light:SetIntensity(.5)
     inst.Light:SetRadius(1)
     inst.Light:Enable(false)
-    inst.Light:SetColour(180/255, 195/255, 50/255)
+    inst.Light:SetColour(180 / 255, 195 / 255, 50 / 255)
 
     inst.AnimState:SetBank("rabbithouse")
     inst.AnimState:SetBuild("rabbit_house")
