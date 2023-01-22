@@ -304,6 +304,24 @@ local function launchitem(item, angle)
     item.Physics:SetVel(speed * math.cos(angle), math.random() * 2 + 8, speed * math.sin(angle))
 end
 
+local function OnSpawned(inst)
+    local hat = SpawnPrefab("ruinshat")
+    print("tentando spawnar chapeu")
+    if hat then
+        inst.components.inventory:Equip(hat)
+    end
+
+    local armor = SpawnPrefab("armorwood")
+    if armor then
+        inst.components.inventory:Equip(armor)
+    end
+
+    local spear = SpawnPrefab("cane")
+    if spear then
+        inst.components.inventory:Equip(spear)
+    end
+end
+
 local function TradeItem(inst)
     print("tradeItem")
 
@@ -465,7 +483,7 @@ local function fn()
     inst.components.follower.maxfollowtime = TUNING.PIG_LOYALTY_MAXTIME
     ------------------------------------------
     inst:AddComponent("health")
-    inst.components.health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)
+    -- inst.components.health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)
 
     ------------------------------------------
 
@@ -526,7 +544,8 @@ local function fn()
     inst.components.locomotor.runspeed = TUNING.BUNNYMAN_RUN_SPEED
     inst.components.locomotor.walkspeed = TUNING.BUNNYMAN_WALK_SPEED
 
-    inst.components.health:SetMaxHealth(TUNING.MERM_KING_HEALTH)
+    -- inst.components.health:SetMaxHealth(TUNING.MERM_KING_HEALTH)
+    inst.components.health:SetMaxHealth(1)
 
     MakeHauntablePanic(inst)
 
@@ -540,21 +559,39 @@ local function fn()
     inst.OnLoad = OnLoad
 
     --chapeu
-    local hat = SpawnPrefab("ruinshat")
-    print("tentando spawnar chapeu")
-    if hat then
-        inst.components.inventory:Equip(hat)
-    end
+    -- inst.OnSpawned = OnSpawned
 
-    local armor = SpawnPrefab("armorwood")
-    if armor then
-        inst.components.inventory:Equip(armor)
-    end
+    -- local hasHat = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
+    -- if not hasHat then
+    --     print("n tem chapeu")
+    --     print(inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD))
+    --     local hat = SpawnPrefab("ruinshat")
+    --     print("tentando spawnar chapeu")
+    --     if hat then
+    --         inst.components.inventory:Equip(hat)
+    --     end
+    -- end
 
-    local spear = SpawnPrefab("cane")
-    if spear then
-        inst.components.inventory:Equip(spear)
-    end
+    -- local hasArmor = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+    -- if not hasArmor then
+    --     print("n tem armor")
+    --     print(inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY))
+    --     local armor = SpawnPrefab("armorwood")
+    --     if armor then
+    --         inst.components.inventory:Equip(armor)
+    --     end
+    -- end
+
+    -- local hasWepon = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+    -- if not hasWepon then
+    --     print("n tem arma")
+    --     print(inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS))
+    --     local spear = SpawnPrefab("cane")
+    --     if spear then
+    --         inst.components.inventory:Equip(spear)
+    --     end
+    -- end
+
     return inst
 end
 

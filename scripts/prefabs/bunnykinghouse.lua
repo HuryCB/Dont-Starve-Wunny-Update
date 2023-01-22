@@ -138,8 +138,41 @@ local function oninit(inst)
         not inst.components.spawner:IsSpawnPending() then
         local child = SpawnPrefab(inst.components.spawner.childname)
         if child ~= nil then
+
+            local hasHat = child.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
+            if not hasHat then
+                print("n tem chapeu")
+                print(child.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD))
+                local hat = SpawnPrefab("ruinshat")
+                print("tentando spawnar chapeu")
+                if hat then
+                    child.components.inventory:Equip(hat)
+                end
+            end
+
+            local hasArmor = child.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+            if not hasArmor then
+                print("n tem armor")
+                print(child.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY))
+                local armor = SpawnPrefab("armorwood")
+                if armor then
+                    child.components.inventory:Equip(armor)
+                end
+            end
+
+            local hasWepon = child.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+            if not hasWepon then
+                print("n tem arma")
+                print(child.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS))
+                local spear = SpawnPrefab("cane")
+                if spear then
+                    child.components.inventory:Equip(spear)
+                end
+            end
+
             inst.components.spawner:TakeOwnership(child)
             inst.components.spawner:GoHome(child)
+            inst.components.spawner:ReleaseChild()
         end
     end
     if inst.components.spawner ~= nil and inst.components.spawner:IsOccupied() then
