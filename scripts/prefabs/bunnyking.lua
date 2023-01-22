@@ -187,9 +187,9 @@ local function OnGetItemFromPlayer(inst, giver, item)
             --     )
             -- end
         end
-        if inst.components.sleeper:IsAsleep() then
-            inst.components.sleeper:WakeUp()
-        end
+        -- if inst.components.sleeper:IsAsleep() then
+        --     inst.components.sleeper:WakeUp()
+        -- end
     end
 
     --I wear hats
@@ -205,9 +205,9 @@ end
 
 local function OnRefuseItem(inst, item)
     inst.sg:GoToState("refuse")
-    if inst.components.sleeper:IsAsleep() then
-        inst.components.sleeper:WakeUp()
-    end
+    -- if inst.components.sleeper:IsAsleep() then
+    --     inst.components.sleeper:WakeUp()
+    -- end
 end
 
 local function OnAttacked(inst, data)

@@ -2,14 +2,75 @@ require("prefabutil")
 
 local assets =
 {
-    Asset("ANIM", "anim/winona_battery_low.zip"),
+    Asset("ANIM", "anim/winona_battery_high.zip"),
     Asset("ANIM", "anim/winona_battery_placement.zip"),
+    Asset("ANIM", "anim/gems.zip"),
+}
+
+local assets_fx =
+{
+    Asset("ANIM", "anim/gems.zip"),
 }
 
 local prefabs =
 {
     "collapse_small",
+    "winona_battery_high_shatterfx",
 }
+
+--------------------------------------------------------------------------
+
+local IDLE_CHARGE_SOUND_FRAMES = { 0, 3, 17, 20 }
+
+local function DoIdleChargeSound(inst)
+    local t = inst.AnimState:GetCurrentAnimationFrame()
+    if (t == 0 or t == 3 or t == 17 or t == 20) and inst._lastchargeframe ~= t then
+        inst._lastchargeframe = t
+        inst.SoundEmitter:PlaySound("dontstarve/common/together/spot_light/electricity", nil, GetRandomMinMax(.2, .5))
+    end
+end
+
+local function StartIdleChargeSounds(inst)
+    if inst._lastchargeframe == nil then
+        inst._lastchargeframe = -1
+        inst.components.updatelooper:AddOnUpdateFn(DoIdleChargeSound)
+    end
+end
+
+local function StopIdleChargeSounds(inst)
+    if inst._lastchargeframe ~= nil then
+        inst._lastchargeframe = nil
+        inst.components.updatelooper:RemoveOnUpdateFn(DoIdleChargeSound)
+    end
+end
+
+--------------------------------------------------------------------------
+
+local NUM_LEVELS = 6
+local GEMSLOTS = 3
+local LEVELS_PER_GEM = 2
+
+local function GetGemSymbol(slot)
+    return "gem" .. tostring(GEMSLOTS - slot + 1)
+end
+
+local function SetGem(inst, slot, gemname)
+    inst.AnimState:OverrideSymbol(GetGemSymbol(slot), "gems", "swap_" .. gemname)
+end
+
+local function UnsetGem(inst, slot, gemname)
+    local symbol = GetGemSymbol(slot)
+    inst.AnimState:ClearOverrideSymbol(symbol)
+    if not POPULATING then
+        local fx = SpawnPrefab("winona_battery_high_shatterfx")
+        fx.entity:AddFollower():FollowSymbol(inst.GUID, symbol, 0, 0, 0)
+        local anim = gemname .. "_shatter"
+        if not fx.AnimState:IsCurrentAnimation(anim) then
+            fx.AnimState:PlayAnimation(anim)
+        end
+        inst.SoundEmitter:PlaySound("dontstarve/common/gem_shatter")
+    end
+end
 
 --------------------------------------------------------------------------
 
@@ -50,8 +111,7 @@ local function UpdateCircuitPower(inst)
                 end)
                 load = load + 1 / batteries
             end)
-            inst.components.fueled.rate = math.max(load, TUNING.WINONA_BATTERY_MIN_LOAD) *
-                TUNING.WINONA_BATTERY_LOW_FUEL_RATE_MULT
+            inst.components.fueled.rate = math.max(load, TUNING.WINONA_BATTERY_MIN_LOAD)
         else
             inst.components.fueled.rate = 0
         end
@@ -108,8 +168,6 @@ end
 
 --------------------------------------------------------------------------
 
-local NUM_LEVELS = 6
-
 local function UpdateSoundLoop(inst, level)
     if inst.SoundEmitter:PlayingSound("loop") then
         inst.SoundEmitter:SetParameter("loop", "intensity", 1 - level / NUM_LEVELS)
@@ -127,9 +185,17 @@ local function StopSoundLoop(inst)
     inst.SoundEmitter:KillSound("loop")
 end
 
+local function OnEntitySleep(inst)
+    StopSoundLoop(inst)
+    StopIdleChargeSounds(inst)
+end
+
 local function OnEntityWake(inst)
     if inst.components.fueled ~= nil and inst.components.fueled.consuming then
         StartSoundLoop(inst)
+    end
+    if inst.AnimState:IsCurrentAnimation("idle_charge") then
+        StartIdleChargeSounds(inst)
     end
 end
 
@@ -140,8 +206,12 @@ local function OnHitAnimOver(inst)
     if inst.AnimState:IsCurrentAnimation("hit") then
         if inst.components.fueled:IsEmpty() then
             inst.AnimState:PlayAnimation("idle_empty")
+            StopIdleChargeSounds(inst)
         else
             inst.AnimState:PlayAnimation("idle_charge", true)
+            if not inst:IsAsleep() then
+                StartIdleChargeSounds(inst)
+            end
         end
     end
 end
@@ -150,29 +220,66 @@ local function PlayHitAnim(inst)
     inst:RemoveEventCallback("animover", OnHitAnimOver)
     inst:ListenForEvent("animover", OnHitAnimOver)
     inst.AnimState:PlayAnimation("hit")
+    StopIdleChargeSounds(inst)
 end
 
 local function OnWorked(inst)
-    if inst.components.fueled.accepting then
+    if not inst:HasTag("NOCLICK") then
         PlayHitAnim(inst)
     end
     inst.SoundEmitter:PlaySound("dontstarve/common/together/catapult/hit")
+end
+
+local function FlingGem(inst, gemname, slot)
+    local pt = inst:GetPosition()
+    pt.y = 2.5 + .5 * slot
+    inst.components.lootdropper:SpawnLootPrefab(gemname, pt)
+    if not POPULATING then
+        inst.SoundEmitter:PlaySound("dontstarve/common/telebase_gemplace")
+    end
+end
+
+local function LoseGem(inst, gemname, slot)
+    local fx = SpawnPrefab("winona_battery_high_shatterfx")
+    local anim = gemname .. "_shatter"
+    if not fx.AnimState:IsCurrentAnimation(anim) then
+        fx.AnimState:PlayAnimation(anim)
+    end
+    local x, y, z = inst.Transform:GetWorldPosition()
+    fx.Transform:SetPosition(x, 2.5 + .75 * slot, z)
+    inst.SoundEmitter:PlaySound("dontstarve/common/gem_shatter")
+end
+
+local function DropGems(inst)
+    if #inst._gems > 0 then
+        for i, v in ipairs(inst._gems) do
+            if i < #inst._gems then
+                FlingGem(inst, v, i)
+            else
+                LoseGem(inst, v, i)
+            end
+        end
+    end
 end
 
 local function OnWorkFinished(inst)
     if inst.components.burnable ~= nil and inst.components.burnable:IsBurning() then
         inst.components.burnable:Extinguish()
     end
-    inst.components.lootdropper:DropLoot()
     local fx = SpawnPrefab("collapse_small")
     fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
     fx:SetMaterial("wood")
+    DropGems(inst)
+    inst.components.lootdropper:DropLoot()
     inst:Remove()
 end
 
 local function OnBurnt(inst)
     DefaultBurntStructureFn(inst)
     StopSoundLoop(inst)
+    if inst.components.trader ~= nil then
+        inst:RemoveComponent("trader")
+    end
     if inst.components.fueled ~= nil then
         inst:RemoveComponent("fueled")
     end
@@ -183,6 +290,13 @@ local function OnBurnt(inst)
         inst._inittask = nil
     end
     inst.components.circuitnode:Disconnect()
+    local numgems = #inst._gems
+    if numgems > 0 then
+        for i = 1, numgems - 1 do
+            FlingGem(inst, table.remove(inst._gems, 1), i)
+        end
+        LoseGem(inst, table.remove(inst._gems), numgems)
+    end
 end
 
 --------------------------------------------------------------------------
@@ -201,60 +315,74 @@ local function GetStatus(inst)
         or nil
 end
 
-local function OnFuelEmpty(inst)
-    if inst.components.fueled.accepting then
-        inst.components.fueled:StopConsuming()
-        BroadcastCircuitChanged(inst)
-        StopBattery(inst)
-        StopSoundLoop(inst)
-        inst.AnimState:OverrideSymbol("m2", "winona_battery_low", "m1")
-        inst.AnimState:OverrideSymbol("plug", "winona_battery_low", "plug_off")
-        if inst.AnimState:IsCurrentAnimation("idle_charge") then
-            inst.AnimState:PlayAnimation("idle_empty")
+local function ShatterGems(inst, keepnumgems)
+    local i = #inst._gems
+    if i > keepnumgems then
+        if i == GEMSLOTS then
+            inst.components.trader:Enable()
         end
-        if not POPULATING then
-            inst.SoundEmitter:PlaySound("dontstarve/common/together/battery/down")
+        while i > keepnumgems do
+            UnsetGem(inst, i, table.remove(inst._gems))
+            i = i - 1
         end
     end
 end
 
-local function OnAddFuel(inst)
-    if inst.components.fueled.accepting and not inst.components.fueled:IsEmpty() then
-        if not inst.components.fueled.consuming then
-            inst.components.fueled:StartConsuming()
-            BroadcastCircuitChanged(inst)
-            if inst.components.circuitnode:IsConnected() then
-                StartBattery(inst)
-            end
-            if not inst:IsAsleep() then
-                StartSoundLoop(inst)
-            end
-        end
-        PlayHitAnim(inst)
-        inst.SoundEmitter:PlaySound("dontstarve/common/together/battery/up")
+local function OnFuelEmpty(inst)
+    inst.components.fueled:StopConsuming()
+    BroadcastCircuitChanged(inst)
+    StopBattery(inst)
+    StopSoundLoop(inst)
+    inst.AnimState:OverrideSymbol("m2", "winona_battery_high", "m1")
+    inst.AnimState:OverrideSymbol("plug", "winona_battery_high", "plug_off")
+    if inst.AnimState:IsCurrentAnimation("idle_charge") then
+        inst.AnimState:PlayAnimation("idle_empty")
+        StopIdleChargeSounds(inst)
     end
+    if not POPULATING then
+        inst.SoundEmitter:PlaySound("dontstarve/common/together/battery/down")
+    end
+    ShatterGems(inst, 0)
 end
 
 local function OnFuelSectionChange(new, old, inst)
-    if inst.components.fueled.accepting then
-        inst.AnimState:OverrideSymbol("m2", "winona_battery_low", "m" .. tostring(math.clamp(new + 1, 1, 7)))
-        inst.AnimState:ClearOverrideSymbol("plug")
-        UpdateSoundLoop(inst, new)
+    inst.AnimState:OverrideSymbol("m2", "winona_battery_high", "m" .. tostring(math.clamp(new + 1, 1, 7)))
+    inst.AnimState:ClearOverrideSymbol("plug")
+    UpdateSoundLoop(inst, new)
+    if new > 0 then
+        ShatterGems(inst, math.ceil(new / LEVELS_PER_GEM))
     end
 end
 
 local function OnSave(inst, data)
     data.burnt = inst.components.burnable ~= nil and inst.components.burnable:IsBurning() or inst:HasTag("burnt") or nil
+    data.gems = #inst._gems > 0 and inst._gems or nil
 end
 
 local function OnLoad(inst, data, ents)
-    if data ~= nil and data.burnt then
-        inst.components.burnable.onburnt(inst)
-    elseif inst.components.fueled:IsEmpty() then
-        OnFuelEmpty(inst)
-    else
-        UpdateSoundLoop(inst, inst.components.fueled:GetCurrentSection())
-        if inst.AnimState:IsCurrentAnimation("idle_charge") then
+    if data ~= nil then
+        if data.gems ~= nil and #inst._gems < GEMSLOTS then
+            for i, v in ipairs(data.gems) do
+                table.insert(inst._gems, v)
+                SetGem(inst, #inst._gems, v)
+                if #inst._gems >= GEMSLOTS then
+                    inst.components.trader:Disable()
+                    break
+                end
+            end
+            ShatterGems(inst, math.ceil(inst.components.fueled:GetCurrentSection() / LEVELS_PER_GEM))
+        end
+        if data.burnt then
+            inst.components.burnable.onburnt(inst)
+        elseif not inst.components.fueled:IsEmpty() then
+            if not inst.components.fueled.consuming then
+                inst.components.fueled:StartConsuming()
+                BroadcastCircuitChanged(inst)
+            end
+            inst.AnimState:PlayAnimation("idle_charge", true)
+            if not inst:IsAsleep() then
+                StartIdleChargeSounds(inst)
+            end
             inst.AnimState:SetFrame(math.random(inst.AnimState:GetCurrentAnimationNumFrames()) - 1)
         end
     end
@@ -278,49 +406,13 @@ local function OnBuilt3(inst)
     inst:RemoveEventCallback("animover", OnBuilt3)
     if inst.AnimState:IsCurrentAnimation("place") then
         inst:RemoveTag("NOCLICK")
-        inst.components.fueled.accepting = true
-        if inst.components.fueled:IsEmpty() then
-            OnFuelEmpty(inst)
-        else
-            OnFuelSectionChange(inst.components.fueled:GetCurrentSection(), nil, inst)
-            inst.AnimState:PlayAnimation("idle_charge", true)
-            if not inst.components.fueled.consuming then
-                inst.components.fueled:StartConsuming()
-                BroadcastCircuitChanged(inst)
-            end
-            if inst.components.circuitnode:IsConnected() then
-                StartBattery(inst)
-            end
-            if not inst:IsAsleep() then
-                StartSoundLoop(inst)
-            end
-        end
+        inst.components.trader:Enable()
     end
 end
 
 local function OnBuilt2(inst)
     if inst.AnimState:IsCurrentAnimation("place") then
-        if inst.components.fueled:IsEmpty() then
-            StopSoundLoop(inst)
-        else
-            if not inst.components.fueled.consuming then
-                inst.components.fueled:StartConsuming()
-                BroadcastCircuitChanged(inst)
-            end
-            if not inst:IsAsleep() then
-                StartSoundLoop(inst)
-            end
-        end
         inst.components.circuitnode:ConnectTo("engineering")
-    end
-end
-
-local function OnBuilt1(inst)
-    if inst.AnimState:IsCurrentAnimation("place") then
-        inst.SoundEmitter:PlaySound("dontstarve/common/together/battery/up")
-        if not (inst.components.fueled:IsEmpty() or inst:IsAsleep()) then
-            StartSoundLoop(inst)
-        end
     end
 end
 
@@ -332,15 +424,11 @@ local function OnBuilt(inst) --, data)
     inst.components.circuitnode:Disconnect()
     inst:ListenForEvent("animover", OnBuilt3)
     inst.AnimState:PlayAnimation("place")
-    inst.AnimState:ClearAllOverrideSymbols()
-    inst.SoundEmitter:PlaySound("dontstarve/common/together/battery/place")
+    StopIdleChargeSounds(inst)
+    inst.SoundEmitter:PlaySound("dontstarve/common/together/battery/place_2")
     inst:AddTag("NOCLICK")
-    inst.components.fueled.accepting = false
-    inst.components.fueled:StopConsuming()
-    BroadcastCircuitChanged(inst)
-    StopSoundLoop(inst)
-    inst:DoTaskInTime(60 * FRAMES, OnBuilt1)
-    inst:DoTaskInTime(66 * FRAMES, OnBuilt2)
+    inst.components.trader:Disable()
+    inst:DoTaskInTime(60 * FRAMES, OnBuilt2)
 end
 
 --------------------------------------------------------------------------
@@ -409,18 +497,61 @@ local function OnEnableHelper(inst, enabled, recipename, placerinst)
 end
 
 --------------------------------------------------------------------------
-local function TurnOnNitreGenerator(inst)
-    local fn = inst.components.fueled.ontakefuelfn
-    fn(inst)
+
+local function ItemTradeTest(inst, item)
+    if item == nil then
+        return false
+    elseif string.sub(item.prefab, -3) ~= "gem" then
+        return false, "NOTGEM"
+    elseif string.sub(item.prefab, -11, -4) == "precious" then
+        return false, "WRONGGEM"
+    end
+    return true
 end
 
-local function TurnOffNitreGenerator(inst)
-    local fn = inst.components.fueled.depleted
-    fn(inst)
-    local fuellevel = math.clamp(inst.components.fueled:GetCurrentSection(), 0, 6)
-    inst.AnimState:OverrideSymbol("m1", "winona_battery_low", "m" .. tostring(fuellevel + 1))
-    inst.AnimState:OverrideSymbol("m2", "winona_battery_low", "m" .. tostring(fuellevel + 1))
-    inst.manual_disable = true
+local function OnGemGiven(inst, giver, item)
+    if #inst._gems < GEMSLOTS then
+        table.insert(inst._gems, item.prefab)
+        SetGem(inst, #inst._gems, item.prefab)
+        if #inst._gems >= GEMSLOTS then
+            inst.components.trader:Disable()
+        end
+        inst.SoundEmitter:PlaySound("dontstarve/common/telebase_gemplace")
+    end
+
+    local delta = inst.components.fueled.maxfuel / GEMSLOTS
+    if inst.components.fueled:IsEmpty() then
+        --prevent battery level flicker by subtracting a tiny bit from initial fuel
+        delta = delta - .000001
+    else
+        local final = inst.components.fueled.currentfuel + delta
+        local amtpergem = inst.components.fueled.maxfuel / GEMSLOTS
+        local curgemamt = final - math.floor(final / amtpergem) * amtpergem
+        if curgemamt < 3 then
+            --prevent new gem from shattering within 3 seconds of socketing
+            delta = delta + 3 - curgemamt
+        end
+    end
+    inst.components.fueled:DoDelta(delta)
+
+    if not inst.components.fueled.consuming then
+        inst.components.fueled:StartConsuming()
+        BroadcastCircuitChanged(inst)
+        if inst.components.circuitnode:IsConnected() then
+            StartBattery(inst)
+        end
+        if not inst:IsAsleep() then
+            StartSoundLoop(inst)
+        end
+    end
+
+    PlayHitAnim(inst)
+    inst.SoundEmitter:PlaySound("dontstarve/common/together/battery/up")
+end
+
+--------------------------------------------------------------------------
+local function DoRemoveBatteryPower(inst, node)
+    node:AddBatteryPower(PERIOD + math.random(2, 6) * FRAMES * -1)
 end
 
 local function OnPickup(inst)
@@ -430,8 +561,58 @@ local function OnPickup(inst)
     -- inst.components.circuitnode:Disconnect()
     -- TurnOffNitreGenerator(inst)
     -- end
+    -- print(#inst._gems)
+    if #inst._gems > 0 then
+        -- inst.components.circuitnode:ForEachNode(DoRemoveBatteryPower)
+        for i, v in ipairs(inst._gems) do
+            -- if i < #inst._gems then
+            -- if i == 1 then
+            --     i = i +1
+            -- end
+            print("pos no array")
+            print(i)
+            print(inst._gems[i])
+            if i < #inst._gems then
+                FlingGem(inst, v, i)
+                print("FlingGem: ")
+                print(inst._gems[i])
+                -- local fuelsection = inst.components.fueled:GetCurrentSection()
+                -- inst.components.fueled:ChangeSection(-1)
+                -- inst.components.fueled.sectionfn(fuelsection-1, fuelsection, inst)
+            else
+                print("LoseGem: ")
+                print(inst._gems[i])
+                LoseGem(inst, v, i)
+            end
+            -- end
+        end
+        if #inst._gems > 2 then
+            print("caiu no sessao 2")
+            local fuelsection = inst.components.fueled:GetCurrentSection()
+            inst.components.fueled:ChangeSection(-2)
+            inst.components.fueled.sectionfn(fuelsection - 2, fuelsection, inst)
+        elseif #inst._gems > 1 then
+            print("caiu no sessao 1")
+            local fuelsection = inst.components.fueled:GetCurrentSection()
+            inst.components.fueled:ChangeSection(-1)
+            inst.components.fueled.sectionfn(fuelsection - 1, fuelsection, inst)
+        end
+    end
+    -- if #inst._gemsn > 1 then
+    --     LoseGem(inst, inst._gems[2])
+    -- end
+    -- DropGems(inst)
+    -- local numgems = inst._gems and #inst._gems or 0
+    -- local fuelsection = inst.components.fueled:GetCurrentSection()
+    -- if fuelsection > 2 and numgems > 1 then
+    -- 	local symbol = GetGemSymbol(numgems)
+    -- 	inst.AnimState:ClearOverrideSymbol(symbol)
+    -- 	inst:FlingGem(table.remove(inst._gems, numgems), numgems)
+    -- 	inst.components.fueled:ChangeSection(-2)
+    -- 	inst.components.fueled.sectionfn(fuelsection-2, fuelsection, inst)
+    -- 	inst.components.trader:Enable()
+    -- end
     OnFuelEmpty(inst)
-    print("pego")
 end
 
 local function OnDropped(inst)
@@ -452,16 +633,22 @@ local function fn()
     inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
-    MakeObstaclePhysics(inst, .5)
+    MakeObstaclePhysics(inst, .8)
 
     inst:AddTag("structure")
     inst:AddTag("engineeringbattery")
+    inst:AddTag("gemsocket")
 
-    inst.AnimState:SetBank("winona_battery_low")
-    inst.AnimState:SetBuild("winona_battery_low")
-    inst.AnimState:PlayAnimation("idle_charge", true)
+    --trader (from trader component) added to pristine state for optimization
+    inst:AddTag("trader")
 
-    inst.MiniMapEntity:SetIcon("winona_battery_low.png")
+    inst.AnimState:SetBank("winona_battery_high")
+    inst.AnimState:SetBuild("winona_battery_high")
+    inst.AnimState:PlayAnimation("idle_empty")
+    inst.AnimState:OverrideSymbol("m2", "winona_battery_high", "m1")
+    inst.AnimState:OverrideSymbol("plug", "winona_battery_high", "plug_off")
+
+    inst.MiniMapEntity:SetIcon("winona_battery_high.png")
 
     --Dedicated server does not need deployhelper
     if not TheNet:IsDedicated() then
@@ -479,18 +666,21 @@ local function fn()
         return inst
     end
 
+    inst:AddComponent("updatelooper")
+
     inst:AddComponent("inspectable")
     inst.components.inspectable.getstatus = GetStatus
 
+    inst:AddComponent("trader")
+    inst.components.trader:SetAbleToAcceptTest(ItemTradeTest)
+    inst.components.trader.onaccept = OnGemGiven
+
     inst:AddComponent("fueled")
     inst.components.fueled:SetDepletedFn(OnFuelEmpty)
-    inst.components.fueled:SetTakeFuelFn(OnAddFuel)
     inst.components.fueled:SetSections(NUM_LEVELS)
     inst.components.fueled:SetSectionCallback(OnFuelSectionChange)
-    inst.components.fueled:InitializeFuelLevel(TUNING.WINONA_BATTERY_LOW_MAX_FUEL_TIME)
-    inst.components.fueled.fueltype = FUELTYPE.CHEMICAL
-    inst.components.fueled.accepting = true
-    inst.components.fueled:StartConsuming()
+    inst.components.fueled.maxfuel = TUNING.WINONA_BATTERY_HIGH_MAX_FUEL_TIME
+    inst.components.fueled.fueltype = FUELTYPE.MAGIC
 
     inst:AddComponent("lootdropper")
     inst:AddComponent("workable")
@@ -510,6 +700,7 @@ local function fn()
     inst.components.battery.onused = UseAsBattery
 
     inst:ListenForEvent("onbuilt", OnBuilt)
+    inst:ListenForEvent("ondeconstructstructure", DropGems)
     inst:ListenForEvent("engineeringcircuitchanged", OnCircuitChanged)
 
     MakeHauntableWork(inst)
@@ -521,22 +712,23 @@ local function fn()
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
     inst.OnLoadPostPass = OnLoadPostPass
-    inst.OnEntitySleep = StopSoundLoop
+    inst.OnEntitySleep = OnEntitySleep
     inst.OnEntityWake = OnEntityWake
 
+    inst._gems = {}
     inst._batterytask = nil
     inst._inittask = inst:DoTaskInTime(0, OnInit)
     UpdateCircuitPower(inst)
 
-    --alterado
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem.canbepickedup = true
     inst.components.inventoryitem.nobounce = true
     inst.components.inventoryitem:SetSinks(true)
-    inst.components.inventoryitem.imagename = "wunny_battery_low"
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/wunny_battery_low.xml"
+    inst.components.inventoryitem.imagename = "wunny_battery_high"
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/wunny_battery_high.xml"
     inst:ListenForEvent("onpickup", OnPickup)
     inst:ListenForEvent("ondropped", OnDropped)
+
     return inst
 end
 
@@ -558,8 +750,8 @@ local function placer_postinit_fn(inst)
     placer2:AddTag("NOCLICK")
     placer2:AddTag("placer")
 
-    placer2.AnimState:SetBank("winona_battery_low")
-    placer2.AnimState:SetBuild("winona_battery_low")
+    placer2.AnimState:SetBank("winona_battery_high")
+    placer2.AnimState:SetBuild("winona_battery_high")
     placer2.AnimState:PlayAnimation("idle_placer")
     placer2.AnimState:SetLightOverride(1)
 
@@ -572,6 +764,35 @@ end
 
 --------------------------------------------------------------------------
 
-return Prefab("wunny_battery_low", fn, assets, prefabs),
-    MakePlacer("winona_battery_low_placer", "winona_battery_placement", "winona_battery_placement", "idle", true, nil,
-        nil, nil, nil, nil, placer_postinit_fn)
+local function fxfn()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddNetwork()
+
+    inst.AnimState:SetBank("gems")
+    inst.AnimState:SetBuild("gems")
+    inst.AnimState:PlayAnimation("redgem_shatter")
+
+    inst:AddTag("FX")
+    inst:AddTag("NOCLICK")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst.persists = false
+    inst:ListenForEvent("animover", inst.Remove)
+
+    return inst
+end
+
+--------------------------------------------------------------------------
+
+return Prefab("wunny_battery_high", fn, assets, prefabs),
+    MakePlacer("winona_battery_high_placer", "winona_battery_placement", "winona_battery_placement", "idle", true, nil,
+        nil, nil, nil, nil, placer_postinit_fn),
+    Prefab("winona_battery_high_shatterfx", fxfn, assets_fx)

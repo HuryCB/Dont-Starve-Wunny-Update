@@ -29,6 +29,7 @@ PrefabFiles = {
     "bunnyking",
     "wunny_spotlight",
     "wunny_battery_low",
+    "wunny_battery_high",
 
     -- "wunnyslingshot",
     -- "beardlordback"
@@ -85,6 +86,8 @@ Assets = {
     Asset("ATLAS", "images/inventoryimages/wunny_spotlight.xml"),
 
     Asset("ATLAS", "images/inventoryimages/wunny_battery_low.xml"),
+
+    Asset("ATLAS", "images/inventoryimages/wunny_battery_high.xml"),
 
     Asset("ATLAS", "images/inventoryimages/coolerpack.xml"),
     Asset("IMAGE", "images/inventoryimages/coolerpack.tex"),
@@ -548,6 +551,21 @@ AddRecipe("wunny_battery_low",
     "images/inventoryimages/wunny_battery_low.xml",
     "wunny_battery_low.tex")
 --end wunny_battery_low
+--wunny_battery_high
+AddRecipe("wunny_battery_high",
+    { Ingredient("manrabbit_tail", 1)
+        -- , Ingredient("rope", 1)
+    },
+    RECIPETABS.WAR,
+    TECH.NONE,
+    nil,
+    nil,
+    nil,
+    nil,
+    "wunny",
+    "images/inventoryimages/wunny_battery_high.xml",
+    "wunny_battery_high.tex")
+--end wunny_battery_high
 --wunny_spotlight
 AddRecipe("wunny_spotlight",
     { Ingredient("manrabbit_tail", 1)

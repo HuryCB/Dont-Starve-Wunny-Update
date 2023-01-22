@@ -130,15 +130,15 @@ local function SetHeadTilt(headinst, tilt, lightenabled)
     headinst._tilt = tilt
     for i, v in ipairs(TILTS) do
         if i == tilt then
-            headinst.AnimState:Show("light"..v)
+            headinst.AnimState:Show("light" .. v)
             if lightenabled then
-                headinst.AnimState:Show("light_shaft"..v)
+                headinst.AnimState:Show("light_shaft" .. v)
             else
-                headinst.AnimState:Hide("light_shaft"..v)
+                headinst.AnimState:Hide("light_shaft" .. v)
             end
         else
-            headinst.AnimState:Hide("light"..v)
-            headinst.AnimState:Hide("light_shaft"..v)
+            headinst.AnimState:Hide("light" .. v)
+            headinst.AnimState:Hide("light_shaft" .. v)
         end
     end
 end
@@ -165,7 +165,7 @@ local function CreateLight()
 
     inst.Light:SetFalloff(.9)
     inst.Light:SetIntensity(LIGHT_INTENSITY_MAX)
-    inst.Light:SetRadius(TUNING.WINONA_SPOTLIGHT_RADIUS * 1.25)--alterado
+    inst.Light:SetRadius(TUNING.WINONA_SPOTLIGHT_RADIUS * 1.25) --alterado
     inst.Light:SetColour(255 / 255, 248 / 255, 198 / 255)
     inst.Light:Enable(false)
 
@@ -205,7 +205,7 @@ end
 
 local function UpdateTarget(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local maxrangesq = TUNING.WINONA_SPOTLIGHT_MAX_RANGE * TUNING.WINONA_SPOTLIGHT_MAX_RANGE * 2--alterado
+    local maxrangesq = TUNING.WINONA_SPOTLIGHT_MAX_RANGE * TUNING.WINONA_SPOTLIGHT_MAX_RANGE * 2 --alterado
     local startrange = TUNING.WINONA_SPOTLIGHT_MAX_RANGE + TUNING.WINONA_SPOTLIGHT_RADIUS + 2
     local rangesq = startrange * startrange
     local targetIsAlive = nil
@@ -269,7 +269,8 @@ local function UpdateLightValues(inst, dir, dist)
     dist = dist + offs
     local theta = (dir + 90) * DEGREES
     inst._lightinst.Transform:SetPosition(math.sin(theta) * dist, 0, math.cos(theta) * dist)
-    local k = math.clamp((dist - TUNING.WINONA_SPOTLIGHT_MIN_RANGE) / (TUNING.WINONA_SPOTLIGHT_MAX_RANGE - TUNING.WINONA_SPOTLIGHT_MIN_RANGE), 0, 1)
+    local k = math.clamp((dist - TUNING.WINONA_SPOTLIGHT_MIN_RANGE) /
+        (TUNING.WINONA_SPOTLIGHT_MAX_RANGE - TUNING.WINONA_SPOTLIGHT_MIN_RANGE), 0, 1)
     inst._lightinst.Light:SetIntensity(LIGHT_INTENSITY_MAX + k * k * LIGHT_INTENSITY_DELTA)
 end
 
@@ -316,7 +317,8 @@ local function OnUpdateLightCommon(inst)
     if inst._curlightdist == nil then
         inst._curlightdist = math.max(TUNING.WINONA_SPOTLIGHT_MIN_RANGE, inst._lightdist:value())
     else
-        inst._curlightdist = inst._curlightdist * (1 - LIGHT_EASING) + math.max(TUNING.WINONA_SPOTLIGHT_MIN_RANGE, inst._lightdist:value()) * LIGHT_EASING
+        inst._curlightdist = inst._curlightdist * (1 - LIGHT_EASING) +
+            math.max(TUNING.WINONA_SPOTLIGHT_MIN_RANGE, inst._lightdist:value()) * LIGHT_EASING
     end
 
     if lightenabled then
@@ -340,7 +342,8 @@ local function OnUpdateLightServer(inst, dt)
         if inst._target ~= nil then
             if inst._target:IsValid() then
                 inst._lightdir:set(inst:GetAngleToPoint(inst._target.Transform:GetWorldPosition()))
-                inst._lightdist:set(math.clamp(math.sqrt(inst:GetDistanceSqToInst(inst._target)), TUNING.WINONA_SPOTLIGHT_MIN_RANGE, TUNING.WINONA_SPOTLIGHT_MAX_RANGE))
+                inst._lightdist:set(math.clamp(math.sqrt(inst:GetDistanceSqToInst(inst._target)),
+                    TUNING.WINONA_SPOTLIGHT_MIN_RANGE, TUNING.WINONA_SPOTLIGHT_MAX_RANGE))
             else
                 SetTarget(inst, nil)
             end
@@ -360,7 +363,7 @@ local function OnUpdateLightServer(inst, dt)
     end
 end
 
-local function OnUpdateLightClient(inst)--, dt)
+local function OnUpdateLightClient(inst) --, dt)
     if inst.components.updatelooper ~= nil then
         if inst:HasTag("burnt") then
             inst:RemoveComponent("updatelooper")
@@ -465,7 +468,7 @@ local function OnBuilt3(inst)
     end
 end
 
-local function OnBuilt(inst)--, data)
+local function OnBuilt(inst) --, data)
     if inst._inittask ~= nil then
         inst._inittask:Cancel()
         inst._inittask = nil
@@ -608,7 +611,7 @@ local function OnCircuitChanged(inst)
     inst.components.circuitnode:ForEachNode(NotifyCircuitChanged)
 end
 
-local function OnConnectCircuit(inst)--, node)
+local function OnConnectCircuit(inst) --, node)
     if not inst._wired then
         inst._wired = true
         inst.AnimState:ClearOverrideSymbol("wire")
@@ -619,7 +622,7 @@ local function OnConnectCircuit(inst)--, node)
     OnCircuitChanged(inst)
 end
 
-local function OnDisconnectCircuit(inst)--, node)
+local function OnDisconnectCircuit(inst) --, node)
     if inst.components.circuitnode:IsConnected() then
         OnCircuitChanged(inst)
     elseif inst._wired then
@@ -664,7 +667,8 @@ local function OnLoad(inst, data)
             if data.power ~= nil then
                 AddBatteryPower(inst, math.max(2 * FRAMES, data.power / 1000))
             end
-            if data.lightdist ~= nil and data.lightdist ~= inst._lightdist:value() and data.lightdist > TUNING.WINONA_SPOTLIGHT_MIN_RANGE and inst._lightdist:value() > 0 then
+            if data.lightdist ~= nil and data.lightdist ~= inst._lightdist:value() and
+                data.lightdist > TUNING.WINONA_SPOTLIGHT_MIN_RANGE and inst._lightdist:value() > 0 then
                 inst._lightdist:set(data.lightdist)
                 inst._curlightdist = inst._curlightdist ~= nil and data.lightdist or nil
                 dirty = true
@@ -700,6 +704,47 @@ local function OnInit(inst)
 end
 
 --------------------------------------------------------------------------
+local function SpotlightWrenchEnable(inst)
+    -- inst.wrenchbuffed:set(true)
+    -- inst:PushEvent("onwrenchbuffdirty")
+    -- if not inst._powertask then --means spotlight is disabled
+    -- 	-- DoDelayedWrenchablePause(inst)
+    -- end
+    -- inst.Light:SetRadius(TUNING.WINONA_SPOTLIGHT_RADIUS * 1.25)--alterado
+
+    -- return true
+    -- EnableLight(inst,)
+end
+
+local function SpotlightWrenchDisable(inst)
+    -- inst.wrenchbuffed:set(false)
+    -- inst:PushEvent("onwrenchbuffdirty")
+end
+
+local function OnPickup(inst)
+    -- inst:PushEvent("OnDropped")
+    -- if inst.components.fueled.consuming then
+    -- SpotlightWrenchDisable(inst)
+    -- OnWorkFinished(inst)
+    -- end
+    -- if inst._inittask ~= nil then
+    -- inst._inittask:Cancel()
+    -- inst._inittask = nil
+    -- end
+    inst.components.circuitnode:Disconnect()
+    EnableLight(inst, false)
+    -- inst.components.workable:SetWorkable(false)
+    print("pego")
+end
+
+local function OnDropped(inst)
+    -- inst:PushEvent("OnDropped")
+    -- SpotlightWrenchEnable(inst)
+    -- EnableLight(inst,true)
+    -- inst.components.workable:SetWorkable(true)
+    OnBuilt(inst)
+    print("dropado")
+end
 
 local function fn()
     local inst = CreateEntity()
@@ -809,14 +854,16 @@ local function fn()
     inst._updatedelay = 0
     inst._inittask = inst:DoTaskInTime(0, OnInit)
 
-       --alterado
-       inst:AddComponent("inventoryitem")
-       inst.components.inventoryitem.canbepickedup = true
-       inst.components.inventoryitem.nobounce = true
-       inst.components.inventoryitem.imagename = "wunny_spotlight"
-       inst.components.inventoryitem.atlasname = "images/inventoryimages/wunny_spotlight.xml"
-       -- inst.components.health.canmurder = false
-       
+    --alterado
+    inst:AddComponent("inventoryitem")
+    inst.components.inventoryitem.canbepickedup = true
+    inst.components.inventoryitem.nobounce = true
+    inst.components.inventoryitem.imagename = "wunny_spotlight"
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/wunny_spotlight.xml"
+    inst:ListenForEvent("onpickup", OnPickup)
+    inst:ListenForEvent("ondropped", OnDropped)
+    -- inst.components.health.canmurder = false
+
     return inst
 end
 
@@ -861,9 +908,9 @@ local function headfn()
 
     inst:AddComponent("colouradder")
 
-   
 
- 
+
+
 
     return inst
 end
@@ -913,4 +960,5 @@ end
 
 return Prefab("wunny_spotlight", fn, assets, prefabs),
     Prefab("winona_spotlight_head", headfn, assets_head),
-    MakePlacer("winona_spotlight_placer", "winona_spotlight_placement", "winona_spotlight_placement", "idle", true, nil, nil, nil, nil, nil, placer_postinit_fn)
+    MakePlacer("winona_spotlight_placer", "winona_spotlight_placement", "winona_spotlight_placement", "idle", true, nil,
+        nil, nil, nil, nil, placer_postinit_fn)
