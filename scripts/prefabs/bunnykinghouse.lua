@@ -124,9 +124,9 @@ local function SpawnCheckCaveDay(inst)
     inst:WatchWorldState("stopcaveday", OnStartDay)
     if inst.components.spawner ~= nil and inst.components.spawner:IsOccupied() then
         -- if not TheWorld.state.iscaveday or
-        if (inst.components.burnable ~= nil and inst.components.burnable:IsBurning()) then
+        -- if (inst.components.burnable ~= nil and inst.components.burnable:IsBurning()) then
             inst.components.spawner:ReleaseChild()
-        end
+        -- end
     end
 end
 

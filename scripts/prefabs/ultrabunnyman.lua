@@ -31,6 +31,112 @@ local brain = require("brains/ultrabunnymanbrain")
 
 local MAX_TARGET_SHARES = 5
 local SHARE_TARGET_DIST = 30
+local weaponDamage = 0
+
+local function OnDeath(inst)
+    print("coelho morrendo")
+    local hasWeapon = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+    print("tem arma? ", hasWeapon)
+    if hasWeapon then
+        print("desequipando arma")
+        inst.components.inventory:UnEquip(hasWeapon)
+    end
+end
+
+function SetBunnyDamage(inst, multiplier, unequip)
+    if inst == nil then return end
+
+    local beardLordDamage = 0
+    if inst.beardlord ~= nil then
+        beardLordDamage = 20
+    end
+
+    if multiplier == nil then multiplier = 1 end
+
+    local hasWeapon = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+    -- local weaponDamage = 0
+    if hasWeapon then
+        -- weaponDamage = hasWeapon.components.weapon.damage
+        hasWeapon.components.weapon:SetDamage(((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier) +
+            (weaponDamage / 2))
+    end
+
+    if unequip then
+        print("caiu no unequip do setbunny")
+        if hasWeapon then
+            -- weaponDamage = hasWeapon.components.weapon.damage
+            hasWeapon.components.weapon:SetDamage(weaponDamage)
+            weaponDamage = 0
+        end
+    end
+    print(TUNING.BUNNYMAN_DAMAGE)
+    print(beardLordDamage)
+    print(multiplier)
+    print(weaponDamage / 2)
+    -- print("setando dano para  ", ((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier) + (weaponDamage / 2))
+
+    inst.components.combat:SetDefaultDamage(((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier) + (weaponDamage/2))
+
+end
+
+-- local function SetDamage(inst)
+--     local weaponDamage = 0
+--     local weapon = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+--     if weapon then
+--         print(weapon)
+--         print("weapon damage ", weapon.components.weapon.damage)
+--         weaponDamage = weapon.components.weapon.damage
+--     end
+-- end
+
+local function OnEquip(inst, data)
+    local hasWeapon = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+    -- local weaponDamage = 0
+    if hasWeapon then
+        weaponDamage = hasWeapon.components.weapon.damage
+        -- hasWeapon.components.weapon:SetDamage(((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier) +
+        --     (weaponDamage / 2))
+    end
+    SetBunnyDamage(inst, 1.1)
+    -- print("coelho equipou kkkk ", data)
+    -- print(data)
+    -- if data.item ~= nil then
+    --     print(data.item)
+    -- end
+    -- if data.weapon ~= nil then
+    --     print(data.weapon)
+    -- end
+    -- local weapon = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+    -- if weapon then
+    --     print(weapon)
+    --     print("weapon damage ", weapon.components.weapon.damage)
+    -- end
+
+    -- if data.weapon.components.weapon.damage ~= nil then
+    --     print(data.weapon.components.weapon.damage)
+    -- end
+    -- if data.weapon.damage ~= nil then
+    --     print(data.weapon.damage)
+    -- end
+    -- if data.item.weapon ~= nil then
+    --     print(data.item.weapon)
+    -- end
+    -- print("equipou e ", inst.components.locomotor:GetSpeedMultiplier())
+    -- _G.speedMultiplier = inst.components.locomotor:GetSpeedMultiplier()
+    -- if data.eslot == EQUIPSLOTS.HEAD and not data.item:HasTag("open_top_hat") then
+    --     --V2C: HAH! There's no "beard" in "player_wormwood" build.
+    --     --     This hides the flower, which uses the beard symbol.
+    --     inst.AnimState:OverrideSymbol("beard", "player_wormwood", "beard")
+    -- end
+end
+
+local function OnUnEquip(inst, data)
+    print("desequipando")
+    local hasWeapon = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+    print("tem arma ao desequipar? ", hasWeapon)
+    -- weaponDamage = 0
+    SetBunnyDamage(inst, 1.1, true)
+end
 
 local function SuggestTreeTarget(inst, data)
     local ba = inst:GetBufferedAction()
@@ -81,14 +187,19 @@ local function ClearObservedBeardlord(inst)
     inst.clearbeardlordtask = nil
     if not IsForcedNightmare(inst) then
         inst.beardlord = nil
-        inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE * 110 / 100)
+        -- local hasWepon = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+        -- if hasWeapon then
+        --     SetBunnyDamage(inst, 1.1)(TUNING.BUNNYMAN_DAMAGE * 110 / 100) + hasWepon.damage)
+        -- else
+        SetBunnyDamage(inst, 1.1)
+        -- end
         inst.components.combat:SetAttackPeriod(TUNING.BUNNYMAN_ATTACK_PERIOD * 90 / 100)
     end
 end
 
 local function SetObserverdBeardLord(inst)
     inst.beardlord = true
-    inst.components.combat:SetDefaultDamage(66)
+    SetBunnyDamage(inst, 1.1)
     inst.components.combat:SetAttackPeriod(0.9)
     if inst.clearbeardlordtask ~= nil then
         inst.clearbeardlordtask:Cancel()
@@ -109,7 +220,7 @@ local function OnTimerDone(inst, data)
         inst.AnimState:SetBuild("ultramanrabbit_build")
         if inst.clearbeardlordtask == nil then
             inst.beardlord = nil
-            inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE * 110 / 100)
+            SetBunnyDamage(inst, 1.1)
             inst.components.combat:SetAttackPeriod(TUNING.BUNNYMAN_ATTACK_PERIOD * 90 / 100)
         end
     end
@@ -131,7 +242,7 @@ local function SetForcedBeardLord(inst, duration)
         inst.components.timer:StartTimer("forcenightmare", duration)
     end
     inst.beardlord = true
-    inst.components.combat:SetDefaultDamage(66)
+    SetBunnyDamage(inst, 1.1)
     inst.components.combat:SetAttackPeriod(0.9)
     inst.AnimState:SetBuild("manrabbit_beard_build")
     inst:ListenForEvent("timerdone", OnTimerDone)
@@ -161,6 +272,14 @@ local function ShouldAcceptItem(inst, item)
     return (--accept all hats!
         item.components.equippable ~= nil and
             item.components.equippable.equipslot == EQUIPSLOTS.HEAD
+        ) or
+        (--accept all hands!
+        item.components.equippable ~= nil and
+            item.components.equippable.equipslot == EQUIPSLOTS.HANDS
+        ) or
+        (--accept all armors!
+        item.components.equippable ~= nil and
+            item.components.equippable.equipslot == EQUIPSLOTS.BODY
         ) or
         (--accept food, but not too many carrots for loyalty!
         inst.components.eater:CanEat(item) and
@@ -217,6 +336,25 @@ local function OnGetItemFromPlayer(inst, giver, item)
         inst.AnimState:Show("hat")
     end
 
+    --I wear weapons
+    if item.components.equippable ~= nil and item.components.equippable.equipslot == EQUIPSLOTS.HANDS then
+        local current = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+        if current ~= nil then
+            inst.components.inventory:DropItem(current)
+        end
+        inst.components.inventory:Equip(item)
+        -- inst.AnimState:Show("hat")
+    end
+
+    --I wear armors
+    if item.components.equippable ~= nil and item.components.equippable.equipslot == EQUIPSLOTS.BODY then
+        local current = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+        if current ~= nil then
+            inst.components.inventory:DropItem(current)
+        end
+        inst.components.inventory:Equip(item)
+        -- inst.AnimState:Show("hat")
+    end
     --n adianta, n é possível tentar dar armadura
     -- if item.components.equippable ~= nil and item.components.equippable.equipslot == EQUIPSLOTS.BODY then
     --     local current = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
@@ -525,7 +663,7 @@ local function fn()
     -- inst.components.sleeper.sleeptestfn = NormalShouldSleep
     -- inst.components.sleeper.waketestfn = DefaultWakeTest
 
-    inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE * 110 / 100)
+    SetBunnyDamage(inst, 1.1)
     inst.components.combat:SetAttackPeriod(TUNING.BUNNYMAN_ATTACK_PERIOD * 90 / 100)
     inst.components.combat:SetKeepTargetFunction(NormalKeepTargetFn)
     inst.components.combat:SetRetargetFunction(3, NormalRetargetFn)
@@ -545,6 +683,9 @@ local function fn()
     inst:ListenForEvent("ms_forcenightmarestate", OnForceNightmareState)
 
     inst.OnLoad = OnLoad
+    inst:ListenForEvent("equip", OnEquip)
+    inst:ListenForEvent("equip", OnUnEquip)
+    inst:ListenForEvent("death", OnDeath)
 
     return inst
 end

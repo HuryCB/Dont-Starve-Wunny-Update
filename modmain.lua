@@ -30,6 +30,7 @@ PrefabFiles = {
     "wunny_spotlight",
     "wunny_battery_low",
     "wunny_battery_high",
+    "snakeking",
     -- "modhats",
 
     -- "wunnyslingshot",
@@ -273,10 +274,26 @@ STRINGS.CHARACTER_SURVIVABILITY.wunny = "Grim"
 TUNING.WUNNY_SPEED = 6
 TUNING.WUNNY_RUNNING_HUNGER_RATE = 1
 TUNING.WUNNY_HUNGER_RATE = TUNING.WILSON_HUNGER_RATE
-TUNING.BUNNYPACK_HUNGER = 1.1 --mudar para 1.1
+TUNING.BUNNYPACK_HUNGER = 1.15 --mudar para 1.1
 -- WUNNY_RUNNING_HUNGER_RATETUNNIN.WUNNY_IDLE_HUNGER_RATE = 1
 
+---CUSTOM TUNINGS
 
+TUNING.SNAKE_SPEED = 3
+TUNING.SNAKE_TARGET_DIST = 8
+TUNING.SNAKE_KEEP_TARGET_DIST= 15
+TUNING.SNAKE_HEALTH = 100
+TUNING.SNAKE_DAMAGE = 10
+TUNING.SNAKE_ATTACK_PERIOD = 3
+TUNING.SNAKE_POISON_CHANCE = 0.25
+TUNING.SNAKE_POISON_START_DAY = 3 -- the day that poison snakes have a chance to show up
+TUNING.SNAKEDEN_RELEASE_TIME = 5
+TUNING.SNAKE_JUNGLETREE_CHANCE = 0.5 -- chance of a normal snake
+TUNING.SNAKE_JUNGLETREE_POISON_CHANCE = 0.25 -- chance of a poison snake
+TUNING.SNAKE_JUNGLETREE_AMOUNT_TALL = 2 -- num of times to try and spawn a snake from a tall tree
+TUNING.SNAKE_JUNGLETREE_AMOUNT_MED = 1 -- num of times to try and spawn a snake from a normal tree
+TUNING.SNAKE_JUNGLETREE_AMOUNT_SMALL = 1 -- num of times to try and spawn a snake from a small tree
+TUNING.SNAKEDEN_MAX_SNAKES = 3
 -- Custom speech strings
 STRINGS.CHARACTERS.WUNNY = require "speech_wunny"
 
@@ -685,6 +702,7 @@ AddComponentPostInit("skinner", function(self, inst)
     end
 
 end)
+
 
 -- local containers_widgetsetup_custom = containers.widgetsetup
 

@@ -851,6 +851,23 @@ local function currentspeedup(self,speedupamount) self.inst.currentspeedup:set(s
 
 local function OnEquip(inst, data)
 	print(data)
+	local hasWeapon = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+    -- local weaponDamage = 0
+    if hasWeapon then
+		hasWeapon:RemoveComponent("tradable")
+		hasWeapon:AddComponent("tradable")
+        -- weaponDamage = hasWeapon.components.weapon.damage
+        -- hasWeapon.components.weapon:SetDamage((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier + weaponDamage/2)
+    end
+
+	local hasArmor = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+    -- local weaponDamage = 0
+    if hasArmor then
+		hasArmor:RemoveComponent("tradable")
+		hasArmor:AddComponent("tradable")
+        -- weaponDamage = hasWeapon.components.weapon.damage
+        -- hasWeapon.components.weapon:SetDamage((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier + weaponDamage/2)
+    end
 	-- print("equipou e ", inst.components.locomotor:GetSpeedMultiplier())
 	-- _G.speedMultiplier = inst.components.locomotor:GetSpeedMultiplier()
     -- if data.eslot == EQUIPSLOTS.HEAD and not data.item:HasTag("open_top_hat") then
@@ -876,7 +893,7 @@ local master_postinit = function(inst)
 	-- print("Multspeed ", inst.components.locomotor:GetSpeedMultiplier())
 	-- print("Walkspeed ", inst.components.locomotor:GetWalkSpeed())
 
-	-- inst:ListenForEvent("equip", OnEquip)
+	inst:ListenForEvent("equip", OnEquip)
     -- inst:ListenForEvent("unequip", OnUnequip)
 	
 	inst.components.temperature.inherentinsulation = -TUNING.INSULATION_TINY

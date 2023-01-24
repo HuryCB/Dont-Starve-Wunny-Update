@@ -26,6 +26,7 @@ local prefabs =
     "kelp",
     "froglegs",
     "merm_king_splash",
+    "snakeking",
 }
 
 local beardlordloot = { "beardhair", "beardhair", "monstermeat" }
@@ -65,6 +66,14 @@ local trading_items =
 }
 
 local trading_filler = { "seeds", "kelp", "seeds", "seeds" }
+
+local function OnDeath(inst)
+    local snake = SpawnPrefab("snakeking")
+    local spawnpos = inst:GetPosition()
+    -- local offset = FindWalkableOffset(spawnpos, math.random() * 2 * PI, 1, 8, true, false, IsPositionValidForEnt(inst, 2))
+    -- spawnpos = offset ~= nil and spawnpos + offset or spawnpos
+    snake.Transform:SetPosition(spawnpos:Get())
+end
 
 local function DoShadowFx(inst, isnightmare)
     local x, y, z = inst.Transform:GetWorldPosition()
@@ -541,8 +550,8 @@ local function fn()
     inst.components.combat:SetKeepTargetFunction(NormalKeepTargetFn)
     inst.components.combat:SetRetargetFunction(3, NormalRetargetFn)
 
-    inst.components.locomotor.runspeed = TUNING.BUNNYMAN_RUN_SPEED
-    inst.components.locomotor.walkspeed = TUNING.BUNNYMAN_WALK_SPEED
+    inst.components.locomotor.runspeed = 0
+    inst.components.locomotor.walkspeed = 0
 
     -- inst.components.health:SetMaxHealth(TUNING.MERM_KING_HEALTH)
     inst.components.health:SetMaxHealth(1)
@@ -557,6 +566,9 @@ local function fn()
     inst:ListenForEvent("ms_forcenightmarestate", OnForceNightmareState)
 
     inst.OnLoad = OnLoad
+
+    ------
+    inst:ListenForEvent("death", OnDeath)
 
     --chapeu
     -- inst.OnSpawned = OnSpawned
