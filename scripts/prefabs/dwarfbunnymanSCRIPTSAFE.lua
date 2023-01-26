@@ -6,7 +6,7 @@ local assets =
     Asset("ANIM", "anim/manrabbit_build.zip"),
     Asset("ANIM", "anim/manrabbit_boat_jump.zip"),
 
-    Asset("ANIM", "anim/manrabbit_beard_build.zip"),
+    -- Asset("ANIM", "anim/manrabbit_beard_build.zip"),
     Asset("ANIM", "anim/manrabbit_beard_basic.zip"),
     Asset("ANIM", "anim/manrabbit_beard_actions.zip"),
     Asset("SOUND", "sound/bunnyman.fsb"),

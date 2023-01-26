@@ -94,7 +94,8 @@ Assets = {
     Asset("ATLAS", "images/inventoryimages/wunny_battery_high.xml"),
 
     Asset("ATLAS", "images/inventoryimages/coolerpack.xml"),
-    Asset("IMAGE", "images/inventoryimages/coolerpack.tex"),
+    Asset("ATLAS", "images/inventoryimages/beardlordpack.xml"),
+    -- Asset("IMAGE", "images/inventoryimages/coolerpack.tex"),
 
 
     Asset("ANIM", "anim/swap_coolerpack.zip"),
@@ -112,6 +113,8 @@ Assets = {
 }
 
 AddMinimapAtlas("images/map_icons/wunny.xml")
+AddMinimapAtlas("images/map_icons/coolerpack.xml")
+AddMinimapAtlas("images/map_icons/beardlordpack.xml")
 
 local require = GLOBAL.require
 local STRINGS = GLOBAL.STRINGS
@@ -193,7 +196,9 @@ AddRecipe("coolerpack", {
     nil,
     nil,
     nil,
-    nil, "images/inventoryimages/coolerpack.xml")
+    "wunny",
+    "images/inventoryimages/coolerpack.xml",
+    "coolerpack.tex")
 --beardlordpack
 AddRecipe("beardlordpack", {
     Ingredient("manrabbit_tail", 4) --4
@@ -205,7 +210,8 @@ AddRecipe("beardlordpack", {
     nil,
     nil,
     nil,
-    nil, "images/inventoryimages/coolerpack.xml")
+    "wunny", "images/inventoryimages/beardlordpack.xml",
+    "beardlordpack.tex")
 --end of beardlordpack
 
 local containers_widgetsetup_custom = containers.widgetsetup
@@ -289,6 +295,7 @@ TUNING.WUNNY_SPEED = 6
 TUNING.WUNNY_RUNNING_HUNGER_RATE = 1
 TUNING.WUNNY_HUNGER_RATE = TUNING.WILSON_HUNGER_RATE
 TUNING.BUNNYPACK_HUNGER = 1.15 --mudar para 1.1
+TUNING.BEARDLORDPACK_HUNGER = 1.175 --mudar para 1.1
 -- WUNNY_RUNNING_HUNGER_RATETUNNIN.WUNNY_IDLE_HUNGER_RATE = 1
 
 ---CUSTOM TUNINGS
@@ -638,7 +645,7 @@ AddRecipe("birchnuthat",
     nil,
     nil,
     nil,
-    nil,
+    "wunny",
     "images/inventoryimages/birchnuthat.xml",
     "birchnuthat.tex")
 
@@ -653,7 +660,7 @@ AddRecipe("beardlordhat",
     nil,
     nil,
     nil,
-    nil,
+    "wunny",
     "images/inventoryimages/beardlordhat.xml",
     "beardlordhat.tex")
 
