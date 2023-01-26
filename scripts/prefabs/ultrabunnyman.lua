@@ -44,6 +44,7 @@ local function OnDeath(inst)
 end
 
 function SetBunnyDamage(inst, multiplier, unequip)
+    print("setBunnyDamage")
     if inst == nil then return end
 
     local beardLordDamage = 0
@@ -55,10 +56,21 @@ function SetBunnyDamage(inst, multiplier, unequip)
 
     local hasWeapon = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
     -- local weaponDamage = 0
+
+    print("vendo se coelho tem arma")
     if hasWeapon then
+        print("coelho tem arma")
         -- weaponDamage = hasWeapon.components.weapon.damage
         hasWeapon.components.weapon:SetDamage(((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier) +
             (weaponDamage / 2))
+        inst.components.combat:SetDefaultDamage(((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier) +
+            (weaponDamage / 2))
+        print("dado calculado: ", ((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier) +
+            (weaponDamage / 2))
+    else
+        print("coelho n tem arma")
+        inst.components.combat:SetDefaultDamage(((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier))
+        print("dano calculado: ", ((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier))
     end
 
     if unequip then
@@ -69,13 +81,12 @@ function SetBunnyDamage(inst, multiplier, unequip)
             weaponDamage = 0
         end
     end
-    print(TUNING.BUNNYMAN_DAMAGE)
-    print(beardLordDamage)
-    print(multiplier)
-    print(weaponDamage / 2)
+    -- print(TUNING.BUNNYMAN_DAMAGE)
+    -- print(beardLordDamage)
+    -- print(multiplier)
+    -- print(weaponDamage / 2)
     -- print("setando dano para  ", ((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier) + (weaponDamage / 2))
 
-    inst.components.combat:SetDefaultDamage(((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier) + (weaponDamage/2))
 
 end
 

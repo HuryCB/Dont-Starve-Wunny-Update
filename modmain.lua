@@ -9,6 +9,7 @@ PrefabFiles = {
     "birchnuthat",
     -- "bunnyback",
     "coolerpack",
+    "beardlordpack",
     "beardlordhat",
     -- "batbunny",
     "newbunnyhouse",
@@ -31,6 +32,7 @@ PrefabFiles = {
     "wunny_battery_low",
     "wunny_battery_high",
     "snakeking",
+    "sewing_tape",
     -- "modhats",
 
     -- "wunnyslingshot",
@@ -192,7 +194,19 @@ AddRecipe("coolerpack", {
     nil,
     nil,
     nil, "images/inventoryimages/coolerpack.xml")
-
+--beardlordpack
+AddRecipe("beardlordpack", {
+    Ingredient("manrabbit_tail", 4) --4
+    -- , Ingredient("silk", 6),
+    -- Ingredient("rope", 2)
+},
+    RECIPETABS.SURVIVAL
+    , TECH.NONE, nil,
+    nil,
+    nil,
+    nil,
+    nil, "images/inventoryimages/coolerpack.xml")
+--end of beardlordpack
 
 local containers_widgetsetup_custom = containers.widgetsetup
 local MAXITEMSLOTS = containers.MAXITEMSLOTS
@@ -281,7 +295,7 @@ TUNING.BUNNYPACK_HUNGER = 1.15 --mudar para 1.1
 
 TUNING.SNAKE_SPEED = 3
 TUNING.SNAKE_TARGET_DIST = 8
-TUNING.SNAKE_KEEP_TARGET_DIST= 15
+TUNING.SNAKE_KEEP_TARGET_DIST = 15
 TUNING.SNAKE_HEALTH = 100
 TUNING.SNAKE_DAMAGE = 10
 TUNING.SNAKE_ATTACK_PERIOD = 3
@@ -539,6 +553,20 @@ AddRecipe("lucy",
 --     "images/inventoryimages/bat_bunny.xml",
 --     "bat_bunny.tex"
 -- )
+--sweing-tape
+AddRecipe("sewing_tape",
+    { Ingredient("silk", 1), Ingredient("cutgrass", 3) },
+    RECIPETABS.SURVIVAL,
+    TECH.NONE,
+    nil,
+    nil,
+    nil,
+    nil,
+    "wunny",
+    nil,
+    nil
+)
+--end of sweing tape
 --catapult
 AddRecipe("wunny_catapult",
     { Ingredient("manrabbit_tail", 1)

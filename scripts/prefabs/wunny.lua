@@ -431,7 +431,7 @@ local common_postinit = function(inst)
 	-- inst.components.sanity.custom_rate_fn = sanityfn
 	
 	--winona
-	inst:AddTag("handyperson")
+	-- inst:AddTag("handyperson")
 
 	--wolfgang
 	-- inst:AddTag("strongman")
@@ -485,6 +485,7 @@ local common_postinit = function(inst)
 	--Wilson
 	inst:AddTag("bearded")
 
+	--Maxwell/Waxwell
 	inst:AddTag("shadowmagic")
 	inst:AddTag("magician")
 	inst:AddTag("reader")

@@ -140,15 +140,15 @@ local function oninit(inst)
         not inst.components.spawner:IsSpawnPending() then
         local child = SpawnPrefab(inst.components.spawner.childname)
         if child ~= nil then
-            local hasWepon = child.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-            if not hasWepon then
-                print("n tem arma")
-                print(child.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS))
-                local spear = SpawnPrefab("spear")
-                if spear then
-                    child.components.inventory:Equip(spear)
-                end
-            end
+            -- local hasWepon = child.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+            -- if not hasWepon then
+            --     print("n tem arma")
+            --     print(child.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS))
+            --     local spear = SpawnPrefab("spear")
+            --     if spear then
+            --         child.components.inventory:Equip(spear)
+            --     end
+            -- end
 
             inst.components.spawner:TakeOwnership(child)
             inst.components.spawner:GoHome(child)

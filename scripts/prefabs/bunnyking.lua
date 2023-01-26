@@ -67,12 +67,20 @@ local trading_items =
 
 local trading_filler = { "seeds", "kelp", "seeds", "seeds" }
 
-local function OnDeath(inst)
+local function SpawnSnake(inst)
+    print("realmente tentando spawnar cobra")
     local snake = SpawnPrefab("snakeking")
     local spawnpos = inst:GetPosition()
     -- local offset = FindWalkableOffset(spawnpos, math.random() * 2 * PI, 1, 8, true, false, IsPositionValidForEnt(inst, 2))
     -- spawnpos = offset ~= nil and spawnpos + offset or spawnpos
     snake.Transform:SetPosition(spawnpos:Get())
+end
+local function OnDeath(inst)
+
+    print("morreu, tentando spawnar cobra")
+    -- print(inst.components.inventory.lootdropper)--pode crashar
+    TheWorld:DoTaskInTime(5000, SpawnSnake(inst))
+   
 end
 
 local function DoShadowFx(inst, isnightmare)
@@ -473,6 +481,12 @@ local function fn()
     inst.components.eater:SetDiet({ FOODTYPE.VEGGIE }, { FOODTYPE.VEGGIE })
     inst.components.eater:SetCanEatRaw()
 
+    --eu, fome
+    inst:AddComponent("hunger")
+    inst.components.hunger:SetMax(TUNING.MERM_KING_HUNGER)
+    inst.components.hunger:SetKillRate(TUNING.MERM_KING_HEALTH / TUNING.MERM_KING_HUNGER_KILL_TIME)
+    inst.components.hunger:SetRate(TUNING.MERM_KING_HUNGER_RATE)
+
     ------------------------------------------
     inst:AddComponent("combat")
     inst.components.combat.hiteffectsymbol = "manrabbit_torso"
@@ -492,6 +506,7 @@ local function fn()
     inst.components.follower.maxfollowtime = TUNING.PIG_LOYALTY_MAXTIME
     ------------------------------------------
     inst:AddComponent("health")
+    inst.components.health.destroytime = 3.5--será?
     -- inst.components.health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)
 
     ------------------------------------------

@@ -272,8 +272,8 @@ local function fn()
     inst.components.workable:SetOnWorkCallback(onhit)
 
     inst:AddComponent("spawner")
-    WorldSettings_Spawner_SpawnDelay(inst, TUNING.RABBITHOUSE_SPAWN_TIME, TUNING.RABBITHOUSE_ENABLED)
-    inst.components.spawner:Configure("bunnyking", TUNING.RABBITHOUSE_SPAWN_TIME)
+    WorldSettings_Spawner_SpawnDelay(inst, TUNING.RABBITHOUSE_SPAWN_TIME * 5, TUNING.RABBITHOUSE_ENABLED)
+    inst.components.spawner:Configure("bunnyking", TUNING.RABBITHOUSE_SPAWN_TIME * 5)
     --inst.components.spawner.onoccupied = onoccupied
     inst.components.spawner.onvacate = onvacate
     inst.components.spawner:CancelSpawning()
