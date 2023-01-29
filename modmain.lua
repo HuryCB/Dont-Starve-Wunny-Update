@@ -34,6 +34,7 @@ PrefabFiles = {
     "snakeking",
     "sewing_tape",
     "spiderbunny",
+    "bunnybat",
     -- "modhats",
 
     -- "wunnyslingshot",
@@ -76,7 +77,12 @@ Assets = {
 
     Asset("IMAGE", "images/inventoryimages/rabbithole.tex"),
 
+    Asset("IMAGE", "images/rabbit_hole.tex"),
+    Asset("ATLAS", "images/rabbit_hole.xml"),
+
     Asset("ATLAS", "images/inventoryimages/birchnuthat.xml"),
+
+    Asset("ATLAS", "images/inventoryimages/ham_bat.xml"),
 
     Asset("ATLAS", "images/inventoryimages/bat_bunny.xml"),
 
@@ -341,7 +347,7 @@ local spacing = 2
 --function of rabbithole recipe
 local function rabbithole_recipe(ingredients, level)
     AddRecipe("rabbithole", ingredients, RECIPETABS.SURVIVAL, level,
-        "rabbithole_placer", spacing, nil, nil, "wunny", "images/inventoryimages/rabbithole.xml")
+        "rabbit_placer", spacing, nil, nil, "wunny", "images/inventoryimages/rabbithole.xml")
 end
 
 rabbithole_recipe({ Ingredient("carrot", 2), Ingredient("rabbit", 2), Ingredient("shovel", 1) }, TECH.NONE)
@@ -677,13 +683,26 @@ AddRecipe("rabbitamulet",
     nil,
     nil,
     nil,
-    nil,
+    "wunny",
     "images/inventoryimages/beardlordhat.xml",
     "beardlordhat.tex")
 --end of rabbitamulet
 -- AddRecipe("bunnyback", { Ingredient("pigskin", 4), Ingredient("silk", 6), Ingredient("rope", 2) }, TECH.NONE)
 
-
+--"bunnybat"
+-- AddRecipe("bunnybat",
+--     { Ingredient("manrabbit_tail", 1), Ingredient("twigs", 2), Ingredient("meat", 2) },
+--     RECIPETABS.WAR,
+--     TECH.SCIENCE_TWO,
+--     nil,
+--     nil,
+--     nil,
+--     nil,
+--     "wunny",
+--     "images/inventoryimages/ham_bat.xml",
+--     "ham_bat.tex"
+-- )
+--end "bunnybat"
 -- AddRecipe("bunnyback", { Ingredient("manrabbit_tail", 4), Ingredient("silk", 6), Ingredient("rope", 2) },
 --     RECIPETABS.SURVIVAL, TECH.NONE)
 

@@ -34,4 +34,5 @@ end
 
 return 
 Prefab("common/objects/rabbitnest", fn, assets),
-    MakePlacer("rabbithole_placer", "rabbitnest", "rabbithole", "idle")
+    -- MakePlacer("rabbithole_placer", "rabbithouse", "rabbit_house", "idle", nil, nil, nil, 0.2)
+    MakePlacer("rabbit_placer", "rabbithole", "rabbit_hole", "idle")
