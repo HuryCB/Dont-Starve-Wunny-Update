@@ -75,12 +75,14 @@ local function SpawnSnake(inst)
     -- spawnpos = offset ~= nil and spawnpos + offset or spawnpos
     snake.Transform:SetPosition(spawnpos:Get())
 end
+
 local function OnDeath(inst)
 
     print("morreu, tentando spawnar cobra")
+    -- print(lootdropper)
     -- print(inst.components.inventory.lootdropper)--pode crashar
-    TheWorld:DoTaskInTime(5000, SpawnSnake(inst))
-   
+    -- TheWorld:DoTaskInTime(5000, SpawnSnake(inst))
+
 end
 
 local function DoShadowFx(inst, isnightmare)
@@ -506,7 +508,7 @@ local function fn()
     inst.components.follower.maxfollowtime = TUNING.PIG_LOYALTY_MAXTIME
     ------------------------------------------
     inst:AddComponent("health")
-    inst.components.health.destroytime = 3.5--será?
+    inst.components.health.destroytime = 3.5 --será?
     -- inst.components.health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)
 
     ------------------------------------------
@@ -584,6 +586,18 @@ local function fn()
 
     ------
     inst:ListenForEvent("death", OnDeath)
+
+    inst.AnimState:OverrideSymbol("swap_object", "swap_cane", "swap_cane")
+
+    inst.AnimState:Show("ARM_carry")
+    inst.AnimState:Hide("ARM_normal")
+
+    inst.AnimState:OverrideSymbol("swap_hat", "hat_ruins", "swap_hat")
+    inst.AnimState:Show("HAT")
+    inst.AnimState:Show("HAT_HAIR")
+    inst.AnimState:Hide("HAIR_NOHAT")
+    inst.AnimState:Hide("HAIR")
+    -- 
 
     --chapeu
     -- inst.OnSpawned = OnSpawned

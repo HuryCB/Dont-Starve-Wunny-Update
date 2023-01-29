@@ -139,16 +139,16 @@ local function oninit(inst)
         local child = SpawnPrefab(inst.components.spawner.childname)
         if child ~= nil then
 
-            local hasHat = child.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
-            if not hasHat then
-                print("n tem chapeu")
-                print(child.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD))
-                local hat = SpawnPrefab("ruinshat")
-                print("tentando spawnar chapeu")
-                if hat then
-                    child.components.inventory:Equip(hat)
-                end
-            end
+            -- local hasHat = child.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
+            -- if not hasHat then
+            --     print("n tem chapeu")
+            --     print(child.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD))
+            --     local hat = SpawnPrefab("ruinshat")
+            --     print("tentando spawnar chapeu")
+            --     if hat then
+            --         child.components.inventory:Equip(hat)
+            --     end
+            -- end
 
             local hasArmor = child.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
             if not hasArmor then
@@ -160,15 +160,15 @@ local function oninit(inst)
                 end
             end
 
-            local hasWepon = child.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-            if not hasWepon then
-                print("n tem arma")
-                print(child.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS))
-                local spear = SpawnPrefab("cane")
-                if spear then
-                    child.components.inventory:Equip(spear)
-                end
-            end
+            -- local hasWepon = child.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+            -- if not hasWepon then
+            --     print("n tem arma")
+            --     print(child.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS))
+            --     local spear = SpawnPrefab("cane")
+            --     if spear then
+            --         child.components.inventory:Equip(spear)
+            --     end
+            -- end
 
             inst.components.spawner:TakeOwnership(child)
             inst.components.spawner:GoHome(child)
@@ -303,4 +303,4 @@ local function fn()
 end
 
 return Prefab("bunnykinghouse", fn, assets, prefabs),
-    MakePlacer("rabbithouse_placer", "rabbithouse", "rabbit_house", "idle")
+    MakePlacer("kingrabbithouse_placer", "rabbithouse", "rabbit_house", "idle", nil, nil, nil, 2)

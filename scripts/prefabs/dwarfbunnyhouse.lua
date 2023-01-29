@@ -238,4 +238,4 @@ local function fn()
 end
 
 return Prefab("dwarfbunnyhouse", fn, assets, prefabs),
-    MakePlacer("rabbithouse_placer", "rabbithouse", "rabbit_house", "idle")
+    MakePlacer("dwarfrabbithouse_placer", "rabbithouse", "rabbit_house", "idle", nil, nil, nil, 0.625)

@@ -61,15 +61,18 @@ function SetBunnyDamage(inst, multiplier, unequip)
     if hasWeapon then
         print("coelho tem arma")
         -- weaponDamage = hasWeapon.components.weapon.damage
-        hasWeapon.components.weapon:SetDamage(((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier) +
-            (weaponDamage / 2))
-        inst.components.combat:SetDefaultDamage(((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier) +
-            (weaponDamage / 2))
-        print("dado calculado: ", ((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier) +
-            (weaponDamage / 2))
+        -- hasWeapon.components.weapon:SetDamage(((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier) +
+        --     (weaponDamage / 2))
+        hasWeapon.components.weapon:SetDamage(weaponDamage * 4)
+        print("novo dano da arma: ",
+            hasWeapon.components.weapon:GetDamage())
+        -- inst.components.combat:SetDefaultDamage(((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier) +
+        --     (weaponDamage / 2))
+        inst.components.combat:SetDefaultDamage(hasWeapon.components.weapon:GetDamage())
     else
         print("coelho n tem arma")
-        inst.components.combat:SetDefaultDamage(((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier))
+        -- inst.components.combat:SetDefaultDamage(((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier))
+        inst.components.combat:SetDefaultDamage(hasWeapon.components.weapon:GetDamage())
         print("dano calculado: ", ((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier))
     end
 
@@ -202,7 +205,7 @@ local function ClearObservedBeardlord(inst)
         -- if hasWeapon then
         --     SetBunnyDamage(inst, 1.1)(TUNING.BUNNYMAN_DAMAGE * 110 / 100) + hasWepon.damage)
         -- else
-        SetBunnyDamage(inst, 1.1)
+        -- SetBunnyDamage(inst, 1.1)
         -- end
         inst.components.combat:SetAttackPeriod(TUNING.BUNNYMAN_ATTACK_PERIOD * 90 / 100)
     end
@@ -210,7 +213,7 @@ end
 
 local function SetObserverdBeardLord(inst)
     inst.beardlord = true
-    SetBunnyDamage(inst, 1.1)
+    -- SetBunnyDamage(inst, 1.1)
     inst.components.combat:SetAttackPeriod(0.9)
     if inst.clearbeardlordtask ~= nil then
         inst.clearbeardlordtask:Cancel()
@@ -231,7 +234,7 @@ local function OnTimerDone(inst, data)
         inst.AnimState:SetBuild("ultramanrabbit_build")
         if inst.clearbeardlordtask == nil then
             inst.beardlord = nil
-            SetBunnyDamage(inst, 1.1)
+            -- SetBunnyDamage(inst, 1.1)
             inst.components.combat:SetAttackPeriod(TUNING.BUNNYMAN_ATTACK_PERIOD * 90 / 100)
         end
     end
@@ -253,7 +256,7 @@ local function SetForcedBeardLord(inst, duration)
         inst.components.timer:StartTimer("forcenightmare", duration)
     end
     inst.beardlord = true
-    SetBunnyDamage(inst, 1.1)
+    -- SetBunnyDamage(inst, 1.1)
     inst.components.combat:SetAttackPeriod(0.9)
     inst.AnimState:SetBuild("manrabbit_beard_build")
     inst:ListenForEvent("timerdone", OnTimerDone)
@@ -674,7 +677,7 @@ local function fn()
     -- inst.components.sleeper.sleeptestfn = NormalShouldSleep
     -- inst.components.sleeper.waketestfn = DefaultWakeTest
 
-    SetBunnyDamage(inst, 1.1)
+    -- SetBunnyDamage(inst, 1.1)
     inst.components.combat:SetAttackPeriod(TUNING.BUNNYMAN_ATTACK_PERIOD * 90 / 100)
     inst.components.combat:SetKeepTargetFunction(NormalKeepTargetFn)
     inst.components.combat:SetRetargetFunction(3, NormalRetargetFn)

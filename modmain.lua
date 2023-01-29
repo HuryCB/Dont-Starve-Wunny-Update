@@ -33,6 +33,7 @@ PrefabFiles = {
     "wunny_battery_high",
     "snakeking",
     "sewing_tape",
+    "spiderbunny",
     -- "modhats",
 
     -- "wunnyslingshot",
@@ -340,7 +341,7 @@ local spacing = 2
 --function of rabbithole recipe
 local function rabbithole_recipe(ingredients, level)
     AddRecipe("rabbithole", ingredients, RECIPETABS.SURVIVAL, level,
-        "rabbithouse_placer", spacing, nil, nil, "wunny", "images/inventoryimages/rabbithole.xml")
+        "rabbithole_placer", spacing, nil, nil, "wunny", "images/inventoryimages/rabbithole.xml")
 end
 
 rabbithole_recipe({ Ingredient("carrot", 2), Ingredient("rabbit", 2), Ingredient("shovel", 1) }, TECH.NONE)
@@ -366,7 +367,7 @@ bunnyhouse_recipe(
 --bunnykinghouse
 local function bunnykinghouse_recipe(ingredientes, level)
     AddRecipe("bunnykinghouse", ingredientes, RECIPETABS.SURVIVAL, level,
-        "rabbithouse_placer", nil, nil, nil, "wunny", "images/inventoryimages/bunnyhouse.xml",
+        "kingrabbithouse_placer", nil, nil, nil, "wunny", "images/inventoryimages/bunnyhouse.xml",
         "bunnyhouse.tex")
 end
 
@@ -383,7 +384,7 @@ bunnykinghouse_recipe(
 --dwarfunnymanhouse
 local function dwarfbunnyhouse_recipe(ingredientes, level)
     AddRecipe("dwarfbunnyhouse", ingredientes, RECIPETABS.SURVIVAL, level,
-        "rabbithouse_placer", nil, nil, nil, "wunny", "images/inventoryimages/bunnyhouse.xml",
+        "dwarfrabbithouse_placer", nil, nil, nil, "wunny", "images/inventoryimages/bunnyhouse.xml",
         "bunnyhouse.tex")
 end
 
