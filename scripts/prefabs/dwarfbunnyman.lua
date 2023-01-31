@@ -460,7 +460,7 @@ local function fn()
     inst.components.locomotor.runspeed = TUNING.BUNNYMAN_RUN_SPEED * 120 / 100
     inst.components.locomotor.walkspeed = TUNING.BUNNYMAN_WALK_SPEED * 120 / 100
 
-    inst.components.health:SetMaxHealth(TUNING.BUNNYMAN_HEALTH)
+    inst.components.health:SetMaxHealth(TUNING.BUNNYMAN_HEALTH / 1.4)
 
     MakeHauntablePanic(inst)
 

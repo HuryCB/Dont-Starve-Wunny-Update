@@ -1,7 +1,7 @@
 local assets =
 {
     Asset("ANIM", "anim/rabbithole.zip"),
-    Asset("ANIM", "anim/rabbitnest.zip"),
+    -- Asset("ANIM", "anim/rabbitnest.zip"),
 	Asset("ATLAS", "images/inventoryimages/rabbitnest.xml"),
 	Asset("IMAGE", "images/inventoryimages/rabbitnest.tex"),
 }

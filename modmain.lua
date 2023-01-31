@@ -82,7 +82,7 @@ Assets = {
 
     Asset("ATLAS", "images/inventoryimages/birchnuthat.xml"),
 
-    Asset("ATLAS", "images/inventoryimages/ham_bat.xml"),
+    -- Asset("ATLAS", "images/inventoryimages/ham_bat.xml"),
 
     Asset("ATLAS", "images/inventoryimages/bat_bunny.xml"),
 
@@ -129,7 +129,8 @@ local RECIPETABS = GLOBAL.RECIPETABS
 local Ingredient = GLOBAL.Ingredient
 local TECH = GLOBAL.TECH
 local _G = GLOBAL
-
+local ACTIONS = GLOBAL.ACTIONS
+local ActionHandler = GLOBAL.ActionHandler
 -- _G.speedMultiplier = 1
 
 modimport("strings.lua")
@@ -775,4 +776,28 @@ end)
 
 -- end)
 -- Add mod character to mod character list. Also specify a gender. Possible genders are MALE, FEMALE, ROBOT, NEUTRAL, and PLURAL.
+local function NewQuickAction(inst, action)
+	if action.target ~= nil and action.target.prefab == "berrybush_juicy" then return "dojostleaction" end
+    local quick = false
+    if inst and inst:HasTag("wunny") then
+        quick = true
+    end 
+        if quick then
+            return "doshortaction"
+        elseif action.target and action.target.components.pickable then
+            if action.target.components.pickable.quickpick then
+                return "doshortaction"
+            else
+                return "dolongaction"
+            end
+        else 
+            return "dolongaction"
+        end
+end
+
+AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.PICK, NewQuickAction))
+AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.TAKEITEM, NewQuickAction))
+AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.HARVEST, NewQuickAction))
+GLOBAL.package.loaded["stategraphs/SGwilson"] = nil 
+
 AddModCharacter("wunny", "MALE", skin_modes)

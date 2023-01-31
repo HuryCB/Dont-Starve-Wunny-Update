@@ -44,6 +44,7 @@ local trading_items =
     { prefabs = { "seeds" }, min_count = 4, max_count = 6, reset = false, add_filler = false, },
     { prefabs = { "tentaclespots" }, min_count = 1, max_count = 1, reset = false, add_filler = true, },
     { prefabs = { "cutreeds" }, min_count = 1, max_count = 2, reset = false, add_filler = true, },
+    -- { prefabs = { "rabbit" }, min_count = 1, max_count = 2, reset = false, add_filler = true, },
 
     {
         prefabs = { -- These trinkets are generally good for team play, but tend to be poor for solo play.
@@ -66,6 +67,8 @@ local trading_items =
 }
 
 local trading_filler = { "seeds", "kelp", "seeds", "seeds" }
+
+local isStarving = false
 
 local function SpawnSnake(inst)
     print("realmente tentando spawnar cobra")
@@ -183,22 +186,15 @@ local function OnForceNightmareState(inst, data)
 end
 
 local function CalcSanityAura(inst, observer)
-    if IsCrazyGuy(observer) then
-        SetObserverdBeardLord(inst)
-        return 0
-    elseif IsForcedNightmare(inst) then
-        return 0
-    end
-    return inst.components.follower ~= nil
-        and inst.components.follower:GetLeader() == observer
-        and TUNING.SANITYAURA_TINY
-        or 0
+    return 0
 end
 
 local function ShouldAcceptItem(inst, item)
+    print(item)
+    print(item.prefab)
     local can_eat = (item.components.edible and inst.components.eater:CanEat(item)) and
         (inst.components.hunger and inst.components.hunger:GetPercent() < 1)
-    return can_eat or item:HasTag("fish")
+    return can_eat or item:HasTag("fish") or item.prefab == "rabbit"
 end
 
 local function OnGetItemFromPlayer(inst, giver, item)
@@ -412,6 +408,54 @@ local function TradeItem(inst)
     item:Remove()
 end
 
+
+local function HungerDelta(inst, data)
+    if data.newpercent then
+        local increase = false
+        if inst.lastpercent_hunger and data.newpercent - inst.lastpercent_hunger > 0 then
+            increase = true
+        end
+        inst.lastpercent_hunger = data.newpercent
+
+        if not inst.components.timer:TimerExists("hungrytalk_cooldown") or data.newpercent == 1 or (increase and not inst.components.timer:TimerExists("hungrytalk_increase_cooldown") ) then
+
+          
+            if data.newpercent <= 0 then
+                inst.components.talker:Say(STRINGS.MERM_KING_TALK_HUNGER_STARVING)
+            elseif data.newpercent < 0.1 then
+                inst.components.talker:Say(STRINGS.MERM_KING_TALK_HUNGER_CLOSE_STARVING)
+            elseif data.newpercent < 0.25 then
+                inst.components.talker:Say(STRINGS.MERM_KING_TALK_HUNGER_VERY_HUNGRY)
+            elseif data.newpercent < 0.5 then
+                inst.components.talker:Say(STRINGS.MERM_KING_TALK_HUNGER_HUNGRY)
+            elseif data.newpercent < 0.95 then
+                inst.components.talker:Say(STRINGS.MERM_KING_TALK_HUNGER_HUNGRISH)
+            else
+                inst.components.talker:Say(STRINGS.MERM_KING_TALK_HUNGER_FULL)
+            end
+
+            local time = Remap(data.newpercent, 1,0, 30,8)
+            if increase then
+                inst.components.timer:StopTimer("hungrytalk_increase_cooldown")
+                inst.components.timer:StartTimer("hungrytalk_increase_cooldown", 10)
+            end
+            inst.components.timer:StopTimer("hungrytalk_cooldown")
+            inst.components.timer:StartTimer("hungrytalk_cooldown", time)
+        end
+
+        if data.newpercent <= 0 then
+            -- inst.components.health:StopRegen()
+            isStarving = true
+            print(isStarving)
+        end
+
+        -- if data.oldpercent and data.oldpercent == 0 and data.newpercent > data.oldpercent then
+        --     inst.components.health:StartRegen(TUNING.MERM_KING_HEALTH_REGEN, TUNING.MERM_KING_HEALTH_REGEN_PERIOD)
+        -- end
+    end
+
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -488,6 +532,7 @@ local function fn()
     inst.components.hunger:SetMax(TUNING.MERM_KING_HUNGER)
     inst.components.hunger:SetKillRate(TUNING.MERM_KING_HEALTH / TUNING.MERM_KING_HUNGER_KILL_TIME)
     inst.components.hunger:SetRate(TUNING.MERM_KING_HUNGER_RATE)
+    inst:ListenForEvent("hungerdelta", function(_, data) HungerDelta(inst, data) end)
 
     ------------------------------------------
     inst:AddComponent("combat")
