@@ -64,12 +64,12 @@ function SetBunnyDamage(inst, multiplier, unequip)
         -- hasWeapon.components.weapon:SetDamage(((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier) +
         --     (weaponDamage / 2))
         -- hasWeapon.components.weapon:SetDamage(weaponDamage * 4)
-        hasWeapon.components.weapon:SetDamage(80)
-        print("novo dano da arma: ",
-            hasWeapon.components.weapon:GetDamage())
+        -- hasWeapon.components.weapon:SetDamage(80)
+        -- print("novo dano da arma: ",
+        --     hasWeapon.components.weapon:GetDamage())
         -- inst.components.combat:SetDefaultDamage(((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier) +
         --     (weaponDamage / 2))
-        inst.components.combat:SetDefaultDamage(80)
+        -- inst.components.combat:SetDefaultDamage()
     else
         print("coelho n tem arma")
         -- inst.components.combat:SetDefaultDamage(((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier))

@@ -39,10 +39,10 @@ local SHARE_TARGET_DIST = 30
 
 local trading_items =
 {
-    { prefabs = { "kelp" }, min_count = 2, max_count = 4, reset = false, add_filler = false, },
+    { prefabs = { "poop" }, min_count = 2, max_count = 4, reset = false, add_filler = false, },
     { prefabs = { "kelp" }, min_count = 2, max_count = 3, reset = false, add_filler = false, },
     { prefabs = { "seeds" }, min_count = 4, max_count = 6, reset = false, add_filler = false, },
-    { prefabs = { "tentaclespots" }, min_count = 1, max_count = 1, reset = false, add_filler = true, },
+    { prefabs = { "dug_grass" }, min_count = 1, max_count = 1, reset = false, add_filler = true, },
     { prefabs = { "cutreeds" }, min_count = 1, max_count = 2, reset = false, add_filler = true, },
     -- { prefabs = { "rabbit" }, min_count = 1, max_count = 2, reset = false, add_filler = true, },
 
@@ -190,11 +190,12 @@ local function CalcSanityAura(inst, observer)
 end
 
 local function ShouldAcceptItem(inst, item)
-    print(item)
-    print(item.prefab)
+    -- print(item)
+    -- print(item.prefab)
     local can_eat = (item.components.edible and inst.components.eater:CanEat(item)) and
         (inst.components.hunger and inst.components.hunger:GetPercent() < 1)
-    return can_eat or item:HasTag("fish") or item.prefab == "rabbit"
+    return can_eat or item:HasTag("fish") 
+    -- or item.prefab == "rabbit"
 end
 
 local function OnGetItemFromPlayer(inst, giver, item)

@@ -673,20 +673,20 @@ AddRecipe("beardlordhat",
     "beardlordhat.tex")
 
 --rabbitamulet
-AddRecipe("rabbitamulet",
-    { Ingredient("manrabbit_tail", 1)
-        -- , Ingredient("rope", 1)
-        -- , Ingredient("beardhair", 1)
-    },
-    RECIPETABS.WAR,
-    TECH.NONE,
-    nil,
-    nil,
-    nil,
-    nil,
-    "wunny",
-    "images/inventoryimages/beardlordhat.xml",
-    "beardlordhat.tex")
+-- AddRecipe("rabbitamulet",
+--     { Ingredient("manrabbit_tail", 1)
+--         -- , Ingredient("rope", 1)
+--         -- , Ingredient("beardhair", 1)
+--     },
+--     RECIPETABS.WAR,
+--     TECH.NONE,
+--     nil,
+--     nil,
+--     nil,
+--     nil,
+--     "wunny",
+--     "images/inventoryimages/beardlordhat.xml",
+--     "beardlordhat.tex")
 --end of rabbitamulet
 -- AddRecipe("bunnyback", { Ingredient("pigskin", 4), Ingredient("silk", 6), Ingredient("rope", 2) }, TECH.NONE)
 

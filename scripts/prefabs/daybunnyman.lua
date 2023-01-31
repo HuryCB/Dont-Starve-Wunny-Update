@@ -162,6 +162,14 @@ local function ShouldAcceptItem(inst, item)
         item.components.equippable ~= nil and
             item.components.equippable.equipslot == EQUIPSLOTS.HEAD
         ) or
+        (--accept all hands!
+        item.components.equippable ~= nil and
+            item.components.equippable.equipslot == EQUIPSLOTS.HANDS
+        ) or
+        (--accept all armors!
+        item.components.equippable ~= nil and
+            item.components.equippable.equipslot == EQUIPSLOTS.BODY
+        ) or
         (--accept food, but not too many carrots for loyalty!
         inst.components.eater:CanEat(item) and
             ((item.prefab ~= "carrot" and item.prefab ~= "carrot_cooked") or
@@ -215,6 +223,25 @@ local function OnGetItemFromPlayer(inst, giver, item)
         end
         inst.components.inventory:Equip(item)
         inst.AnimState:Show("hat")
+    end
+    --I wear weapons
+    if item.components.equippable ~= nil and item.components.equippable.equipslot == EQUIPSLOTS.HANDS then
+        local current = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+        if current ~= nil then
+            inst.components.inventory:DropItem(current)
+        end
+        inst.components.inventory:Equip(item)
+        -- inst.AnimState:Show("hat")
+    end
+
+    --I wear armors
+    if item.components.equippable ~= nil and item.components.equippable.equipslot == EQUIPSLOTS.BODY then
+        local current = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+        if current ~= nil then
+            inst.components.inventory:DropItem(current)
+        end
+        inst.components.inventory:Equip(item)
+        -- inst.AnimState:Show("hat")
     end
 end
 
@@ -331,7 +358,7 @@ end
 function DefaultSleepTest(inst)
     local watchlight = inst.LightWatcher ~= nil or (inst.components.sleeper and inst.components.sleeper.watchlight)
     return StandardSleepChecks(inst)
-            -- sleep in the overworld at night
+        -- sleep in the overworld at night
         and (not TheWorld:HasTag("cave") and TheWorld.state.isnight
             -- in caves, sleep at night if we have a lightwatcher and are in the dark
             or (TheWorld:HasTag("cave") and TheWorld.state.iscavenight and (not watchlight or not inst:IsInLight())))
@@ -357,7 +384,6 @@ function DefaultWakeTest(inst)
         -- in caves, wake if it's not night and we've got a light shining on us
         or (TheWorld:HasTag("cave") and not TheWorld.state.iscavenight and (not watchlight or inst:IsInLight()))
 end
-
 
 local function fn()
     local inst = CreateEntity()
@@ -390,7 +416,7 @@ local function fn()
 
     inst.AnimState:SetBank("manrabbit")
     inst.AnimState:PlayAnimation("idle_loop", true)
-     inst.AnimState:Hide("hat")
+    inst.AnimState:Hide("hat")
     inst.AnimState:Hide("ARM_carry")
     inst.AnimState:Hide("HAIR_HAT")
 

@@ -154,6 +154,14 @@ local function ShouldAcceptItem(inst, item)
         item.components.equippable ~= nil and
             item.components.equippable.equipslot == EQUIPSLOTS.HEAD
         ) or
+        (--accept all hands!
+        item.components.equippable ~= nil and
+            item.components.equippable.equipslot == EQUIPSLOTS.HANDS
+        ) or
+        (--accept all armors!
+        item.components.equippable ~= nil and
+            item.components.equippable.equipslot == EQUIPSLOTS.BODY
+        ) or
         (--accept food, but not too many carrots for loyalty!
         inst.components.eater:CanEat(item) and
             ((item.prefab ~= "carrot" and item.prefab ~= "carrot_cooked") or
@@ -207,6 +215,25 @@ local function OnGetItemFromPlayer(inst, giver, item)
         end
         inst.components.inventory:Equip(item)
         inst.AnimState:Show("hat")
+    end
+    --I wear weapons
+    if item.components.equippable ~= nil and item.components.equippable.equipslot == EQUIPSLOTS.HANDS then
+        local current = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+        if current ~= nil then
+            inst.components.inventory:DropItem(current)
+        end
+        inst.components.inventory:Equip(item)
+        -- inst.AnimState:Show("hat")
+    end
+
+    --I wear armors
+    if item.components.equippable ~= nil and item.components.equippable.equipslot == EQUIPSLOTS.BODY then
+        local current = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+        if current ~= nil then
+            inst.components.inventory:DropItem(current)
+        end
+        inst.components.inventory:Equip(item)
+        -- inst.AnimState:Show("hat")
     end
 end
 
@@ -452,7 +479,7 @@ local function fn()
     inst.components.sleeper.sleeptestfn = NocturnalSleepTest
     inst.components.sleeper.waketestfn = NocturnalWakeTest
 
-    inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE)
+    inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE / 1.4)
     inst.components.combat:SetAttackPeriod(TUNING.BUNNYMAN_ATTACK_PERIOD)
     inst.components.combat:SetKeepTargetFunction(NormalKeepTargetFn)
     inst.components.combat:SetRetargetFunction(3, NormalRetargetFn)

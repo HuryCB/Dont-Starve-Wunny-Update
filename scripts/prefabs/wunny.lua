@@ -886,6 +886,12 @@ local function OnUnequip(inst, data)
     -- end
 end
 
+local function OnHealthDelta(inst, data)
+    if data.amount < 0 then
+        inst.components.sanity:DoDelta(data.amount * ((data ~= nil and data.overtime) and TUNING.WALTER_SANITY_DAMAGE_OVERTIME_RATE or TUNING.WALTER_SANITY_DAMAGE_RATE) * inst._sanity_damage_protection:Get())
+    end
+end
+
 local master_postinit = function(inst)
 	-- print("speed ", GLOBAL.net_shortint(inst.GUID,"currentspeedup"))
 	-- print("speed ", currentspeedup)
@@ -1108,6 +1114,8 @@ local master_postinit = function(inst)
 	inst:ListenForEvent("sanitydelta", OnSanityDelta)
 
 	inst:ListenForEvent("onremove", OnRemoveEntity)
+	
+	inst:ListenForEvent("healthdelta", OnHealthDelta)
 	inst:ListenForEvent("attacked", OnAttacked)
 
 	local moisture = inst.components.moisture
