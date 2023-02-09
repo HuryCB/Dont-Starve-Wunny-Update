@@ -12,7 +12,10 @@ STRINGS.NAMES.BEARDLORDHAT = "Beardlord hat"
 STRINGS.RECIPE_DESC.BEARDLORDHAT = "550 hp, 85% dmg reduction, loses small sanity on use, and gives small insulation"
 
 STRINGS.NAMES.COOLERPACK = "Bunnyman backpack"
-STRINGS.RECIPE_DESC.COOLERPACK = "Increases hunger rate instead of slowing down (10%)"
+STRINGS.RECIPE_DESC.COOLERPACK = "Increases hunger rate instead of slowing down (15%)"
+
+STRINGS.NAMES.BEARDLORDPACK = "Beardlord backpack"
+STRINGS.RECIPE_DESC.BEARDLORDPACK = "12 slots. Increases hunger rate (17.5%) and tiny sanity drain"
 
 STRINGS.NAMES.BIRCHNUTHAT = "Bunnyman hat"
 STRINGS.RECIPE_DESC.BIRCHNUTHAT = "Gives tiny insulation instead of water protection"
@@ -36,7 +39,7 @@ STRINGS.NAMES.SHADOWBUNNYHOUSE = "Shadow Bunnyhouse"
 STRINGS.RECIPE_DESC.SHADOWBUNNYHOUSE = "It takes a Shadow Bunny to attack Shadow Creatures"
 
 STRINGS.NAMES.BUNNYKINGHOUSE = "King Bunnyhouse"
-STRINGS.RECIPE_DESC.BUNNYKINGHOUSE = "It takes a Shadow Bunny to attack Shadow Creatures"
+STRINGS.RECIPE_DESC.BUNNYKINGHOUSE = "Welcome your new King!"
 
 STRINGS.NAMES.DWARFBUNNYHOUSE = "Dwarf Bunnyhouse"
 STRINGS.RECIPE_DESC.DWARFBUNNYHOUSE = "Dwarfs!"
@@ -45,16 +48,16 @@ STRINGS.NAMES.WUNNYSLINGSHOT = "Longer slingshot"
 STRINGS.RECIPE_DESC.WUNNYSLINGSHOT = "A longer slingshot, but it costs your mind..."
 
 STRINGS.NAMES.WUNNY_CATAPULT = "Wunny Catapult"
-STRINGS.RECIPE_DESC.WUNNY_CATAPULT = "Better than winona's"
+STRINGS.RECIPE_DESC.WUNNY_CATAPULT = "Better than winona's. Can be picked up"
 
 STRINGS.NAMES.WUNNY_BATTERY_LOW = "Wunny's Generator"
-STRINGS.RECIPE_DESC.WUNNY_BATTERY_LOW = "Better than winona's"
+STRINGS.RECIPE_DESC.WUNNY_BATTERY_LOW = "Better than winona's. Can be picked up"
 
 STRINGS.NAMES.WUNNY_BATTERY_HIGH= "Wunny's G.E.M.erator"
-STRINGS.RECIPE_DESC.WUNNY_BATTERY_HIGH = "Better than winona's"
+STRINGS.RECIPE_DESC.WUNNY_BATTERY_HIGH = "Better than winona's. Can be picked up"
 
 STRINGS.NAMES.WUNNY_SPOTLIGHT = "Wunny Spotlight"
-STRINGS.RECIPE_DESC.WUNNY_SPOTLIGHT = "Better than winona's"
+STRINGS.RECIPE_DESC.WUNNY_SPOTLIGHT = "Better than winona's. Can be picked up"
 
 -- TRINGS.RECIPE_DESC.LUCY = "Woodie's axe for Wunny"
 

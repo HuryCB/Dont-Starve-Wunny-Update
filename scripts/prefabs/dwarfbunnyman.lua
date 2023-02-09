@@ -27,7 +27,7 @@ local prefabs =
 local beardlordloot = { "beardhair", "beardhair", "monstermeat" }
 local forced_beardlordloot = { "nightmarefuel", "beardhair", "beardhair", "monstermeat" }
 
-local brain = require("brains/bunnymanbrain")
+local brain = require("brains/everythingbunnymanbrain")
 
 local MAX_TARGET_SHARES = 5
 local SHARE_TARGET_DIST = 30
@@ -269,8 +269,10 @@ local function NormalRetargetFn(inst)
             TUNING.PIG_TARGET_DIST,
             function(guy)
                 return inst.components.combat:CanTarget(guy)
-                    and (guy:HasTag("monster")
-                        or guy:HasTag("wonkey")
+                    and (
+                        -- guy:HasTag("monster")
+                        -- or 
+                        guy:HasTag("wonkey")
                         or guy:HasTag("pirate")
                         or (guy.components.inventory ~= nil and
                             guy:IsNear(inst, TUNING.BUNNYMAN_SEE_MEAT_DIST) and
@@ -393,8 +395,8 @@ local function fn()
     inst.components.talker.ontalk = ontalk
 
     inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
-    inst.components.locomotor.runspeed = TUNING.PIG_RUN_SPEED * 2.2 -- account for them being stopped for part of their anim
-    inst.components.locomotor.walkspeed = TUNING.PIG_WALK_SPEED * 1.9 -- account for them being stopped for part of their anim
+    inst.components.locomotor.runspeed = TUNING.PIG_RUN_SPEED * 2.4 -- account for them being stopped for part of their anim
+    inst.components.locomotor.walkspeed = TUNING.PIG_WALK_SPEED * 2.2 -- account for them being stopped for part of their anim
 
     -- boat hopping setup
     inst.components.locomotor:SetAllowPlatformHopping(true)
@@ -484,8 +486,8 @@ local function fn()
     inst.components.combat:SetKeepTargetFunction(NormalKeepTargetFn)
     inst.components.combat:SetRetargetFunction(3, NormalRetargetFn)
 
-    inst.components.locomotor.runspeed = TUNING.BUNNYMAN_RUN_SPEED * 120 / 100
-    inst.components.locomotor.walkspeed = TUNING.BUNNYMAN_WALK_SPEED * 120 / 100
+    inst.components.locomotor.runspeed = TUNING.BUNNYMAN_RUN_SPEED * 140 / 100
+    inst.components.locomotor.walkspeed = TUNING.BUNNYMAN_WALK_SPEED * 140 / 100
 
     inst.components.health:SetMaxHealth(TUNING.BUNNYMAN_HEALTH / 1.4)
 

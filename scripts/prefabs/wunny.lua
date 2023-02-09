@@ -11,8 +11,8 @@ local prefabsItens = {
 }
 
 TUNING.WUNNY_HEALTH = 75
-TUNING.WUNNY_HUNGER = 175
-TUNING.WUNNY_SANITY = 185
+TUNING.WUNNY_HUNGER = 200
+TUNING.WUNNY_SANITY = 200
 
 PrefabFiles = {
 	"smallmeat",
@@ -39,30 +39,31 @@ local NORMAL_SKINS = {
 -- Custom starting inventory
 TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
 	-- "wunnyslingshot",
-	"rabbit",
-	"rabbit",
-	"armorwood",
-	"purplegem",
-	"purplegem",
-	"purplegem",
-	"purplegem",
-	"purplegem",
-	"purplegem",
-	"purplegem",
-	"purplegem",
-	"purplegem",
-	"purplegem",
-	"redgem",
-	"redgem",
-	"redgem",
-	"redgem",
-	"redgem",
-	"redgem",
-	"redgem",
-	"pondeel",
-	"pondeel",
-	"pondeel",
-	"hammer",
+	"dwarfbunnyman",
+	-- "rabbit",
+	-- "rabbit",
+	-- "armorwood",
+	-- "purplegem",
+	-- "purplegem",
+	-- "purplegem",
+	-- "purplegem",
+	-- "purplegem",
+	-- "purplegem",
+	-- "purplegem",
+	-- "purplegem",
+	-- "purplegem",
+	-- "purplegem",
+	-- "redgem",
+	-- "redgem",
+	-- "redgem",
+	-- "redgem",
+	-- "redgem",
+	-- "redgem",
+	-- "redgem",
+	-- "pondeel",
+	-- "pondeel",
+	-- "pondeel",
+	-- "hammer",
 	-- "rabbit",
 	-- "rabbit",
 	-- "boards",
@@ -119,13 +120,13 @@ TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
 	-- "slingshotammo_rock",
 	-- "slingshotammo_rock",
 
-	"shovel",
-
-	"carrot",
-	"carrot",
+	-- "shovel",
 
 	-- "carrot",
 	-- "carrot",
+
+	-- "carrot",
+	-- "carrot",
 	-- "carrot",
 	-- "carrot",
 	-- "carrot",
@@ -133,25 +134,25 @@ TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WUNNY = {
 	-- "carrot",
 	-- "carrot",
 
-	"manrabbit_tail",
-	"manrabbit_tail",
-	"manrabbit_tail",
-	"manrabbit_tail",
-	"manrabbit_tail",
-	"manrabbit_tail",
-	"manrabbit_tail",
-	"manrabbit_tail",
-	"manrabbit_tail",
-	"manrabbit_tail",
-	"manrabbit_tail",
-	"manrabbit_tail",
-	"manrabbit_tail",
-	"manrabbit_tail",
-	"manrabbit_tail",
-	"manrabbit_tail",
-	"manrabbit_tail",
-	"manrabbit_tail",
-	"manrabbit_tail",
+	-- "manrabbit_tail",
+	-- "manrabbit_tail",
+	-- "manrabbit_tail",
+	-- "manrabbit_tail",
+	-- "manrabbit_tail",
+	-- "manrabbit_tail",
+	-- "manrabbit_tail",
+	-- "manrabbit_tail",
+	-- "manrabbit_tail",
+	-- "manrabbit_tail",
+	-- "manrabbit_tail",
+	-- "manrabbit_tail",
+	-- "manrabbit_tail",
+	-- "manrabbit_tail",
+	-- "manrabbit_tail",
+	-- "manrabbit_tail",
+	-- "manrabbit_tail",
+	-- "manrabbit_tail",
+	-- "manrabbit_tail",
 	-- "armorwood",
 
 	-- "tophat_magician",
@@ -309,15 +310,15 @@ local function OnRemoveEntity(inst)
 end
 
 local function ForceDespawnShadowMinions(inst)
-    local todespawn = {}
-    for k, v in pairs(inst.components.petleash:GetPets()) do
-        if v:HasTag("shadowminion") then
-            table.insert(todespawn, v)
-        end
-    end
-    for i, v in ipairs(todespawn) do
-        inst.components.petleash:DespawnPet(v)
-    end
+	local todespawn = {}
+	for k, v in pairs(inst.components.petleash:GetPets()) do
+		if v:HasTag("shadowminion") then
+			table.insert(todespawn, v)
+		end
+	end
+	for i, v in ipairs(todespawn) do
+		inst.components.petleash:DespawnPet(v)
+	end
 end
 
 local function OnDespawn(inst, migrationdata)
@@ -367,7 +368,7 @@ end
 -- When loading or spawning the character
 local function onload(inst, data)
 	inst.components.magician:StopUsing()
-    -- OnSkinsChanged(inst, {nofx = true})
+	-- OnSkinsChanged(inst, {nofx = true})
 
 	inst:ListenForEvent("ms_respawnedfromghost", onbecamehuman)
 	inst:ListenForEvent("ms_becameghost", onbecameghost)
@@ -422,14 +423,14 @@ local common_postinit = function(inst)
 
 	--wickerbottom
 	inst:AddTag("bookbuilder")
-	
+
 
 	--willow
 	inst:AddTag("pyromaniac")
 	inst:AddTag("expertchef")
 	inst:AddTag("bernieowner")
 	-- inst.components.sanity.custom_rate_fn = sanityfn
-	
+
 	--winona
 	-- inst:AddTag("handyperson")
 
@@ -472,14 +473,14 @@ local common_postinit = function(inst)
 	inst:AddTag("dogrider")
 	inst:AddTag("nowormholesanityloss") -- talvez tirar para balancear
 	-- inst:AddTag("storyteller") -- for storyteller component
-	
+
 
 	--Wanda
 	inst:AddTag("clockmaker")
 	inst:AddTag("pocketwatchcaster")
 
 	--Wigfrid
-	inst:AddTag("valkyrie")
+	-- inst:AddTag("valkyrie")
 	-- inst:AddTag("battlesinger")
 
 	--Wilson
@@ -509,7 +510,7 @@ local function SetSkin(inst)
 	inst.components.skinner:SetSkinMode("normal_skin", "wilson")
 end
 
-local BEARDLORD_SANITY_THRESOLD = 0.9 -- 50 sanity
+local BEARDLORD_SANITY_THRESOLD = 0.4 -- 50 sanity
 local function OnSanityDelta(inst, data)
 	-- local BEARD_BITS = { 1, 3, 9 }
 
@@ -558,6 +559,7 @@ local function OnSanityDelta(inst, data)
 		inst.isbeardlord = false
 
 		-- inst.components.sanity.dapperness = 0
+		inst.components.sanity:DoDelta(TUNING.WUNNY_SANITY*BEARDLORD_SANITY_THRESOLD/2)
 
 		inst.components.health:SetAbsorptionAmount(0)
 		inst.components.combat:SetAttackPeriod(TUNING.WILSON_ATTACK_PERIOD)
@@ -574,7 +576,7 @@ local function OnSanityDelta(inst, data)
 		-- inst.components.sanityaura.aura = 0
 		inst.components.skinner:SetSkinMode("normal_skin", "wilson")
 		if inst.components.eater ~= nil then
-			inst.components.eater:SetDiet({ FOODGROUP.VEGETARIAN }, { FOODGROUP.VEGETARIAN,  FOODTYPE.GOODIES })
+			inst.components.eater:SetDiet({ FOODGROUP.VEGETARIAN }, { FOODGROUP.VEGETARIAN, FOODTYPE.GOODIES })
 			inst.components.eater:SetStrongStomach(false)
 			inst.components.eater:SetCanEatRawMeat(false)
 		end
@@ -804,11 +806,11 @@ local function OnReadFn(inst, book)
 end
 
 local function OnDeath(inst)
-    for k, v in pairs(inst.components.petleash:GetPets()) do
-        if v:HasTag("shadowminion") and v._killtask == nil then
-            v._killtask = v:DoTaskInTime(math.random(), KillPet)
-        end
-    end
+	for k, v in pairs(inst.components.petleash:GetPets()) do
+		if v:HasTag("shadowminion") and v._killtask == nil then
+			v._killtask = v:DoTaskInTime(math.random(), KillPet)
+		end
+	end
 end
 
 local function KillPet(pet)
@@ -821,75 +823,77 @@ local function KillPet(pet)
 end
 
 local function OnSpawnPet(inst, pet)
-    if pet:HasTag("shadowminion") then
-        if not (inst.components.health:IsDead() or inst:HasTag("playerghost")) then
+	if pet:HasTag("shadowminion") then
+		if not (inst.components.health:IsDead() or inst:HasTag("playerghost")) then
 			--if not inst.components.builder.freebuildmode then
-	            inst.components.sanity:AddSanityPenalty(pet, TUNING.SHADOWWAXWELL_SANITY_PENALTY[string.upper(pet.prefab)])
+			inst.components.sanity:AddSanityPenalty(pet, TUNING.SHADOWWAXWELL_SANITY_PENALTY[string.upper(pet.prefab)])
 			--end
-            inst:ListenForEvent("onremove", inst._onpetlost, pet)
-            pet.components.skinner:CopySkinsFromPlayer(inst)
-        elseif pet._killtask == nil then
-            pet._killtask = pet:DoTaskInTime(math.random(), KillPet)
-        end
-    elseif inst._OnSpawnPet ~= nil then
-        inst:_OnSpawnPet(pet)
-    end
+			inst:ListenForEvent("onremove", inst._onpetlost, pet)
+			pet.components.skinner:CopySkinsFromPlayer(inst)
+		elseif pet._killtask == nil then
+			pet._killtask = pet:DoTaskInTime(math.random(), KillPet)
+		end
+	elseif inst._OnSpawnPet ~= nil then
+		inst:_OnSpawnPet(pet)
+	end
 end
 
 local function OnDespawnPet(inst, pet)
-    if pet:HasTag("shadowminion") then
+	if pet:HasTag("shadowminion") then
 		if not inst.is_snapshot_user_session and pet.sg ~= nil then
 			pet.sg:GoToState("quickdespawn")
 		else
 			pet:Remove()
 		end
-    elseif inst._OnDespawnPet ~= nil then
-        inst:_OnDespawnPet(pet)
-    end
+	elseif inst._OnDespawnPet ~= nil then
+		inst:_OnDespawnPet(pet)
+	end
 end
 
-local function currentspeedup(self,speedupamount) self.inst.currentspeedup:set(speedupamount) end
+local function currentspeedup(self, speedupamount) self.inst.currentspeedup:set(speedupamount) end
 
 local function OnEquip(inst, data)
 	print(data)
 	local hasWeapon = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-    -- local weaponDamage = 0
-    if hasWeapon then
+	-- local weaponDamage = 0
+	if hasWeapon then
 		hasWeapon:RemoveComponent("tradable")
 		hasWeapon:AddComponent("tradable")
-        -- weaponDamage = hasWeapon.components.weapon.damage
-        -- hasWeapon.components.weapon:SetDamage((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier + weaponDamage/2)
-    end
+		-- weaponDamage = hasWeapon.components.weapon.damage
+		-- hasWeapon.components.weapon:SetDamage((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier + weaponDamage/2)
+	end
 
 	local hasArmor = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
-    -- local weaponDamage = 0
-    if hasArmor then
+	-- local weaponDamage = 0
+	if hasArmor then
 		hasArmor:RemoveComponent("tradable")
 		hasArmor:AddComponent("tradable")
-        -- weaponDamage = hasWeapon.components.weapon.damage
-        -- hasWeapon.components.weapon:SetDamage((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier + weaponDamage/2)
-    end
+		-- weaponDamage = hasWeapon.components.weapon.damage
+		-- hasWeapon.components.weapon:SetDamage((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier + weaponDamage/2)
+	end
 	-- print("equipou e ", inst.components.locomotor:GetSpeedMultiplier())
 	-- _G.speedMultiplier = inst.components.locomotor:GetSpeedMultiplier()
-    -- if data.eslot == EQUIPSLOTS.HEAD and not data.item:HasTag("open_top_hat") then
-    --     --V2C: HAH! There's no "beard" in "player_wormwood" build.
-    --     --     This hides the flower, which uses the beard symbol.
-    --     inst.AnimState:OverrideSymbol("beard", "player_wormwood", "beard")
-    -- end
+	-- if data.eslot == EQUIPSLOTS.HEAD and not data.item:HasTag("open_top_hat") then
+	--     --V2C: HAH! There's no "beard" in "player_wormwood" build.
+	--     --     This hides the flower, which uses the beard symbol.
+	--     inst.AnimState:OverrideSymbol("beard", "player_wormwood", "beard")
+	-- end
 end
 
 local function OnUnequip(inst, data)
 	-- print("desequipou e ", inst.components.locomotor:GetSpeedMultiplier())
 	-- _G.speedMultiplier = inst.components.locomotor:GetSpeedMultiplier()
-    -- if data.eslot == EQUIPSLOTS.HEAD then
-    --     inst.AnimState:ClearOverrideSymbol("beard")
-    -- end
+	-- if data.eslot == EQUIPSLOTS.HEAD then
+	--     inst.AnimState:ClearOverrideSymbol("beard")
+	-- end
 end
 
 local function OnHealthDelta(inst, data)
-    if data.amount < 0 then
-        inst.components.sanity:DoDelta(data.amount * ((data ~= nil and data.overtime) and TUNING.WALTER_SANITY_DAMAGE_OVERTIME_RATE or TUNING.WALTER_SANITY_DAMAGE_RATE) * inst._sanity_damage_protection:Get())
-    end
+	if data.amount < 0 then
+		inst.components.sanity:DoDelta(data.amount *
+			((data ~= nil and data.overtime) and TUNING.WALTER_SANITY_DAMAGE_OVERTIME_RATE or TUNING.WALTER_SANITY_DAMAGE_RATE) *
+			inst._sanity_damage_protection:Get()/2)
+	end
 end
 
 local master_postinit = function(inst)
@@ -901,8 +905,8 @@ local master_postinit = function(inst)
 	-- print("Walkspeed ", inst.components.locomotor:GetWalkSpeed())
 
 	inst:ListenForEvent("equip", OnEquip)
-    -- inst:ListenForEvent("unequip", OnUnequip)
-	
+	-- inst:ListenForEvent("unequip", OnUnequip)
+
 	inst.components.temperature.inherentinsulation = -TUNING.INSULATION_TINY
 	inst.components.temperature.inherentsummerinsulation = -TUNING.INSULATION_TINY
 	inst.components.temperature:SetFreezingHurtRate(TUNING.WILSON_HEALTH / TUNING.WILLOW_FREEZING_KILL_TIME)
@@ -914,7 +918,7 @@ local master_postinit = function(inst)
 
 	inst.nivelDaBarba = 0
 
-	inst.components.builder.science_bonus = 1 --voltar, mudar para este depois
+	inst.components.builder.science_bonus = 2 --voltar, mudar para este depois
 	-- inst.components.builder.science_bonus = 2
 
 	--beard
@@ -934,23 +938,23 @@ local master_postinit = function(inst)
 	inst:AddTag("wunny")
 
 	--Waxwell
-	
+
 	inst:AddComponent("magician")
 
 	inst.components.reader:SetSanityPenaltyMultiplier(TUNING.MAXWELL_READING_SANITY_MULT)
-    inst.components.reader:SetOnReadFn(OnReadFn)
+	inst.components.reader:SetOnReadFn(OnReadFn)
 
 	if inst.components.petleash ~= nil then
-        inst._OnSpawnPet = inst.components.petleash.onspawnfn
-        inst._OnDespawnPet = inst.components.petleash.ondespawnfn
+		inst._OnSpawnPet = inst.components.petleash.onspawnfn
+		inst._OnDespawnPet = inst.components.petleash.ondespawnfn
 		inst.components.petleash:SetMaxPets(inst.components.petleash:GetMaxPets() + 12)
-    else
-        inst:AddComponent("petleash")
+	else
+		inst:AddComponent("petleash")
 		inst.components.petleash:SetMaxPets(12)
-    end
+	end
 
 	inst.components.petleash:SetOnSpawnFn(OnSpawnPet)
-    inst.components.petleash:SetOnDespawnFn(OnDespawnPet)
+	inst.components.petleash:SetOnDespawnFn(OnDespawnPet)
 
 	inst._onpetlost = function(pet) inst.components.sanity:RemoveSanityPenalty(pet) end
 
@@ -961,9 +965,9 @@ local master_postinit = function(inst)
 	inst.components.foodaffinity:AddPrefabAffinity("carrot_cooked", 1.5)
 
 	-- inst:AddComponent("itemaffinity")
-    -- inst.components.itemaffinity:AddAffinity("rabbit", nil, TUNING.DAPPERNESS_MED, 1)
-    -- inst.components.itemaffinity:AddAffinity("dwarfbunnyman", nil, TUNING.DAPPERNESS_MED, 1)
-    -- inst.components.itemaffinity:AddAffinity(nil, "manrabbit", TUNING.DAPPERNESS_MED, 1)
+	-- inst.components.itemaffinity:AddAffinity("rabbit", nil, TUNING.DAPPERNESS_MED, 1)
+	-- inst.components.itemaffinity:AddAffinity("dwarfbunnyman", nil, TUNING.DAPPERNESS_MED, 1)
+	-- inst.components.itemaffinity:AddAffinity(nil, "manrabbit", TUNING.DAPPERNESS_MED, 1)
 
 	inst:AddComponent("preserver")
 	inst.components.preserver:SetPerishRateMultiplier(CarrotPreserverRate)
@@ -1030,7 +1034,7 @@ local master_postinit = function(inst)
 					end
 				end
 			end
-			if v.prefab == "rabbit" 
+			if v.prefab == "rabbit"
 				or v.prefab == "dwarfbunnyman" then
 				-- isNearbyRabbit = true
 				v.components.inventoryitem.canbepickedup = true
@@ -1066,14 +1070,14 @@ local master_postinit = function(inst)
 					local item = SpawnPrefab("carrot")
 					inst.components.inventory:GiveItem(item, nil, inst:GetPosition())
 				end
-			elseif victim.prefab == "bunnyman" 
-			or victim.prefab == "newbunnyman" 
-			or victim.prefab == "everythingbunnyman" 
-			or victim.prefab == "daybunnyman" 
-			or victim.prefab == "ultrabunnyman" 
-			or victim.prefab == "shadowbunnyman" 
-			or victim.prefab == "dwarfbunnyman" 
-				then
+			elseif victim.prefab == "bunnyman"
+				or victim.prefab == "newbunnyman"
+				or victim.prefab == "everythingbunnyman"
+				or victim.prefab == "daybunnyman"
+				or victim.prefab == "ultrabunnyman"
+				or victim.prefab == "shadowbunnyman"
+				or victim.prefab == "dwarfbunnyman"
+			then
 				inst.components.sanity:DoDelta(-10)
 				local dropChance = math.random(0, 2)
 				if dropChance == 1 then
@@ -1114,9 +1118,11 @@ local master_postinit = function(inst)
 	inst:ListenForEvent("sanitydelta", OnSanityDelta)
 
 	inst:ListenForEvent("onremove", OnRemoveEntity)
-	
+
 	inst:ListenForEvent("healthdelta", OnHealthDelta)
 	inst:ListenForEvent("attacked", OnAttacked)
+
+	inst._sanity_damage_protection = SourceModifierList(inst)
 
 	local moisture = inst.components.moisture
 	local GetDryingRate_prev = moisture.GetDryingRate

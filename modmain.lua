@@ -37,7 +37,7 @@ PrefabFiles = {
     "bunnybat",
     -- "modhats",
 
-    -- "wunnyslingshot",
+    "wunnyslingshot",
     -- "beardlordback"
 }
 
@@ -47,7 +47,6 @@ Assets = {
 
     Asset("IMAGE", "images/selectscreen_portraits/wunny.tex"),
     Asset("ATLAS", "images/selectscreen_portraits/wunny.xml"),
-
     Asset("IMAGE", "images/selectscreen_portraits/wunny_silho.tex"),
     Asset("ATLAS", "images/selectscreen_portraits/wunny_silho.xml"),
 
@@ -91,15 +90,10 @@ Assets = {
     Asset("ATLAS", "images/inventoryimages/bunny.xml"),
 
     Asset("ATLAS", "images/inventoryimages/bunnyhouse.xml"),
-
     Asset("ATLAS", "images/inventoryimages/winona_catapult.xml"),
-
     Asset("ATLAS", "images/inventoryimages/wunny_spotlight.xml"),
-
     Asset("ATLAS", "images/inventoryimages/wunny_battery_low.xml"),
-
     Asset("ATLAS", "images/inventoryimages/wunny_battery_high.xml"),
-
     Asset("ATLAS", "images/inventoryimages/coolerpack.xml"),
     Asset("ATLAS", "images/inventoryimages/beardlordpack.xml"),
     -- Asset("IMAGE", "images/inventoryimages/coolerpack.tex"),
@@ -163,15 +157,15 @@ params.coolerpack = {
         slotpos = {},
         animbank = "ui_piggyback_2x6",
         animbuild = "ui_piggyback_2x6",
-        pos = GLOBAL.Vector3(-5, -50, 0),
+        pos = GLOBAL.Vector3( -5, -50, 0),
     },
     issidewidget = true,
     type = "pack",
 }
 
 for y = 0, 5 do
-    table.insert(params.coolerpack.widget.slotpos, GLOBAL.Vector3(-162, -75 * y + 170, 0))
-    table.insert(params.coolerpack.widget.slotpos, GLOBAL.Vector3(-162 + 75, -75 * y + 170, 0))
+    table.insert(params.coolerpack.widget.slotpos, GLOBAL.Vector3( -162, -75 * y + 170, 0))
+    table.insert(params.coolerpack.widget.slotpos, GLOBAL.Vector3( -162 + 75, -75 * y + 170, 0))
 end
 
 function params.coolerpack.itemtestfn(container, item, slot)
@@ -196,8 +190,8 @@ end
 
 AddRecipe("coolerpack", {
     Ingredient("manrabbit_tail", 4) --4
-    -- , Ingredient("silk", 6),
-    -- Ingredient("rope", 2)
+    , Ingredient("silk", 6),
+    Ingredient("rope", 2)
 },
     RECIPETABS.SURVIVAL
     , TECH.NONE, nil,
@@ -210,8 +204,9 @@ AddRecipe("coolerpack", {
 --beardlordpack
 AddRecipe("beardlordpack", {
     Ingredient("manrabbit_tail", 4) --4
-    -- , Ingredient("silk", 6),
-    -- Ingredient("rope", 2)
+    , Ingredient("silk", 6),
+    Ingredient("rope", 2)
+    , Ingredient("beardhair", 2)
 },
     RECIPETABS.SURVIVAL
     , TECH.NONE, nil,
@@ -294,7 +289,8 @@ end)
 -- The character select screen lines
 STRINGS.CHARACTER_TITLES.wunny = "The Bunnylord"
 STRINGS.CHARACTER_NAMES.wunny = "Wunny MODED"
-STRINGS.CHARACTER_DESCRIPTIONS.wunny = "*Transforms into a beardlord\n*Befriends bunnyman\n*Is a Vegetarian\n*Has some perks of others survivors... you will have to find out"
+STRINGS.CHARACTER_DESCRIPTIONS.wunny =
+"*Transforms into a beardlord\n*Befriends bunnyman\n*Is a Vegetarian\n*Has some perks of others survivors... you will have to find out"
 -- STRINGS.CHARACTER_QUOTES.wunny = "\"Quote\""
 STRINGS.CHARACTER_SURVIVABILITY.wunny = "Grim"
 
@@ -363,10 +359,10 @@ end
 
 bunnyhouse_recipe(
     {
-        -- Ingredient("carrot", 5),
+        Ingredient("carrot", 5),
         Ingredient("manrabbit_tail", 2)
-        -- , Ingredient("boards", 2)
-        -- , Ingredient("axe", 1)
+        , Ingredient("boards", 2)
+    , Ingredient("axe", 1)
     }, TECH.NONE)
 
 --end newbunnyhouse
@@ -380,10 +376,9 @@ end
 
 bunnykinghouse_recipe(
     {
-        -- Ingredient("carrot", 5),
-        Ingredient("manrabbit_tail", 2)
-        -- , Ingredient("boards", 2)
-        -- , Ingredient("axe", 1)
+        Ingredient("carrot", 10),
+        Ingredient("manrabbit_tail", 4)
+        , Ingredient("boards", 4)
     }, TECH.NONE)
 
 --end bunnykinghouse
@@ -397,10 +392,11 @@ end
 
 dwarfbunnyhouse_recipe(
     {
-        -- Ingredient("carrot", 5),
+        Ingredient("carrot", 3),
         Ingredient("manrabbit_tail", 2)
-        -- , Ingredient("boards", 2)
-        -- , Ingredient("axe", 1)
+        , Ingredient("boards", 1)
+    , Ingredient("axe", 1)
+    , Ingredient("pickaxe", 1)
     }, TECH.NONE)
 
 --end dwarfunnymanhouse
@@ -414,12 +410,12 @@ end
 
 everythingbunnyhouse_recipe(
     {
-        -- Ingredient("carrot", 5),
+        Ingredient("carrot", 5),
         Ingredient("manrabbit_tail", 2)
-        -- , Ingredient("boards", 2)
-        -- , Ingredient("axe", 1)
-        -- , Ingredient("pickaxe", 1)
-        -- , Ingredient("spear", 1)
+        , Ingredient("boards", 2)
+    , Ingredient("axe", 1)
+    , Ingredient("pickaxe", 1)
+    , Ingredient("spear", 1)
     }, TECH.NONE)
 --end everything
 
@@ -432,12 +428,12 @@ end
 
 day_recipe(
     {
-        -- Ingredient("carrot", 5),
+        Ingredient("carrot", 5),
         Ingredient("manrabbit_tail", 2)
-        -- , Ingredient("boards", 2)
-        -- , Ingredient("axe", 1)
-        -- , Ingredient("pickaxe", 1)
-        -- , Ingredient("spear", 1)
+        , Ingredient("boards", 2)
+    , Ingredient("axe", 1)
+    , Ingredient("pickaxe", 1)
+    , Ingredient("spear", 1)
     }, TECH.NONE)
 --end daybunny
 
@@ -450,13 +446,13 @@ end
 
 ultrabunnyhouse_recipe(
     {
-        -- Ingredient("carrot", 5),
+        Ingredient("carrot", 5),
         Ingredient("manrabbit_tail", 2)
-        -- , Ingredient("boards", 2)
-        -- , Ingredient("axe", 1)
-        -- , Ingredient("pickaxe", 1)
-        -- , Ingredient("spear", 1)
-        -- , Ingredient("livinglog", 1)
+        , Ingredient("boards", 2)
+    , Ingredient("axe", 1)
+    , Ingredient("pickaxe", 1)
+    , Ingredient("spear", 1)
+    , Ingredient("livinglog", 1)
     }, TECH.NONE)
 --end ultragbunnyman house
 
@@ -469,50 +465,51 @@ end
 
 shadowbunnyhouse_recipe(
     {
-        -- Ingredient("carrot", 5),
-        Ingredient("manrabbit_tail", 2)
+        Ingredient("carrot", 5),
+        Ingredient("manrabbit_tail", 1)
         -- , Ingredient("boards", 2)
         -- , Ingredient("axe", 1)
-        -- , Ingredient("pickaxe", 1)
-        -- , Ingredient("spear", 1)
-        -- , Ingredient("livinglog", 1)
+        , Ingredient("spear", 1)
+    , Ingredient("beardhair", 1)
+    , Ingredient("livinglog", 2)
+    , Ingredient("nightmarefuel", 1)
     }, TECH.NONE)
 --end ultragbunnyman house
 
 
 --DEFAULT RABBIT HOUSE for crafting options
-local function rabbithouse_recipe(ingredientes, level)
-    AddRecipe("rabbithouse", ingredientes, RECIPETABS.SURVIVAL, level,
-        "rabbithouse_placer", nil, nil, nil, "wunny")
-end
+-- local function rabbithouse_recipe(ingredientes, level)
+--     AddRecipe("rabbithouse", ingredientes, RECIPETABS.SURVIVAL, level,
+--         "rabbithouse_placer", nil, nil, nil, "wunny")
+-- end
 
-rabbithouse_recipe(
-    {
-        -- Ingredient("carrot", 5),
-        Ingredient("manrabbit_tail", 2)
-        -- , Ingredient("boards", 2)
-    }, TECH.NONE)
-
-
-
--- AddRecipe("wunnyslingshot",
+-- rabbithouse_recipe(
 --     {
---         Ingredient("twigs", 2)
---         , Ingredient("mosquitosack", 3)
---         , Ingredient("livinglog", 1)
---         , Ingredient("silk", 1)
+--         Ingredient("carrot", 5),
+--         Ingredient("manrabbit_tail", 2)
+--         , Ingredient("boards", 2)
+--     }, TECH.NONE)
 
---     }, RECIPETABS.WAR,
---     TECH.NONE,
---     nil,
---     nil,
---     nil,
---     nil,
---     "wunny",
---     -- "images/inventoryimages/slingshot.xml",
---     nil,
---     "slingshot.tex"
--- )
+
+
+AddRecipe("wunnyslingshot",
+    {
+        Ingredient("twigs", 2)
+        , Ingredient("mosquitosack", 3)
+    , Ingredient("livinglog", 1)
+    , Ingredient("silk", 1)
+
+    }, RECIPETABS.WAR,
+    TECH.NONE,
+    nil,
+    nil,
+    nil,
+    nil,
+    "wunny",
+    -- "images/inventoryimages/slingshot.xml",
+    nil,
+    "slingshot.tex"
+)
 
 
 AddRecipe("lucy",
@@ -524,7 +521,7 @@ AddRecipe("lucy",
         Ingredient("nightmarefuel", 1),
     },
     RECIPETABS.SURVIVAL,
-    TECH.MAGIC_TWO,
+    TECH.MAGIC_ONE,
     nil,
     nil,
     nil,
@@ -533,6 +530,19 @@ AddRecipe("lucy",
     nil,
     "lucy.tex")
 
+AddRecipe("spear_wathgrithr",
+    { Ingredient("twigs", 2), Ingredient("flint", 2), Ingredient("goldnugget", 2) }
+    , TECH.NONE,
+    nil,
+    nil,
+    nil,
+    nil,
+    "wunny")
+AddRecipe("wathgrithrhat", { Ingredient("goldnugget", 2), Ingredient("rocks", 2) }, TECH.NONE, nil,
+    nil,
+    nil,
+    nil,
+    "wunny")
 -- AddRecipe("batbunny",
 --     {
 --         Ingredient("manrabbit_tail", 1)
@@ -584,8 +594,9 @@ AddRecipe("sewing_tape",
 --end of sweing tape
 --catapult
 AddRecipe("wunny_catapult",
-    { Ingredient("manrabbit_tail", 1)
-        -- , Ingredient("rope", 1)
+    { Ingredient("sewing_tape", 1)
+    , Ingredient("twigs", 3)
+    , Ingredient("rocks", 15)
     },
     RECIPETABS.WAR,
     TECH.NONE,
@@ -599,8 +610,9 @@ AddRecipe("wunny_catapult",
 --end catapult
 --wunny_battery_low
 AddRecipe("wunny_battery_low",
-    { Ingredient("manrabbit_tail", 1)
-        -- , Ingredient("rope", 1)
+    { Ingredient("sewing_tape", 1)
+    , Ingredient("log", 2)
+    , Ingredient("nitre", 2)
     },
     RECIPETABS.WAR,
     TECH.NONE,
@@ -614,8 +626,9 @@ AddRecipe("wunny_battery_low",
 --end wunny_battery_low
 --wunny_battery_high
 AddRecipe("wunny_battery_high",
-    { Ingredient("manrabbit_tail", 1)
-        -- , Ingredient("rope", 1)
+    { Ingredient("sewing_tape", 1)
+    , Ingredient("boards", 2)
+    , Ingredient("transistor", 2)
     },
     RECIPETABS.WAR,
     TECH.NONE,
@@ -629,8 +642,9 @@ AddRecipe("wunny_battery_high",
 --end wunny_battery_high
 --wunny_spotlight
 AddRecipe("wunny_spotlight",
-    { Ingredient("manrabbit_tail", 1)
-        -- , Ingredient("rope", 1)
+    { Ingredient("sewing_tape", 1)
+    , Ingredient("goldnugget", 2)
+    , Ingredient("fireflies", 2)
     },
     RECIPETABS.WAR,
     TECH.NONE,
@@ -645,7 +659,7 @@ AddRecipe("wunny_spotlight",
 
 AddRecipe("birchnuthat",
     { Ingredient("manrabbit_tail", 1)
-        -- , Ingredient("rope", 1)
+    , Ingredient("rope", 1)
     },
     RECIPETABS.WAR,
     TECH.NONE,
@@ -659,8 +673,8 @@ AddRecipe("birchnuthat",
 
 AddRecipe("beardlordhat",
     { Ingredient("manrabbit_tail", 1)
-        -- , Ingredient("rope", 1)
-        -- , Ingredient("beardhair", 1)
+    , Ingredient("rope", 1)
+    , Ingredient("beardhair", 1)
     },
     RECIPETABS.WAR,
     TECH.NONE,
@@ -756,7 +770,6 @@ AddComponentPostInit("skinner", function(self, inst)
         end
         return SetSkinsOnAnim_prev(anim_state, prefab, base_skin, clothing_names, skintype, ...)
     end
-
 end)
 
 
@@ -777,27 +790,157 @@ end)
 -- end)
 -- Add mod character to mod character list. Also specify a gender. Possible genders are MALE, FEMALE, ROBOT, NEUTRAL, and PLURAL.
 local function NewQuickAction(inst, action)
-	if action.target ~= nil and action.target.prefab == "berrybush_juicy" then return "dojostleaction" end
-    local quick = false
+    -- if action.target ~= nil and action.target.prefab == "berrybush_juicy" then return "dojostleaction" end
+    -- local quick = false
+    -- if inst and inst:HasTag("wunny") then
+    --     quick = true
+    -- end
+    -- if quick then
+    --     return "doshortaction"
+    -- else
+    --     return "dolongaction"
+    -- end
+
     if inst and inst:HasTag("wunny") then
-        quick = true
-    end 
-        if quick then
-            return "doshortaction"
-        elseif action.target and action.target.components.pickable then
-            if action.target.components.pickable.quickpick then
-                return "doshortaction"
-            else
-                return "dolongaction"
-            end
-        else 
-            return "dolongaction"
-        end
+        return "doshortaction"
+    end
+
+    return (inst.replica.rider ~= nil and inst.replica.rider:IsRiding() and "dolongaction")
+        or (action.target:HasTag("jostlepick") and "dojostleaction")
+        or (action.target:HasTag("quickpick") and "doshortaction")
+        or (inst:HasTag("fastpicker") and "doshortaction")
+        or (inst:HasTag("quagmire_fasthands") and "domediumaction")
+        or "dolongaction"
 end
 
-AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.PICK, NewQuickAction))
-AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.TAKEITEM, NewQuickAction))
-AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.HARVEST, NewQuickAction))
-GLOBAL.package.loaded["stategraphs/SGwilson"] = nil 
+-- AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.PICK, NewQuickAction))
+-- AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.TAKEITEM, NewQuickAction))
+-- AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.HARVEST, NewQuickAction))
+-- AddStategraphActionHandler("wilson_client", ActionHandler(ACTIONS.PICK, NewQuickAction))
+-- AddStategraphActionHandler("wilson_client", ActionHandler(ACTIONS.TAKEITEM, NewQuickAction))
+-- AddStategraphActionHandler("wilson_client", ActionHandler(ACTIONS.HARVEST, NewQuickAction))
+
+-- local function GetGameMode(game_mode)
+--     return GAME_MODES[game_mode] or GameModeError(game_mode)
+-- end
+
+-- function IsRecipeValidInGameMode(game_mode, recipe_name)
+--     local invalid_recipes = GetGameMode(game_mode).invalid_recipes
+--     return not table.contains(invalid_recipes, recipe_name)
+-- end
+
+-- function GetValidRecipe(recname)
+--     if not IsRecipeValidInGameMode(TheNet:GetServerGameMode(), recname) then
+--         return
+--     end
+--     local rec = AllRecipes[recname]
+--     return rec ~= nil and not rec.is_deconstruction_recipe and (rec.require_special_event == nil or IsSpecialEventActive(rec.require_special_event)) and rec or nil
+-- end
+
+AddStategraphPostInit("wilson", function(sg)
+    -- local actionhandler = GLOBAL.ActionHandler(GLOBAL.ACTIONS.PICK, NewQuickAction)
+    sg.actionhandlers[GLOBAL.ACTIONS.PICK] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.PICK, function(inst, action)
+            if inst and inst:HasTag("wunny") then
+                inst.components.hunger:DoDelta(-50)--testando issoo
+                return "doshortaction"
+            end
+
+            return (inst.replica.rider ~= nil and inst.replica.rider:IsRiding() and "dolongaction")
+                or (action.target:HasTag("jostlepick") and "dojostleaction")
+                or (action.target:HasTag("quickpick") and "doshortaction")
+                or (inst:HasTag("fastpicker") and "doshortaction")
+                or (inst:HasTag("quagmire_fasthands") and "domediumaction")
+                or "dolongaction"
+        end)
+    sg.actionhandlers[GLOBAL.ACTIONS.TAKEITEM] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.TAKEITEM, function(inst, action)
+            if inst and inst:HasTag("wunny") and action.target ~= nil and action.target.takeitem ~= nil then
+                return "doshortaction"
+            end
+            return action.target ~= nil
+                and action.target.takeitem ~= nil --added for quagmire
+                and "give"
+                or "dolongaction"
+        end)
+    sg.actionhandlers[GLOBAL.ACTIONS.HARVEST] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.HARVEST, function(inst)
+            if inst and inst:HasTag("wunny") then
+                return "doshortaction"
+            end
+            return inst:HasTag("quagmire_fasthands") and "domediumaction" or "dolongaction"
+        end)
+    sg.actionhandlers[GLOBAL.ACTIONS.COOK] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.COOK, function(inst, action)
+            if inst:HasTag("wunny") then
+                return "doshortaction"
+            end
+            return inst:HasTag("expertchef") and "domediumaction" or "dolongaction"
+        end)
+    sg.actionhandlers[GLOBAL.ACTIONS.REPAIR] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.REPAIR, function(inst, action)
+            if inst:HasTag("wunny") then
+                return "doshortaction"
+            end
+            return action.target:HasTag("repairshortaction") and "doshortaction" or "dolongaction"
+        end)
+    sg.actionhandlers[GLOBAL.ACTIONS.MANUALEXTINGUISH] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.MANUALEXTINGUISH,
+            function(inst)
+                if inst:HasTag("wunny") then
+                    return "doshortaction"
+                end
+                return inst:HasTag("pyromaniac") and "domediumaction" or "dolongaction"
+            end)
+    sg.actionhandlers[GLOBAL.ACTIONS.SHAVE] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.SHAVE, function(inst, action)
+            if inst:HasTag("wunny") then
+                return "doshortaction"
+            end
+            return "dolongaction"
+        end)
+    sg.actionhandlers[GLOBAL.ACTIONS.MAKEBALLOON] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.MAKEBALLOON,
+            function(inst, action)
+                if inst:HasTag("wunny") then
+                    return "doshortaction"
+                end
+                return "dolongaction"
+            end)
+    sg.actionhandlers[GLOBAL.ACTIONS.HEAL] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.HEAL, function(inst, action)
+            if inst:HasTag("wunny") then
+                return "doshortaction"
+            end
+            return "dolongaction"
+        end)
+    sg.actionhandlers[GLOBAL.ACTIONS.FEED] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.FEED, function(inst, action)
+            if inst:HasTag("wunny") then
+                return "doshortaction"
+            end
+            return "dolongaction"
+        end)
+    sg.actionhandlers[GLOBAL.ACTIONS.BUILD] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.BUILD, function(inst, action)
+            -- local rec = GetValidRecipe(action.recipe)
+            return
+            -- (rec ~= nil and rec.sg_state)
+            -- or
+                (inst:HasTag("wunny") and "doshortaction")
+                or (inst:HasTag("hungrybuilder") and "dohungrybuild")
+                or (inst:HasTag("fastbuilder") and "domediumaction")
+                or (inst:HasTag("slowbuilder") and "dolongestaction")
+                or "dolongaction"
+        end)
+    sg.actionhandlers[GLOBAL.ACTIONS.MURDER] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.MURDER,
+            function(inst)
+                if inst:HasTag("wunny") then
+                    return "doshortaction"
+                end
+                return inst:HasTag("quagmire_fasthands") and "domediumaction" or "dolongaction"
+            end)
+    -- sg.actionhandlers[GLOBAL.ACTIONS.FERTILIZE] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.FERTILIZE, function(inst, action)
+    --     return (action.target ~= nil and action.target ~= inst and "doshortaction")
+    --         or (action.invobject ~= nil and action.invobject:HasTag("slowfertilize") and "fertilize")
+    --         or "fertilize_short"
+    -- end)
+end)
+
+-- AddStategraphPostInit("wilson", ActionHandler(ACTIONS.TAKEITEM, NewQuickAction))
+-- AddStategraphPostInit("wilson", ActionHandler(ACTIONS.HARVEST, NewQuickAction))
+-- AddStategraphPostInit("wilson_client", ActionHandler(ACTIONS.PICK, NewQuickAction))
+-- AddStategraphPostInit("wilson_client", ActionHandler(ACTIONS.TAKEITEM, NewQuickAction))
+-- AddStategraphPostInit("wilson_client", ActionHandler(ACTIONS.HARVEST, NewQuickAction))
+GLOBAL.package.loaded["stategraphs/SGwilson"] = nil
 
 AddModCharacter("wunny", "MALE", skin_modes)
