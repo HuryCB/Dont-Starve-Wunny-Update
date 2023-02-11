@@ -294,7 +294,10 @@ end
 local function OnWobyRemoved(inst)
 	inst.woby = nil
 	inst._replacewobytask = inst:DoTaskInTime(1,
-		function(i) i._replacewobytask = nil if i.woby == nil then SpawnWoby(i) end end)
+			function(i)
+				i._replacewobytask = nil
+				if i.woby == nil then SpawnWoby(i) end
+			end)
 end
 
 local function OnRemoveEntity(inst)
@@ -401,6 +404,13 @@ local function onload(inst, data)
 			end
 		end
 		inst._wobybuck_damage = data.buckdamage or 0
+
+		if data.science_bonus then
+			inst.components.builder.science_bonus = data.science_bonus
+		end
+		if data.magic_bonus then
+			inst.components.builder.magic_bonus = data.magic_bonus
+		end
 	end
 end
 
@@ -426,7 +436,7 @@ local common_postinit = function(inst)
 
 
 	--willow
-	inst:AddTag("pyromaniac")
+	-- inst:AddTag("pyromaniac")
 	inst:AddTag("expertchef")
 	inst:AddTag("bernieowner")
 	-- inst.components.sanity.custom_rate_fn = sanityfn
@@ -451,7 +461,7 @@ local common_postinit = function(inst)
 	-- inst:AddTag("souleater")
 
 	--Wurt
-	inst:AddTag("merm_builder")
+	-- inst:AddTag("merm_builder")
 
 	--wx78
 	-- inst:AddTag("batteryuser")          -- from batteryuser component
@@ -466,7 +476,7 @@ local common_postinit = function(inst)
 
 	--Walter
 	inst:AddTag("pebblemaker")
-	inst:AddTag("pinetreepioneer")
+	-- inst:AddTag("pinetreepioneer")
 	-- inst:AddTag("allergictobees")
 	inst:AddTag("slingshot_sharpshooter")
 	-- inst:AddTag("efficient_sleeper")
@@ -495,6 +505,8 @@ end
 local function OnSave(inst, data)
 	data.woby = inst.woby ~= nil and inst.woby:GetSaveRecord() or nil
 	data.buckdamage = inst._wobybuck_damage > 0 and inst._wobybuck_damage or nil
+	data.science_bonus = inst.components.builder.science_bonus
+	data.magic_bonus = inst.components.builder.magic_bonus
 end
 
 local function SetSkin(inst)
@@ -553,13 +565,12 @@ local function OnSanityDelta(inst, data)
 		-- then
 		-- 	inst.AnimState:OverrideSymbol("beard", "beard", "beard_long")
 		-- end
-
 	elseif inst.isbeardlord and data.newpercent >= BEARDLORD_SANITY_THRESOLD then
 		-- Becoming bunny
 		inst.isbeardlord = false
 
 		-- inst.components.sanity.dapperness = 0
-		inst.components.sanity:DoDelta(TUNING.WUNNY_SANITY*BEARDLORD_SANITY_THRESOLD/2)
+		inst.components.sanity:DoDelta(TUNING.WUNNY_SANITY * BEARDLORD_SANITY_THRESOLD / 2)
 
 		inst.components.health:SetAbsorptionAmount(0)
 		inst.components.combat:SetAttackPeriod(TUNING.WILSON_ATTACK_PERIOD)
@@ -615,7 +626,8 @@ end
 local caveSanityfn = function(inst)
 	local delta = 0
 	if TheWorld.state.iscaveday
-	then delta = -10 / 60
+	then
+		delta = -10 / 60
 	end
 	return delta
 end
@@ -623,9 +635,11 @@ end
 local surfaceSanityfn = function(inst)
 	local delta = 0
 	if TheWorld.state.isdusk
-	then delta = -2.5 / 60
+	then
+		delta = -2.5 / 60
 	elseif TheWorld.state.isnight
-	then delta = -7.5 / 60
+	then
+		delta = -7.5 / 60
 	end
 	return delta
 end
@@ -795,7 +809,6 @@ local SHADOWCREATURE_MUST_TAGS = { "shadowcreature", "_combat", "locomotor" }
 local SHADOWCREATURE_CANT_TAGS = { "INLIMBO", "notaunt" }
 local function OnReadFn(inst, book)
 	if inst.components.sanity:IsInsane() then
-
 		local x, y, z = inst.Transform:GetWorldPosition()
 		local ents = TheSim:FindEntities(x, y, z, 16, SHADOWCREATURE_MUST_TAGS, SHADOWCREATURE_CANT_TAGS)
 
@@ -891,8 +904,8 @@ end
 local function OnHealthDelta(inst, data)
 	if data.amount < 0 then
 		inst.components.sanity:DoDelta(data.amount *
-			((data ~= nil and data.overtime) and TUNING.WALTER_SANITY_DAMAGE_OVERTIME_RATE or TUNING.WALTER_SANITY_DAMAGE_RATE) *
-			inst._sanity_damage_protection:Get()/2)
+		((data ~= nil and data.overtime) and TUNING.WALTER_SANITY_DAMAGE_OVERTIME_RATE or TUNING.WALTER_SANITY_DAMAGE_RATE) *
+		inst._sanity_damage_protection:Get() / 2)
 	end
 end
 
@@ -918,7 +931,7 @@ local master_postinit = function(inst)
 
 	inst.nivelDaBarba = 0
 
-	inst.components.builder.science_bonus = 2 --voltar, mudar para este depois
+	-- inst.components.builder.science_bonus = 2 --voltar, mudar para este depois
 	-- inst.components.builder.science_bonus = 2
 
 	--beard
@@ -977,6 +990,7 @@ local master_postinit = function(inst)
 	end
 
 	inst.components.locomotor:SetFasterOnGroundTile(WORLD_TILES.SAVANNA, true)
+	inst.components.locomotor:SetFasterOnGroundTile(WORLD_TILES.SINKHOLE, true)
 
 	inst:ListenForEvent("locomote", function()
 		if inst.sg ~= nil and inst.sg:HasStateTag("moving") then
@@ -1009,6 +1023,16 @@ local master_postinit = function(inst)
 	-- Sanity rate
 	-- inst.components.sanity.night_drain_mult = 0
 
+	function AwardPlayerAchievement(name, player)
+		if IsConsole() then
+			if player ~= nil and player:HasTag("player") then
+				TheGameService:AwardAchievement(name, tostring(player.userid))
+			else
+				print("AwardPlayerAchievement Error:", name, "to", tostring(player))
+			end
+		end
+	end
+
 	inst:DoPeriodicTask(.2, function()
 		local pos = Vector3(inst.Transform:GetWorldPosition())
 		local ents = TheSim:FindEntities(pos.x, pos.y, pos.z, 6)
@@ -1030,14 +1054,51 @@ local master_postinit = function(inst)
 						end
 						inst.components.leader:AddFollower(v)
 						--lose hunger on befriending
-						inst.components.hunger:DoDelta(-12.5)
+						inst.components.hunger:DoDelta( -12.5)
 					end
+				elseif v.prefab == "rabbit"
+					or v.prefab == "dwarfbunnyman" then
+					-- isNearbyRabbit = true
+					v.components.inventoryitem.canbepickedup = true
+				elseif v.prefab == "researchlab" and inst.components.builder.science_bonus < 1
+				then
+					-- print("perto do research")
+					-- print("perto do research")
+					-- print("perto do research")
+					inst.components.builder.science_bonus = 1
+				elseif v.prefab == "researchlab2" and inst.components.builder.science_bonus < 2
+				then
+					-- print("perto do research")
+					-- print("perto do research")
+					-- print("perto do research")
+					inst.components.builder.science_bonus = 2
+				elseif v.prefab == "researchlab4"
+					and inst.components.builder.magic_bonus < 2
+				then
+					print("researchlab4")
+					print("researchlab4")
+					print("researchlab4")
+					-- print(inst.components.builder)
+					-- for index, data in ipairs(inst.components.builder) do
+					-- 	print(index)
+					-- 	for key, value in pairs(data) do
+					-- 		print('\t', key, value)
+					-- 	end
+					-- end
+					-- AwardPlayerAchievement("build_researchlab4", inst.components.builder)
+					-- print("perto do research")
+					-- print("perto do research")
+					-- print("perto do research")
+					inst.components.builder.magic_bonus = 2
+				elseif v.prefab == "researchlab3"
+					and inst.components.builder.science_bonus < 3
+				then
+					inst.components.builder.magic_bonus = 3
+				elseif v.prefab == "seafaring_prototyper"
+					and inst.components.builder.seafaring_bonus < 2
+				then
+					inst.components.builder.seafaring_bonus = 2
 				end
-			end
-			if v.prefab == "rabbit"
-				or v.prefab == "dwarfbunnyman" then
-				-- isNearbyRabbit = true
-				v.components.inventoryitem.canbepickedup = true
 			end
 		end
 
@@ -1050,13 +1111,13 @@ local master_postinit = function(inst)
 		-- 		-- end
 		-- 	end
 		-- end
-	end)
+	end
+	)
 
 	inst:RemoveTag("scarytoprey")
 
 	if TheWorld:HasTag("cave") then
 		caveBehaviour(inst)
-
 	else
 		surfaceBehaviour(inst)
 	end
@@ -1064,7 +1125,7 @@ local master_postinit = function(inst)
 	local function OnKill(victim, inst)
 		if victim and victim.prefab then
 			if victim.prefab == "rabbit" then
-				inst.components.sanity:DoDelta(-10)
+				inst.components.sanity:DoDelta( -10)
 				local dropChance = math.random(0, 1)
 				if dropChance == 1 then
 					local item = SpawnPrefab("carrot")
@@ -1078,7 +1139,7 @@ local master_postinit = function(inst)
 				or victim.prefab == "shadowbunnyman"
 				or victim.prefab == "dwarfbunnyman"
 			then
-				inst.components.sanity:DoDelta(-10)
+				inst.components.sanity:DoDelta( -10)
 				local dropChance = math.random(0, 2)
 				if dropChance == 1 then
 					local item = SpawnPrefab("manrabbit_tail")
@@ -1105,7 +1166,10 @@ local master_postinit = function(inst)
 	inst._wobybuck_damage = 0
 	inst:ListenForEvent("timerdone", OnTimerDone)
 
-	inst._woby_spawntask = inst:DoTaskInTime(0, function(i) i._woby_spawntask = nil SpawnWoby(i) end)
+	inst._woby_spawntask = inst:DoTaskInTime(0, function(i)
+			i._woby_spawntask = nil
+			SpawnWoby(i)
+		end)
 	inst._woby_onremove = function(woby) OnWobyRemoved(inst) end
 
 	inst.OnWobyTransformed = OnWobyTransformed
@@ -1131,7 +1195,6 @@ local master_postinit = function(inst)
 		rate = rate * (1 - (1 * 0.20))
 		return rate
 	end
-
 end
 
 return MakePlayerCharacter("wunny", prefabs, assets, common_postinit, master_postinit, prefabs, prefabsItens)

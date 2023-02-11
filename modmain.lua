@@ -35,6 +35,7 @@ PrefabFiles = {
     "sewing_tape",
     "spiderbunny",
     "bunnybat",
+    -- "wurt_turf_marsh",
     -- "modhats",
 
     "wunnyslingshot",
@@ -300,6 +301,7 @@ TUNING.WUNNY_RUNNING_HUNGER_RATE = 1
 TUNING.WUNNY_HUNGER_RATE = TUNING.WILSON_HUNGER_RATE
 TUNING.BUNNYPACK_HUNGER = 1.15 --mudar para 1.1
 TUNING.BEARDLORDPACK_HUNGER = 1.175 --mudar para 1.1
+TUNING.WUNNY_QUICK_ACTION_HUNGER = -0.25
 -- WUNNY_RUNNING_HUNGER_RATETUNNIN.WUNNY_IDLE_HUNGER_RATE = 1
 
 ---CUSTOM TUNINGS
@@ -686,6 +688,50 @@ AddRecipe("beardlordhat",
     "images/inventoryimages/beardlordhat.xml",
     "beardlordhat.tex")
 
+
+-- Willow
+AddRecipe("lighter", { Ingredient("rope", 1), Ingredient("goldnugget", 1), Ingredient("petals", 3) }, TECH.NONE, nil,
+    nil,
+    nil,
+    nil,
+    "wunny")
+AddRecipe("bernie_inactive", { Ingredient("beardhair", 2), Ingredient("beefalowool", 2), Ingredient("silk", 2) }, TECH
+.NONE, nil,
+    nil,
+    nil,
+    nil,
+    "wunny")
+
+-- Wurt
+AddRecipe("mermhouse_crafted", { Ingredient("boards", 4), Ingredient("cutreeds", 3), Ingredient("pondfish", 2) },
+    TECH.SCIENCE_ONE, nil,
+    nil,
+    nil,
+    nil,
+    "wunny")
+AddRecipe("mermthrone_construction", { Ingredient("boards", 5), Ingredient("rope", 5) }, TECH.SCIENCE_ONE,
+    nil,
+    nil,
+    nil,
+    nil,
+    "wunny")
+AddRecipe("mermwatchtower", { Ingredient("boards", 5), Ingredient("tentaclespots", 1), Ingredient("spear", 2) },
+    TECH.SCIENCE_ONE, nil,
+    nil,
+    nil,
+    nil,
+    "wunny")
+-- AddRecipe2("wurt_turf_marsh", { Ingredient("cutreeds", 1), Ingredient("spoiled_food", 2) }, TECH.NONE,
+--     { builder_tag = "merm_builder", product = "turf_marsh", numtogive = 4 })
+
+AddRecipe("mermhat", { Ingredient("pondfish", 1), Ingredient("cutreeds", 1), Ingredient("twigs", 2) }, TECH.NONE,
+    nil,
+    nil,
+    nil,
+    nil,
+    "wunny")
+
+
 --rabbitamulet
 -- AddRecipe("rabbitamulet",
 --     { Ingredient("manrabbit_tail", 1)
@@ -747,7 +793,10 @@ AddPrefabPostInit("rabbithole", function(inst)
 
     local dig_up_old = inst.components.workable.onfinish
     local function dig_up(inst, chopper)
-        inst.components.lootdropper:SpawnLootPrefab("carrot")
+        local dropChance = math.random(0, 1)
+        if dropChance == 1 then
+            inst.components.lootdropper:SpawnLootPrefab("carrot")
+        end
         if dig_up_old ~= nil then
             dig_up_old(inst, chopper)
         end
@@ -755,6 +804,12 @@ AddPrefabPostInit("rabbithole", function(inst)
 
     inst.components.workable:SetOnFinishCallback(dig_up)
 end)
+
+-- AddPrefabPostInit("butterflywings", function(inst)
+--     inst:AddComponent("edible")
+--     inst.components.edible.foodtype = FOODTYPE.GOODIES
+--n funciona
+-- end)
 
 local DidSkinnerPostInit = false
 AddComponentPostInit("skinner", function(self, inst)
@@ -841,19 +896,23 @@ AddStategraphPostInit("wilson", function(sg)
     -- local actionhandler = GLOBAL.ActionHandler(GLOBAL.ACTIONS.PICK, NewQuickAction)
     sg.actionhandlers[GLOBAL.ACTIONS.PICK] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.PICK, function(inst, action)
             if inst and inst:HasTag("wunny") then
-                inst.components.hunger:DoDelta(-50)--testando issoo
+                inst.components.hunger:DoDelta(TUNING.WUNNY_QUICK_ACTION_HUNGER) --testando issoo
                 return "doshortaction"
             end
 
-            return (inst.replica.rider ~= nil and inst.replica.rider:IsRiding() and "dolongaction")
-                or (action.target:HasTag("jostlepick") and "dojostleaction")
-                or (action.target:HasTag("quickpick") and "doshortaction")
-                or (inst:HasTag("fastpicker") and "doshortaction")
-                or (inst:HasTag("quagmire_fasthands") and "domediumaction")
-                or "dolongaction"
+            return (inst.components.rider ~= nil and inst.components.rider:IsRiding() and "dolongaction")
+                or (action.target ~= nil
+                and action.target.components.pickable ~= nil
+                and ((action.target.components.pickable.jostlepick and "dojostleaction") or
+                (action.target.components.pickable.quickpick and "doshortaction") or
+                (inst:HasTag("fastpicker") and "doshortaction") or
+                (inst:HasTag("quagmire_fasthands") and "domediumaction") or
+                "dolongaction"))
+                or nil
         end)
     sg.actionhandlers[GLOBAL.ACTIONS.TAKEITEM] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.TAKEITEM, function(inst, action)
             if inst and inst:HasTag("wunny") and action.target ~= nil and action.target.takeitem ~= nil then
+                inst.components.hunger:DoDelta(TUNING.WUNNY_QUICK_ACTION_HUNGER)
                 return "doshortaction"
             end
             return action.target ~= nil
@@ -863,18 +922,21 @@ AddStategraphPostInit("wilson", function(sg)
         end)
     sg.actionhandlers[GLOBAL.ACTIONS.HARVEST] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.HARVEST, function(inst)
             if inst and inst:HasTag("wunny") then
+                inst.components.hunger:DoDelta(TUNING.WUNNY_QUICK_ACTION_HUNGER)
                 return "doshortaction"
             end
             return inst:HasTag("quagmire_fasthands") and "domediumaction" or "dolongaction"
         end)
     sg.actionhandlers[GLOBAL.ACTIONS.COOK] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.COOK, function(inst, action)
             if inst:HasTag("wunny") then
+                inst.components.hunger:DoDelta(TUNING.WUNNY_QUICK_ACTION_HUNGER)
                 return "doshortaction"
             end
             return inst:HasTag("expertchef") and "domediumaction" or "dolongaction"
         end)
     sg.actionhandlers[GLOBAL.ACTIONS.REPAIR] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.REPAIR, function(inst, action)
             if inst:HasTag("wunny") then
+                inst.components.hunger:DoDelta(TUNING.WUNNY_QUICK_ACTION_HUNGER)
                 return "doshortaction"
             end
             return action.target:HasTag("repairshortaction") and "doshortaction" or "dolongaction"
@@ -882,37 +944,64 @@ AddStategraphPostInit("wilson", function(sg)
     sg.actionhandlers[GLOBAL.ACTIONS.MANUALEXTINGUISH] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.MANUALEXTINGUISH,
             function(inst)
                 if inst:HasTag("wunny") then
+                    inst.components.hunger:DoDelta(TUNING.WUNNY_QUICK_ACTION_HUNGER)
                     return "doshortaction"
                 end
                 return inst:HasTag("pyromaniac") and "domediumaction" or "dolongaction"
             end)
     sg.actionhandlers[GLOBAL.ACTIONS.SHAVE] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.SHAVE, function(inst, action)
             if inst:HasTag("wunny") then
+                inst.components.hunger:DoDelta(TUNING.WUNNY_QUICK_ACTION_HUNGER)
                 return "doshortaction"
             end
             return "dolongaction"
         end)
-    sg.actionhandlers[GLOBAL.ACTIONS.MAKEBALLOON] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.MAKEBALLOON,
-            function(inst, action)
-                if inst:HasTag("wunny") then
-                    return "doshortaction"
-                end
-                return "dolongaction"
-            end)
+    -- sg.actionhandlers[GLOBAL.ACTIONS.MAKEBALLOON] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.MAKEBALLOON,
+    --         function(inst, action)
+    --             if act.doer ~= nil and
+    --                 act.invobject ~= nil and
+    --                 act.invobject.components.balloonmaker ~= nil and
+    --                 (act.doer:HasTag("balloonomancer") or act.doer:HasTag("wunny")) then
+    --                 if act.doer.components.sanity ~= nil then
+    --                     if act.doer.components.sanity.current < TUNING.SANITY_TINY then
+    --                         return false
+    --                     end
+    --                     act.doer.components.sanity:DoDelta( -TUNING.SANITY_TINY)
+    --                 end
+    --                 --Spawn it to either side of doer's current facing with some variance
+    --                 local x, y, z = act.doer.Transform:GetWorldPosition()
+    --                 local angle = act.doer.Transform:GetRotation()
+    --                 local angle_offset = GetRandomMinMax( -10, 10)
+    --                 angle_offset = angle_offset + (angle_offset < 0 and -65 or 65)
+    --                 angle = (angle + angle_offset) * DEGREES
+    --                 act.invobject.components.balloonmaker:MakeBalloon(
+    --                     x + .5 * math.cos(angle),
+    --                     0,
+    --                     z - .5 * math.sin(angle)
+    --                 )
+    --                 return true
+    --             end
+    --         end)
     sg.actionhandlers[GLOBAL.ACTIONS.HEAL] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.HEAL, function(inst, action)
             if inst:HasTag("wunny") then
+                inst.components.hunger:DoDelta(TUNING.WUNNY_QUICK_ACTION_HUNGER)
                 return "doshortaction"
             end
             return "dolongaction"
         end)
     sg.actionhandlers[GLOBAL.ACTIONS.FEED] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.FEED, function(inst, action)
             if inst:HasTag("wunny") then
+                inst.components.hunger:DoDelta(TUNING.WUNNY_QUICK_ACTION_HUNGER)
                 return "doshortaction"
             end
             return "dolongaction"
         end)
     sg.actionhandlers[GLOBAL.ACTIONS.BUILD] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.BUILD, function(inst, action)
             -- local rec = GetValidRecipe(action.recipe)
+            if inst:HasTag("wunny") then
+                inst.components.hunger:DoDelta(TUNING.WUNNY_QUICK_ACTION_HUNGER)
+                return "doshortaction"
+            end
             return
             -- (rec ~= nil and rec.sg_state)
             -- or
@@ -925,6 +1014,7 @@ AddStategraphPostInit("wilson", function(sg)
     sg.actionhandlers[GLOBAL.ACTIONS.MURDER] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.MURDER,
             function(inst)
                 if inst:HasTag("wunny") then
+                    inst.components.hunger:DoDelta(TUNING.WUNNY_QUICK_ACTION_HUNGER)
                     return "doshortaction"
                 end
                 return inst:HasTag("quagmire_fasthands") and "domediumaction" or "dolongaction"

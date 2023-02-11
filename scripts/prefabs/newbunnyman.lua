@@ -349,6 +349,7 @@ local function fn()
     inst:AddTag("character")
     inst:AddTag("pig")
     inst:AddTag("manrabbit")
+ inst:AddTag("notraptrigger")
     inst:AddTag("scarytoprey")
 
     inst.AnimState:SetBank("manrabbit")
