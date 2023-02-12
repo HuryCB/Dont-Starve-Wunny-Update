@@ -56,14 +56,14 @@ local CHOP_MUST_TAGS = { "CHOP_workable" }
 local function KeepChoppingAction(inst)
     return inst.tree_target ~= nil
         or (inst.components.follower.leader ~= nil and
-            inst:IsNear(inst.components.follower.leader, KEEP_CHOPPING_DIST))
+        inst:IsNear(inst.components.follower.leader, KEEP_CHOPPING_DIST))
 end
 
 local function StartChoppingCondition(inst)
     return inst.tree_target ~= nil
         or (inst.components.follower.leader ~= nil and
-            inst.components.follower.leader.sg ~= nil and
-            inst.components.follower.leader.sg:HasStateTag("chopping"))
+        inst.components.follower.leader.sg ~= nil and
+        inst.components.follower.leader.sg:HasStateTag("chopping"))
 end
 
 local function FindTreeToChopAction(inst)
@@ -95,14 +95,14 @@ end
 local function KeepMiningAction(inst)
     return inst.tree_target ~= nil
         or (inst.components.follower.leader ~= nil and
-            inst:IsNear(inst.components.follower.leader, KEEP_CHOPPING_DIST))
+        inst:IsNear(inst.components.follower.leader, KEEP_CHOPPING_DIST))
 end
 
 local function StartMiningCondition(inst)
     return inst.tree_target ~= nil
         or (inst.components.follower.leader ~= nil and
-            inst.components.follower.leader.sg ~= nil and
-            inst.components.follower.leader.sg:HasStateTag("mining"))
+        inst.components.follower.leader.sg ~= nil and
+        inst.components.follower.leader.sg:HasStateTag("mining"))
 end
 
 local function FindRockToMineAction(inst)
@@ -120,7 +120,7 @@ end
 
 local function GetTraderFn(inst)
     return FindEntity(inst, TRADE_DIST, function(target) return inst.components.trader:IsTryingToTradeWithMe(target) end
-        , GETTRADER_MUST_TAGS)
+            , GETTRADER_MUST_TAGS)
 end
 
 local function KeepTraderFn(inst, target)
@@ -133,7 +133,7 @@ local function FindFoodAction(inst)
     end
 
     local target =
-    inst.components.inventory ~= nil and
+        inst.components.inventory ~= nil and
         inst.components.eater ~= nil and
         inst.components.inventory:FindItem(function(item) return inst.components.eater:CanEat(item) end) or
         nil
@@ -143,18 +143,18 @@ local function FindFoodAction(inst)
         if time_since_eat == nil or time_since_eat > TUNING.PIG_MIN_POOP_PERIOD * 2 then
             local noveggie = time_since_eat ~= nil and time_since_eat < TUNING.PIG_MIN_POOP_PERIOD * 4
             target = FindEntity(inst,
-                SEE_FOOD_DIST,
-                function(item)
-                    return item:GetTimeAlive() >= 8
-                        and item.prefab ~= "mandrake"
-                        and item.components.edible ~= nil
-                        and (not noveggie or item.components.edible.foodtype == FOODTYPE.MEAT)
-                        and inst.components.eater:CanEat(item)
-                        and item:IsOnPassablePoint()
-                end,
-                nil,
-                FINDFOOD_CANT_TAGS
-            )
+                    SEE_FOOD_DIST,
+                    function(item)
+                        return item:GetTimeAlive() >= 8
+                            and item.prefab ~= "mandrake"
+                            and item.components.edible ~= nil
+                            and (not noveggie or item.components.edible.foodtype == FOODTYPE.MEAT)
+                            and inst.components.eater:CanEat(item)
+                            and item:IsOnPassablePoint()
+                    end,
+                    nil,
+                    FINDFOOD_CANT_TAGS
+                )
         end
     end
 
@@ -201,59 +201,64 @@ local function GetNoLeaderHomePos(inst)
 end
 
 local UltraBunnymanBrain = Class(Brain, function(self, inst)
-    Brain._ctor(self, inst)
-end)
+        Brain._ctor(self, inst)
+    end)
 
 function UltraBunnymanBrain:OnStart()
     --print(self.inst, "PigBrain:OnStart")
     local root =
-    PriorityNode(
-        {
-            BrainCommon.PanicWhenScared(self.inst, .25, "RABBIT_PANICBOSS"),
-            BrainCommon.NodeAssistLeaderDoAction(self, {
-                action = "CHOP", -- Required.
-                chatterstring = "MERM_TALK_HELP_CHOP_WOOD",
-            }),
-            BrainCommon.NodeAssistLeaderDoAction(self, {
-                action = "MINE", -- Required.
-                chatterstring = "MERM_TALK_HELP_MINE_ROCK",
-            }),
-            IfThenDoWhileNode(function() return StartChoppingCondition(self.inst) end,
-                function() return KeepChoppingAction(self.inst) end, "chop",
-                LoopNode {
-                    ChattyNode(self.inst, "PIG_TALK_HELP_CHOP_WOOD",
-                        DoAction(self.inst, FindTreeToChopAction))
+        PriorityNode(
+            {
+                BrainCommon.PanicWhenScared(self.inst, .25, "RABBIT_PANICBOSS"),
+                BrainCommon.NodeAssistLeaderDoAction(self, {
+                    action = "CHOP", -- Required.
+                    chatterstring = "MERM_TALK_HELP_CHOP_WOOD",
                 }),
-            IfThenDoWhileNode(function() return StartMiningCondition(self.inst) end,
-                function() return KeepMiningAction(self.inst) end, "MINE",
-                LoopNode {
-                    ChattyNode(self.inst, "PIG_TALK_HELP_MINE_ROCK",
-                        DoAction(self.inst, FindRockToMineAction))
+                BrainCommon.NodeAssistLeaderDoAction(self, {
+                    action = "MINE", -- Required.
+                    chatterstring = "MERM_TALK_HELP_MINE_ROCK",
                 }),
-            WhileNode(function() return self.inst.components.hauntable and self.inst.components.hauntable.panic end,
-                "PanicHaunted",
-                ChattyNode(self.inst, "RABBIT_PANICHAUNT",
-                    Panic(self.inst))),
-            WhileNode(function() return self.inst.components.health.takingfiredamage end, "OnFire",
-                ChattyNode(self.inst, "RABBIT_PANICFIRE",
-                    Panic(self.inst))),
-            WhileNode(function() return self.inst.components.health:GetPercent() < TUNING.BUNNYMAN_PANIC_THRESH end,
-                "LowHealth",
-                ChattyNode(self.inst, "RABBIT_RETREAT",
-                    RunAway(self.inst, "scarytoprey", SEE_PLAYER_DIST, STOP_RUN_DIST))),
-            ChaseAndAttack(self.inst, MAX_CHASE_TIME, MAX_CHASE_DIST),
-            WhileNode(function() return IsHomeOnFire(self.inst) end, "OnFire",
-                ChattyNode(self.inst, "RABBIT_PANICHOUSEFIRE",
-                    Panic(self.inst))),
-            FaceEntity(self.inst, GetTraderFn, KeepTraderFn),
-            DoAction(self.inst, FindFoodAction),
-            Follow(self.inst, GetLeader, MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST),
-            -- WhileNode(function() return not self.inst.beardlord and TheWorld.state.iscaveday end, "IsDay",
-            --     DoAction(self.inst, GoHomeAction, "go home", true), 1),
-            Leash(self.inst, GetNoLeaderHomePos, LEASH_MAX_DIST, LEASH_RETURN_DIST),
-            Wander(self.inst, GetNoLeaderHomePos, MAX_WANDER_DIST),
+                IfThenDoWhileNode(function() return StartChoppingCondition(self.inst) end,
+                    function() return KeepChoppingAction(self.inst) end, "chop",
+                    LoopNode {
+                        ChattyNode(self.inst, "PIG_TALK_HELP_CHOP_WOOD",
+                            DoAction(self.inst, FindTreeToChopAction))
+                    }),
+                IfThenDoWhileNode(function() return StartMiningCondition(self.inst) end,
+                    function() return KeepMiningAction(self.inst) end, "MINE",
+                    LoopNode {
+                        ChattyNode(self.inst, "PIG_TALK_HELP_MINE_ROCK",
+                            DoAction(self.inst, FindRockToMineAction))
+                    }),
+                WhileNode(function() return self.inst.components.hauntable and self.inst.components.hauntable.panic end,
+                    "PanicHaunted",
+                    ChattyNode(self.inst, "RABBIT_PANICHAUNT",
+                        Panic(self.inst))),
+                WhileNode(function() return self.inst.components.health.takingfiredamage end, "OnFire",
+                    ChattyNode(self.inst, "RABBIT_PANICFIRE",
+                        Panic(self.inst))),
+                WhileNode(function() return self.inst.components.health:GetPercent() < TUNING.BUNNYMAN_PANIC_THRESH end,
+                    "LowHealth",
+                    ChattyNode(self.inst, "RABBIT_RETREAT",
+                        RunAway(self.inst, "scarytoprey", SEE_PLAYER_DIST, STOP_RUN_DIST))),
+                WhileNode(function() return self.inst.components.combat.target == nil or
+                        not self.inst.components.combat:InCooldown() end, "AttackMomentarily",
+                    ChaseAndAttack(self.inst, SpringCombatMod(MAX_CHASE_TIME), SpringCombatMod(MAX_CHASE_DIST))),
+                WhileNode(function() return self.inst.components.combat.target ~= nil and
+                        self.inst.components.combat:InCooldown() end, "Dodge",
+                    RunAway(self.inst, function() return self.inst.components.combat.target end, RUN_AWAY_DIST, STOP_RUN_AWAY_DIST)),
+                WhileNode(function() return IsHomeOnFire(self.inst) end, "OnFire",
+                    ChattyNode(self.inst, "RABBIT_PANICHOUSEFIRE",
+                        Panic(self.inst))),
+                FaceEntity(self.inst, GetTraderFn, KeepTraderFn),
+                DoAction(self.inst, FindFoodAction),
+                Follow(self.inst, GetLeader, MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST),
+                -- WhileNode(function() return not self.inst.beardlord and TheWorld.state.iscaveday end, "IsDay",
+                --     DoAction(self.inst, GoHomeAction, "go home", true), 1),
+                Leash(self.inst, GetNoLeaderHomePos, LEASH_MAX_DIST, LEASH_RETURN_DIST),
+                Wander(self.inst, GetNoLeaderHomePos, MAX_WANDER_DIST),
 
-        }, .5)
+            }, .5)
 
     self.bt = BT(self.inst, root)
 end

@@ -34,13 +34,13 @@ local SHARE_TARGET_DIST = 30
 local weaponDamage = 0
 
 local function OnDeath(inst)
-    print("coelho morrendo")
-    local hasWeapon = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-    print("tem arma? ", hasWeapon)
-    if hasWeapon then
-        print("desequipando arma")
-        inst.components.inventory:UnEquip(hasWeapon)
-    end
+    -- print("coelho morrendo")
+    -- local hasWeapon = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+    -- print("tem arma? ", hasWeapon)
+    -- if hasWeapon then
+    --     print("desequipando arma")
+    --     inst.components.inventory:UnEquip(hasWeapon)
+    -- end
 end
 
 function SetBunnyDamage(inst, multiplier, unequip)
@@ -81,7 +81,7 @@ function SetBunnyDamage(inst, multiplier, unequip)
         print("caiu no unequip do setbunny")
         if hasWeapon then
             -- weaponDamage = hasWeapon.components.weapon.damage
-            hasWeapon.components.weapon:SetDamage(weaponDamage)
+            -- hasWeapon.components.weapon:SetDamage(weaponDamage)
             weaponDamage = 0
         end
     end
@@ -105,10 +105,14 @@ end
 -- end
 
 local function OnEquip(inst, data)
-    local hasWeapon = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+    local hasWeapon = false
+    if inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).components.weapon ~= nil
+    then
+        hasWeapon = true
+    end
     -- local weaponDamage = 0
     if hasWeapon then
-        weaponDamage = hasWeapon.components.weapon.damage
+        -- weaponDamage = hasWeapon.components.weapon.damage
         -- hasWeapon.components.weapon:SetDamage(((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier) +
         --     (weaponDamage / 2))
     end
@@ -591,8 +595,8 @@ local function fn()
     inst.components.talker.ontalk = ontalk
 
     inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
-    inst.components.locomotor.runspeed = TUNING.PIG_RUN_SPEED * 2.2 -- account for them being stopped for part of their anim
-    inst.components.locomotor.walkspeed = TUNING.PIG_WALK_SPEED * 1.9 -- account for them being stopped for part of their anim
+    inst.components.locomotor.runspeed = TUNING.PIG_RUN_SPEED * 2.4 -- account for them being stopped for part of their anim
+    inst.components.locomotor.walkspeed = TUNING.PIG_WALK_SPEED * 2.1 -- account for them being stopped for part of their anim
 
     -- boat hopping setup
     inst.components.locomotor:SetAllowPlatformHopping(true)
@@ -663,6 +667,7 @@ local function fn()
 
     ------------------------------------------
     MakeMediumFreezableCharacter(inst, "pig_torso")
+    inst.components.freezable:SetResistance(4)
 
     ------------------------------------------
 
@@ -684,8 +689,8 @@ local function fn()
     inst.components.combat:SetKeepTargetFunction(NormalKeepTargetFn)
     inst.components.combat:SetRetargetFunction(3, NormalRetargetFn)
 
-    inst.components.locomotor.runspeed = TUNING.BUNNYMAN_RUN_SPEED * 120 / 100
-    inst.components.locomotor.walkspeed = TUNING.BUNNYMAN_WALK_SPEED * 120 / 100
+    inst.components.locomotor.runspeed = TUNING.BUNNYMAN_RUN_SPEED * 130 / 100
+    inst.components.locomotor.walkspeed = TUNING.BUNNYMAN_WALK_SPEED * 130 / 100
 
     inst.components.health:SetMaxHealth(TUNING.BUNNYMAN_HEALTH * 110 / 100)
 
@@ -702,6 +707,20 @@ local function fn()
     inst:ListenForEvent("equip", OnEquip)
     inst:ListenForEvent("equip", OnUnEquip)
     inst:ListenForEvent("death", OnDeath)
+
+    -- inst:ListenForEvent("onbunnykingcreated",   function()
+    --     inst:DoTaskInTime(math.random()*SLIGHTDELAY,function()
+
+    --         inst.components.combat:SetDefaultDamage(300)
+    --         inst:PushEvent("onbunnykingcreated")
+    --     end)
+    -- end, TheWorld)
+    -- inst:ListenForEvent("onmermkingdestroyed", function()
+    --     inst:DoTaskInTime(math.random()*SLIGHTDELAY,function()
+    --         inst.components.combat:SetDefaultDamage(30)
+    --         inst:PushEvent("onbunnykingdestroyed")
+    --     end)
+    -- end, TheWorld)
 
     return inst
 end

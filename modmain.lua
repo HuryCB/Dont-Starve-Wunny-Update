@@ -35,6 +35,8 @@ PrefabFiles = {
     "sewing_tape",
     "spiderbunny",
     "bunnybat",
+    "containerbunnyman",
+    
     -- "wurt_turf_marsh",
     -- "modhats",
 
@@ -782,7 +784,27 @@ AddRecipe("mermhat", { Ingredient("pondfish", 1), Ingredient("cutreeds", 1), Ing
 -- nil,
 -- "wunny", "images/inventoryimages/birchnuthat.xml",
 -- "birchnuthat.tex")
+AddRecipe2("madscience_lab_perkWunny", -- name
+	{Ingredient("transistor", 2), Ingredient("cutstone", 2)},-- ingredients
+	TECH.NONE, -- tech
+	{ 	product = "madscience_lab",
+		builder_tag = "wunny",
+		placer = "madscience_lab_placer",
+		nounlock = false,
+		image = "madscience_lab.tex"}, -- config
+	{ "REWARD",} -- filters
+)
 
+AddRecipe2("madscience_lab_perkWunny", -- name
+	{Ingredient("transistor", 2), Ingredient("cutstone", 2)},-- ingredients
+	TECH.NONE, -- tech
+	{ 	product = "madscience_lab",
+		builder_tag = "wunny",
+		placer = "madscience_lab_placer",
+		nounlock = false,
+		image = "madscience_lab.tex"}, -- config
+	{ "REWARD",} -- filters
+)
 --add carrot to rabbithole drop
 AddPrefabPostInit("rabbithole", function(inst)
     GLOBAL.MakeInventoryPhysics(inst)

@@ -80,7 +80,7 @@ local function SpawnSnake(inst)
 end
 
 local function OnDeath(inst)
-
+    -- TheWorld:PushEvent("onbunnykingdestroyed")
     print("morreu, tentando spawnar cobra")
     -- print(lootdropper)
     -- print(inst.components.inventory.lootdropper)--pode crashar
@@ -321,6 +321,7 @@ local function launchitem(item, angle)
 end
 
 local function OnSpawned(inst)
+    -- TheWorld:PushEvent("onbunnykingcreated")
     local hat = SpawnPrefab("ruinshat")
     print("tentando spawnar chapeu")
     if hat then
@@ -647,7 +648,7 @@ local function fn()
     -- 
 
     --chapeu
-    -- inst.OnSpawned = OnSpawned
+    inst.OnSpawned = OnSpawned
 
     -- local hasHat = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
     -- if not hasHat then

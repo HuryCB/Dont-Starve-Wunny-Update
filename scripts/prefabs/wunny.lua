@@ -411,6 +411,19 @@ local function onload(inst, data)
 		if data.magic_bonus then
 			inst.components.builder.magic_bonus = data.magic_bonus
 		end
+		if data.seafaring_bonus then
+			inst.components.builder.seafaring_bonus = data.seafaring_bonus
+		end
+		if data.bookcraft_bonus then
+			inst.components.builder.bookcraft_bonus = data.bookcraft_bonus
+		end
+		if data.fishing_bonus then
+			inst.components.builder.fishing_bonus = data.fishing_bonus
+		end
+
+		if data.nivelDaBarba then
+			inst.nivelDaBarba = data.nivelDaBarba
+		end
 	end
 end
 
@@ -507,6 +520,10 @@ local function OnSave(inst, data)
 	data.buckdamage = inst._wobybuck_damage > 0 and inst._wobybuck_damage or nil
 	data.science_bonus = inst.components.builder.science_bonus
 	data.magic_bonus = inst.components.builder.magic_bonus
+	data.seafaring_bonus = inst.components.builder.seafaring_bonus
+	data.bookcraft_bonus = inst.components.builder.bookcraft_bonus
+	data.fishing_bonus = inst.components.builder.fishing_bonus
+	data.nivelDaBarba = inst.nivelDaBarba
 end
 
 local function SetSkin(inst)
@@ -557,13 +574,20 @@ local function OnSanityDelta(inst, data)
 		-- if inst.nivelDaBarba == 1
 		-- then
 		-- 	inst.AnimState:OverrideSymbol("beard", "beard", "beard_short")
-		-- 	inst.AnimState:OverrideSymbol("beard", "beard_silk", "beard_short")
+		
 		-- elseif inst.nivelDaBarba == 2
 		-- then
-		-- 	inst.AnimState:OverrideSymbol("beard", "beard", "beard_medium")
+		
 		-- elseif inst.nivelDaBarba == 3
 		-- then
-		-- 	inst.AnimState:OverrideSymbol("beard", "beard", "beard_long")
+		print("nivel da barba: ", inst.nivelDaBarba)
+		if inst.nivelDaBarba == 1 then
+			inst.AnimState:OverrideSymbol("beard", "beard", "beard_short")
+		elseif inst.nivelDaBarba == 2 then
+			inst.AnimState:OverrideSymbol("beard", "beard", "beard_medium")
+		elseif inst.nivelDaBarba == 3 then
+			inst.AnimState:OverrideSymbol("beard", "beard", "beard_long")
+		end
 		-- end
 	elseif inst.isbeardlord and data.newpercent >= BEARDLORD_SANITY_THRESOLD then
 		-- Becoming bunny
@@ -594,6 +618,15 @@ local function OnSanityDelta(inst, data)
 		-- SetSkin(inst)
 		-- Adjust stats
 		-- AdjustLowSanityStats(inst, 0)
+		print("nivel da barba: ", inst.nivelDaBarba)
+		if inst.nivelDaBarba == 1 then
+			inst.AnimState:OverrideSymbol("beard", "bunnybeard", "beard_short")
+		elseif inst.nivelDaBarba == 2 then
+			inst.AnimState:OverrideSymbol("beard", "bunnybeard", "beard_medium")
+		elseif inst.nivelDaBarba == 3 then
+			inst.AnimState:OverrideSymbol("beard", "bunnybeard", "beard_long")
+		end
+		-- inst.AnimState:OverrideSymbol("beard", "bunnybeard", "beard_long")
 	end
 
 	-- Adjust stats
@@ -605,10 +638,11 @@ local function OnSanityDelta(inst, data)
 	-- print(inst.nivelDaBarba)
 	-- if inst.nivelDaBarba == 1
 	-- then
-	-- 	inst.AnimState:OverrideSymbol("beard", "beard_silk", "beardsilk_short")
+
+	-- inst.AnimState:OverrideSymbol("beard", "bunnybeard", "beard_short")
 	-- elseif inst.nivelDaBarba == 2
 	-- then
-	-- 	inst.AnimState:OverrideSymbol("beard", "beard_silk", "beardsilk_medium")
+	-- inst.AnimState:OverrideSymbol("beard", "beard_silk", "beardsilk_medium")
 	-- elseif inst.nivelDaBarba == 3
 	-- then
 	-- 	inst.AnimState:OverrideSymbol("beard", "beard_silk", "beardsilk_long")
@@ -670,6 +704,8 @@ local caveNight = function(inst)
 end
 
 local caveBehaviour = function(inst)
+	-- inst.components.sanity.night_drain_mult = 0
+	inst.components.sanity.dapperness = TUNING.MED
 	if not inst.isbearlord then
 		inst.components.combat.damagemultiplier = 0.5
 	end
@@ -708,6 +744,7 @@ local surfaceNight = function(inst)
 end
 
 local surfaceBehaviour = function(inst)
+	inst.components.sanity.dapperness = 0
 	if not inst.isbearlord then
 		inst.components.combat.damagemultiplier = 0.5
 	end
@@ -740,7 +777,7 @@ local function OnResetBeard(inst)
 end
 
 local BEARD_DAYS = { 4, 8, 16 } --mudar depois para 4, 8 ,16
-local BEARD_BITS = { 1, 3, 9 }
+local BEARD_BITS = { 1, 3, 8 }
 
 local function OnGrowShortBeard(inst, skinname)
 	inst.nivelDaBarba = 1
@@ -757,6 +794,8 @@ local function OnGrowShortBeard(inst, skinname)
 	-- if not inst.isbeardlord then
 	if skinname == nil then
 		inst.AnimState:OverrideSymbol("beard", "bunnybeard", "beard_short")
+		-- inst.AnimState:OverrideSymbol("beard", "wilson_beard_ice", "beard_short")
+		-- ThePlayer.components.beard.daysgrowth = 16ThePlayer.components.beard.bits = 9ThePlayer.AnimState:OverrideSymbol("beard", "wilson_beard_ice", "beard_long")
 	else
 		inst.AnimState:OverrideSkinSymbol("beard", skinname, "beard_short")
 	end
@@ -770,6 +809,7 @@ local function OnGrowMediumBeard(inst, skinname)
 	-- print(inst.nivelDaBarba)
 	if skinname == nil then
 		inst.AnimState:OverrideSymbol("beard", "bunnybeard", "beard_medium")
+		-- inst.AnimState:OverrideSymbol("beard", "wilson_beard_ice", "beard_medium")
 	else
 		inst.AnimState:OverrideSkinSymbol("beard", skinname, "beard_medium")
 	end
@@ -782,6 +822,7 @@ local function OnGrowLongBeard(inst, skinname)
 	-- print(inst.nivelDaBarba)
 	if skinname == nil then
 		inst.AnimState:OverrideSymbol("beard", "bunnybeard", "beard_long")
+		-- inst.AnimState:OverrideSymbol("beard", "wilson_beard_ice", "beard_long")
 	else
 		inst.AnimState:OverrideSkinSymbol("beard", skinname, "beard_long")
 	end
@@ -839,7 +880,8 @@ local function OnSpawnPet(inst, pet)
 	if pet:HasTag("shadowminion") then
 		if not (inst.components.health:IsDead() or inst:HasTag("playerghost")) then
 			--if not inst.components.builder.freebuildmode then
-			inst.components.sanity:AddSanityPenalty(pet, TUNING.SHADOWWAXWELL_SANITY_PENALTY[string.upper(pet.prefab)])
+			inst.components.sanity:AddSanityPenalty(pet,
+				TUNING.SHADOWWAXWELL_SANITY_PENALTY[string.upper(pet.prefab)])
 			--end
 			inst:ListenForEvent("onremove", inst._onpetlost, pet)
 			pet.components.skinner:CopySkinsFromPlayer(inst)
@@ -929,10 +971,11 @@ local master_postinit = function(inst)
 
 	inst.runningSpeed = 1
 
-	inst.nivelDaBarba = 0
+	-- inst.nivelDaBarba = 0
 
 	-- inst.components.builder.science_bonus = 2 --voltar, mudar para este depois
 	-- inst.components.builder.science_bonus = 2
+	-- inst.components.builder.ancient_bonus = 4
 
 	--beard
 	inst:AddComponent("beard")
@@ -1020,6 +1063,13 @@ local master_postinit = function(inst)
 	inst.components.hunger:SetMax(TUNING.WUNNY_HUNGER)
 	inst.components.sanity:SetMax(TUNING.WUNNY_SANITY)
 
+	inst:AddComponent("periodicspawner")
+    inst.components.periodicspawner:SetPrefab("poop")
+	inst.components.periodicspawner:SetRandomTimes(TUNING.TOTAL_DAY_TIME * 2.45, TUNING.SEG_TIME * 2.2)
+    inst.components.periodicspawner:SetDensityInRange(20, 2)
+    inst.components.periodicspawner:SetMinimumSpacing(8)
+    inst.components.periodicspawner:Start()
+
 	-- Sanity rate
 	-- inst.components.sanity.night_drain_mult = 0
 
@@ -1056,8 +1106,12 @@ local master_postinit = function(inst)
 						--lose hunger on befriending
 						inst.components.hunger:DoDelta( -12.5)
 					end
+					if v.prefab == "dwarfbunnyman" then
+						v.components.inventoryitem.canbepickedup = true
+					end
 				elseif v.prefab == "rabbit"
-					or v.prefab == "dwarfbunnyman" then
+				-- or v.prefab == "dwarfbunnyman"
+				then
 					-- isNearbyRabbit = true
 					v.components.inventoryitem.canbepickedup = true
 				elseif v.prefab == "researchlab" and inst.components.builder.science_bonus < 1
@@ -1098,7 +1152,20 @@ local master_postinit = function(inst)
 					and inst.components.builder.seafaring_bonus < 2
 				then
 					inst.components.builder.seafaring_bonus = 2
+				elseif v.prefab == "bookstation"
+				-- and inst.components.builder.bookcraft_bonus < 1
+				then
+					inst.components.builder.bookcraft_bonus = 1
+				elseif v.prefab == "tacklestation"
+				-- and inst.components.builder.fishing_bonus < 1
+				then
+					inst.components.builder.fishing_bonus = 1
 				end
+				-- elseif v.prefab == "turfcraftingstation"
+				-- 	and inst.components.builder.fishing_bonus < 2
+				-- then
+				-- 	inst.components.builder.fishing_bonus = 2
+				-- end
 			end
 		end
 
@@ -1106,7 +1173,7 @@ local master_postinit = function(inst)
 		-- local ents = TheSim:FindEntities(pos.x, pos.y, pos.z, 24)
 		-- for k, v in pairs(ents) do
 		-- 	if v.prefab == "rabbit" then
-		-- 		-- if isNearbyRabbit == false then
+		-- 		-- if isNearbyRabbit == false thenw
 		-- 			v.components.inventoryitem.canbepickedup = false
 		-- 		-- end
 		-- 	end

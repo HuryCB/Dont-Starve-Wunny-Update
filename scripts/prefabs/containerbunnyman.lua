@@ -3,10 +3,10 @@ local assets =
     Asset("ANIM", "anim/manrabbit_basic.zip"),
     Asset("ANIM", "anim/manrabbit_actions.zip"),
     Asset("ANIM", "anim/manrabbit_attacks.zip"),
-    -- Asset("ANIM", "anim/manrabbit_build.zip"),
+    Asset("ANIM", "anim/manrabbit_build.zip"),
     Asset("ANIM", "anim/manrabbit_boat_jump.zip"),
 
-    -- Asset("ANIM", "anim/manrabbit_beard_build.zip"),
+    Asset("ANIM", "anim/manrabbit_beard_build.zip"),
     Asset("ANIM", "anim/manrabbit_beard_basic.zip"),
     Asset("ANIM", "anim/manrabbit_beard_actions.zip"),
     Asset("SOUND", "sound/bunnyman.fsb"),
@@ -18,59 +18,50 @@ local prefabs =
     "monstermeat",
     "manrabbit_tail",
     "beardhair",
-    "nightmarefuel",
+	"nightmarefuel",
     "carrot",
-    "shadow_despawn",
-    "statue_transition_2",
+	"shadow_despawn",
+	"statue_transition_2",
 }
 
 local beardlordloot = { "beardhair", "beardhair", "monstermeat" }
 local forced_beardlordloot = { "nightmarefuel", "beardhair", "beardhair", "monstermeat" }
 
-local brain = require("brains/everythingbunnymanbrain")
+local brain = require("brains/bunnymanbrain")
 
 local MAX_TARGET_SHARES = 5
 local SHARE_TARGET_DIST = 30
 
-local function SuggestTreeTarget(inst, data)
-    local ba = inst:GetBufferedAction()
-    if data ~= nil and data.tree ~= nil and (ba == nil or ba.action ~= ACTIONS.CHOP) then
-        inst.tree_target = data.tree
-    end
-end
-
 local function DoShadowFx(inst, isnightmare)
-    local x, y, z = inst.Transform:GetWorldPosition()
-    local fx = SpawnPrefab("statue_transition_2")
-    fx.Transform:SetPosition(x, y, z)
-    fx.Transform:SetScale(1.2, 1.2, 1.2)
+	local x, y, z = inst.Transform:GetWorldPosition()
+	local fx = SpawnPrefab("statue_transition_2")
+	fx.Transform:SetPosition(x, y, z)
+	fx.Transform:SetScale(1.2, 1.2, 1.2)
 
-    --When forcing into nightmare state, shadow_trap would've already spawned this fx
-    if not isnightmare then
-        fx = SpawnPrefab("shadow_despawn")
-        local platform = inst:GetCurrentPlatform()
-        if platform ~= nil then
-            fx.entity:SetParent(platform.entity)
-            fx.Transform:SetPosition(platform.entity:WorldToLocalSpace(x, y, z))
-            fx:ListenForEvent("onremove", function()
-                fx.Transform:SetPosition(fx.Transform:GetWorldPosition())
-                fx.entity:SetParent(nil)
-            end, platform)
-        else
-            fx.Transform:SetPosition(x, y, z)
-        end
-    end
+	--When forcing into nightmare state, shadow_trap would've already spawned this fx
+	if not isnightmare then
+		fx = SpawnPrefab("shadow_despawn")
+		local platform = inst:GetCurrentPlatform()
+		if platform ~= nil then
+			fx.entity:SetParent(platform.entity)
+			fx.Transform:SetPosition(platform.entity:WorldToLocalSpace(x, y, z))
+			fx:ListenForEvent("onremove", function()
+				fx.Transform:SetPosition(fx.Transform:GetWorldPosition())
+				fx.entity:SetParent(nil)
+			end, platform)
+		else
+			fx.Transform:SetPosition(x, y, z)
+		end
+	end
 end
 
 local function IsCrazyGuy(guy)
     local sanity = guy ~= nil and guy.replica.sanity or nil
-    return sanity ~= nil and sanity:IsInsanityMode() and
-        sanity:GetPercentNetworked() <=
-        (guy:HasTag("dappereffects") and TUNING.DAPPER_BEARDLING_SANITY or TUNING.BEARDLING_SANITY)
+    return sanity ~= nil and sanity:IsInsanityMode() and sanity:GetPercentNetworked() <= (guy:HasTag("dappereffects") and TUNING.DAPPER_BEARDLING_SANITY or TUNING.BEARDLING_SANITY)
 end
 
 local function IsForcedNightmare(inst)
-    return inst.components.timer:TimerExists("forcenightmare")
+	return inst.components.timer:TimerExists("forcenightmare")
 end
 
 local function ontalk(inst)
@@ -79,9 +70,9 @@ end
 
 local function ClearObservedBeardlord(inst)
     inst.clearbeardlordtask = nil
-    if not IsForcedNightmare(inst) then
-        inst.beardlord = nil
-    end
+	if not IsForcedNightmare(inst) then
+		inst.beardlord = nil
+	end
 end
 
 local function SetObserverdBeardLord(inst)
@@ -89,82 +80,75 @@ local function SetObserverdBeardLord(inst)
     if inst.clearbeardlordtask ~= nil then
         inst.clearbeardlordtask:Cancel()
     end
-    inst.clearbeardlordtask = inst:DoTaskInTime(5, ClearObservedBeardlord)
+	inst.clearbeardlordtask = inst:DoTaskInTime(5, ClearObservedBeardlord)
 end
 
 local function OnTimerDone(inst, data)
-    if data ~= nil and data.name == "forcenightmare" then
-        if not (inst:IsInLimbo() or inst:IsAsleep()) then
-            if inst.sg:HasStateTag("busy") and not inst.sg:HasStateTag("sleeping") then
-                inst.components.timer:StartTimer("forcenightmare", 1)
-                return
-            end
-            DoShadowFx(inst, false)
-        end
-        inst:RemoveEventCallback("timerdone", OnTimerDone)
-        inst.AnimState:SetBuild("manrabbit_build")
-        if inst.clearbeardlordtask == nil then
-            inst.beardlord = nil
-        end
-    end
+	if data ~= nil and data.name == "forcenightmare" then
+		if not (inst:IsInLimbo() or inst:IsAsleep()) then
+			if inst.sg:HasStateTag("busy") and not inst.sg:HasStateTag("sleeping") then
+				inst.components.timer:StartTimer("forcenightmare", 1)
+				return
+			end
+			DoShadowFx(inst, false)
+		end
+		inst:RemoveEventCallback("timerdone", OnTimerDone)
+		inst.AnimState:SetBuild("manrabbit_build")
+		if inst.clearbeardlordtask == nil then
+			inst.beardlord = nil
+		end
+	end
 end
 
 local function SetForcedBeardLord(inst, duration)
-    --duration nil is loading, so don't perform checks
-    if duration ~= nil then
-        if inst.components.health:IsDead() then
-            return
-        end
-        local t = inst.components.timer:GetTimeLeft("forcenightmare")
-        if t ~= nil then
-            if t < duration then
-                inst.components.timer:SetTimeLeft("forcenightmare", duration)
-            end
-            return
-        end
-        inst.components.timer:StartTimer("forcenightmare", duration)
-    end
-    inst.beardlord = true
-    inst.AnimState:SetBuild("manrabbit_beard_build")
-    inst:ListenForEvent("timerdone", OnTimerDone)
+	--duration nil is loading, so don't perform checks
+	if duration ~= nil then
+		if inst.components.health:IsDead() then
+			return
+		end
+		local t = inst.components.timer:GetTimeLeft("forcenightmare")
+		if t ~= nil then
+			if t < duration then
+				inst.components.timer:SetTimeLeft("forcenightmare", duration)
+			end
+			return
+		end
+		inst.components.timer:StartTimer("forcenightmare", duration)
+	end
+	inst.beardlord = true
+	inst.AnimState:SetBuild("manrabbit_beard_build")
+	inst:ListenForEvent("timerdone", OnTimerDone)
 end
 
 local function OnForceNightmareState(inst, data)
-    if data ~= nil and data.duration ~= nil then
-        DoShadowFx(inst, true)
-        SetForcedBeardLord(inst, data.duration)
-    end
+	if data ~= nil and data.duration ~= nil then
+		DoShadowFx(inst, true)
+		SetForcedBeardLord(inst, data.duration)
+	end
 end
 
 local function CalcSanityAura(inst, observer)
     if IsCrazyGuy(observer) then
-        SetObserverdBeardLord(inst)
-        return 0
-    elseif IsForcedNightmare(inst) then
-        return 0
+		SetObserverdBeardLord(inst)
+        return -TUNING.SANITYAURA_MED
+	elseif IsForcedNightmare(inst) then
+		return -TUNING.SANITYAURA_MED
     end
     return inst.components.follower ~= nil
         and inst.components.follower:GetLeader() == observer
-        and TUNING.SANITYAURA_TINY
+        and TUNING.SANITYAURA_SMALL
         or 0
 end
 
 local function ShouldAcceptItem(inst, item)
-    return (--accept all hats!
-        item.components.equippable ~= nil and
+    return
+        (   --accept all hats!
+            item.components.equippable ~= nil and
             item.components.equippable.equipslot == EQUIPSLOTS.HEAD
         ) or
-        (--accept all hands!
-        item.components.equippable ~= nil and
-            item.components.equippable.equipslot == EQUIPSLOTS.HANDS
-        ) or
-        (--accept all armors!
-        item.components.equippable ~= nil and
-            item.components.equippable.equipslot == EQUIPSLOTS.BODY
-        ) or
-        (--accept food, but not too many carrots for loyalty!
-        inst.components.eater:CanEat(item) and
-            ((item.prefab ~= "carrot" and item.prefab ~= "carrot_cooked") or
+        (   --accept food, but not too many carrots for loyalty!
+            inst.components.eater:CanEat(item) and
+            (   (item.prefab ~= "carrot" and item.prefab ~= "carrot_cooked") or
                 inst.components.follower.leader == nil or
                 inst.components.follower:GetLoyaltyPercent() <= .9
             )
@@ -174,14 +158,14 @@ end
 local function OnGetItemFromPlayer(inst, giver, item)
     --I eat food
     if item.components.edible ~= nil then
-        if (item.prefab == "carrot" or
-            item.prefab == "carrot_cooked"
+        if (    item.prefab == "carrot" or
+                item.prefab == "carrot_cooked"
             ) and
             item.components.inventoryitem ~= nil and
-            (--make sure it didn't drop due to pockets full
-            item.components.inventoryitem:GetGrandOwner() == inst or
+            (   --make sure it didn't drop due to pockets full
+                item.components.inventoryitem:GetGrandOwner() == inst or
                 --could be merged into a stack
-                (not item:IsValid() and
+                (   not item:IsValid() and
                     inst.components.inventory:FindItem(function(obj)
                         return obj.prefab == item.prefab
                             and obj.components.stackable ~= nil
@@ -191,10 +175,10 @@ local function OnGetItemFromPlayer(inst, giver, item)
             if inst.components.combat:TargetIs(giver) then
                 inst.components.combat:SetTarget(nil)
             elseif giver.components.leader ~= nil then
-                if giver.components.minigame_participator == nil then
-                    giver:PushEvent("makefriend")
-                    giver.components.leader:AddFollower(inst)
-                end
+				if giver.components.minigame_participator == nil then
+	                giver:PushEvent("makefriend")
+		            giver.components.leader:AddFollower(inst)
+				end
                 inst.components.follower:AddLoyaltyTime(
                     giver:HasTag("polite")
                     and TUNING.RABBIT_CARROT_LOYALTY + TUNING.RABBIT_POLITENESS_LOYALTY_BONUS
@@ -216,25 +200,6 @@ local function OnGetItemFromPlayer(inst, giver, item)
         inst.components.inventory:Equip(item)
         inst.AnimState:Show("hat")
     end
-    --I wear weapons
-    if item.components.equippable ~= nil and item.components.equippable.equipslot == EQUIPSLOTS.HANDS then
-        local current = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-        if current ~= nil then
-            inst.components.inventory:DropItem(current)
-        end
-        inst.components.inventory:Equip(item)
-        -- inst.AnimState:Show("hat")
-    end
-
-    --I wear armors
-    if item.components.equippable ~= nil and item.components.equippable.equipslot == EQUIPSLOTS.BODY then
-        local current = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
-        if current ~= nil then
-            inst.components.inventory:DropItem(current)
-        end
-        inst.components.inventory:Equip(item)
-        -- inst.AnimState:Show("hat")
-    end
 end
 
 local function OnRefuseItem(inst, item)
@@ -246,42 +211,37 @@ end
 
 local function OnAttacked(inst, data)
     inst.components.combat:SetTarget(data.attacker)
-    inst.components.combat:ShareTarget(data.attacker, SHARE_TARGET_DIST,
-        function(dude) return dude.prefab == inst.prefab end, MAX_TARGET_SHARES)
+    inst.components.combat:ShareTarget(data.attacker, SHARE_TARGET_DIST, function(dude) return dude.prefab == inst.prefab end, MAX_TARGET_SHARES)
 end
 
 local function OnNewTarget(inst, data)
-    inst.components.combat:ShareTarget(data.target, SHARE_TARGET_DIST,
-        function(dude) return dude.prefab == inst.prefab end, MAX_TARGET_SHARES)
+    inst.components.combat:ShareTarget(data.target, SHARE_TARGET_DIST, function(dude) return dude.prefab == inst.prefab end, MAX_TARGET_SHARES)
 end
 
 local function is_meat(item)
-    -- return item.components.edible ~= nil and item.components.edible.foodtype == FOODTYPE.MEAT and not item:HasTag("smallcreature")
-    return false
+    return item.components.edible ~= nil and item.components.edible.foodtype == FOODTYPE.MEAT and not item:HasTag("smallcreature")
 end
 
 local RETARGET_MUST_TAGS = { "_combat", "_health" }
-local RETARGET_ONEOF_TAGS = { "monster", "player", "pirate" }
+local RETARGET_ONEOF_TAGS = { "monster", "player", "pirate"}
 local function NormalRetargetFn(inst)
     return not inst:IsInLimbo()
         and FindEntity(
-            inst,
-            TUNING.PIG_TARGET_DIST,
-            function(guy)
-                return inst.components.combat:CanTarget(guy)
-                    and (
-                        -- guy:HasTag("monster")
-                        -- or 
-                        guy:HasTag("wonkey")
-                        or guy:HasTag("pirate")
-                        or (guy.components.inventory ~= nil and
-                            guy:IsNear(inst, TUNING.BUNNYMAN_SEE_MEAT_DIST) and
-                            guy.components.inventory:FindItem(is_meat) ~= nil))
-            end,
-            RETARGET_MUST_TAGS, -- see entityreplica.lua
-            nil,
-            RETARGET_ONEOF_TAGS
-        )
+                inst,
+                TUNING.PIG_TARGET_DIST,
+                function(guy)
+                    return inst.components.combat:CanTarget(guy)
+                        and (guy:HasTag("monster")
+                            or guy:HasTag("wonkey")
+                            or guy:HasTag("pirate")
+                            or (guy.components.inventory ~= nil and
+                                guy:IsNear(inst, TUNING.BUNNYMAN_SEE_MEAT_DIST) and
+                                guy.components.inventory:FindItem(is_meat) ~= nil))
+                end,
+                RETARGET_MUST_TAGS, -- see entityreplica.lua
+                nil,
+                RETARGET_ONEOF_TAGS
+            )
         or nil
 end
 
@@ -295,7 +255,7 @@ end
 
 local function battlecry(combatcmp, target)
     local strtbl =
-    target ~= nil and
+        target ~= nil and
         target.components.inventory ~= nil and
         target.components.inventory:FindItem(is_meat) ~= nil and
         "RABBIT_MEAT_BATTLECRY" or
@@ -309,10 +269,10 @@ end
 
 local function LootSetupFunction(lootdropper)
     local guy = lootdropper.inst.causeofdeath
-    if IsForcedNightmare(lootdropper.inst) then
-        -- forced beard lord
-        lootdropper:SetLoot(forced_beardlordloot)
-    elseif IsCrazyGuy(guy ~= nil and guy.components.follower ~= nil and guy.components.follower.leader or guy) then
+	if IsForcedNightmare(lootdropper.inst) then
+		-- forced beard lord
+		lootdropper:SetLoot(forced_beardlordloot)
+	elseif IsCrazyGuy(guy ~= nil and guy.components.follower ~= nil and guy.components.follower.leader or guy) then
         -- beard lord
         lootdropper:SetLoot(beardlordloot)
     else
@@ -325,27 +285,9 @@ local function LootSetupFunction(lootdropper)
 end
 
 local function OnLoad(inst)
-    if IsForcedNightmare(inst) then
-        SetForcedBeardLord(inst, nil)
-    end
-end
-
-local function OnPickup(inst)
-    local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-    if item then
-        inst.components.inventory:DropItem(item)
-    end
-  
-    local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
-    if item then
-        inst.components.inventory:DropItem(item)
-    end
-  
-    local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
-    if item then
-        inst.components.inventory:DropItem(item)
-    end
-  
+	if IsForcedNightmare(inst) then
+		SetForcedBeardLord(inst, nil)
+	end
 end
 
 local function fn()
@@ -359,21 +301,16 @@ local function fn()
 
     inst.AnimState:SetBuild("manrabbit_build")
 
-    -- MakeCharacterPhysics(inst, 50, .5)
-    MakeCharacterPhysics(inst, 50 / 2, .5 / 2)
+    MakeCharacterPhysics(inst, 50, .5)
 
-    -- inst.DynamicShadow:SetSize(1.5, .75)
-    inst.DynamicShadow:SetSize(1.5 / 3, .75 / 3)
+    inst.DynamicShadow:SetSize(1.5, .75)
     inst.Transform:SetFourFaced()
-    -- inst.Transform:SetScale(1.25, 1.25, 1.25)
-    inst.Transform:SetScale(.85, .85, .85)
-    -- inst.Transform:SetScale(1.25/2, 1.25/2, 1.25/2)
+    inst.Transform:SetScale(1.25, 1.25, 1.25)
 
     inst:AddTag("cavedweller")
     inst:AddTag("character")
     inst:AddTag("pig")
     inst:AddTag("manrabbit")
- inst:AddTag("notraptrigger")
     inst:AddTag("scarytoprey")
 
     inst.AnimState:SetBank("manrabbit")
@@ -399,7 +336,7 @@ local function fn()
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
-        -- inst.OnEntityReplicated = function(inst) inst.replica.container:WidgetSetup("antlionhat") end
+        inst.OnEntityReplicated = function(inst) inst.replica.container:WidgetSetup("wobybig") end
         return inst
     end
 
@@ -409,13 +346,16 @@ local function fn()
     inst.components.talker.ontalk = ontalk
 
     inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
-    inst.components.locomotor.runspeed = TUNING.PIG_RUN_SPEED * 2.4 -- account for them being stopped for part of their anim
-    inst.components.locomotor.walkspeed = TUNING.PIG_WALK_SPEED * 2.2 -- account for them being stopped for part of their anim
+    inst.components.locomotor.runspeed = TUNING.PIG_RUN_SPEED * 2.2 -- account for them being stopped for part of their anim
+    inst.components.locomotor.walkspeed = TUNING.PIG_WALK_SPEED * 1.9 -- account for them being stopped for part of their anim
 
     -- boat hopping setup
     inst.components.locomotor:SetAllowPlatformHopping(true)
     inst:AddComponent("embarker")
     inst:AddComponent("drownable")
+
+    inst:AddComponent("container")
+    inst.components.container:WidgetSetup("wobybig")
 
     inst:AddComponent("bloomer")
 
@@ -457,7 +397,7 @@ local function fn()
     ------------------------------------------
 
     inst:AddComponent("knownlocations")
-    inst:AddComponent("timer")
+	inst:AddComponent("timer")
 
     ------------------------------------------
 
@@ -489,48 +429,32 @@ local function fn()
     inst:ListenForEvent("attacked", OnAttacked)
     inst:ListenForEvent("newcombattarget", OnNewTarget)
 
-    inst:ListenForEvent("suggest_tree_target", SuggestTreeTarget)
-
     inst.components.sleeper:SetResistance(2)
     inst.components.sleeper.sleeptestfn = NocturnalSleepTest
     inst.components.sleeper.waketestfn = NocturnalWakeTest
 
-    inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE / 1.4)
+    inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE)
     inst.components.combat:SetAttackPeriod(TUNING.BUNNYMAN_ATTACK_PERIOD)
     inst.components.combat:SetKeepTargetFunction(NormalKeepTargetFn)
     inst.components.combat:SetRetargetFunction(3, NormalRetargetFn)
 
-    inst.components.locomotor.runspeed = TUNING.BUNNYMAN_RUN_SPEED * 140 / 100
-    inst.components.locomotor.walkspeed = TUNING.BUNNYMAN_WALK_SPEED * 140 / 100
+    inst.components.locomotor.runspeed = TUNING.BUNNYMAN_RUN_SPEED
+    inst.components.locomotor.walkspeed = TUNING.BUNNYMAN_WALK_SPEED
 
-    inst.components.health:SetMaxHealth(TUNING.BUNNYMAN_HEALTH / 1.4)
+    inst.components.health:SetMaxHealth(TUNING.BUNNYMAN_HEALTH)
 
     MakeHauntablePanic(inst)
 
     inst:SetBrain(brain)
-    inst:SetStateGraph("SGeverythingbunnyman")
+    inst:SetStateGraph("SGbunnyman")
 
-    --shadow_trap interaction
-    inst.has_nightmare_state = true
-    inst:ListenForEvent("ms_forcenightmarestate", OnForceNightmareState)
+	--shadow_trap interaction
+	inst.has_nightmare_state = true
+	inst:ListenForEvent("ms_forcenightmarestate", OnForceNightmareState)
 
-    inst.OnLoad = OnLoad
-
-    -- inst:AddComponent("container")
-    -- inst.components.container:WidgetSetup("antlionhat")
-
-    inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.nobounce = true
-    inst.components.inventoryitem.canbepickedup = false
-    inst.components.inventoryitem.canbepickedupalive = true
-    inst.components.inventoryitem:SetSinks(true)
-    inst.components.inventoryitem.imagename = "bunny"
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/bunny.xml"
-    MakeFeedableSmallLivestock(inst, TUNING.RABBIT_PERISH_TIME * 4, nil, nil)
-
-    inst:ListenForEvent("onpickup", OnPickup)
+	inst.OnLoad = OnLoad
 
     return inst
 end
 
-return Prefab("dwarfbunnyman", fn, assets, prefabs)
+return Prefab("containerbunnyman", fn, assets, prefabs)
