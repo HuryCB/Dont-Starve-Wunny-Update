@@ -346,7 +346,7 @@ local function onbecamehuman(inst)
 	-- Set speed when not a ghost (optional)
 	--resistencia da willow
 	inst.components.freezable:SetResistance(3)
-	inst.components.locomotor:SetExternalSpeedMultiplier(inst, "wunny_speed_mod", 1)
+	-- inst.components.locomotor:SetExternalSpeedMultiplier(inst, "wunny_speed_mod", 1)
 end
 
 local function onbecameghost(inst)
@@ -423,6 +423,9 @@ local function onload(inst, data)
 
 		if data.nivelDaBarba then
 			inst.nivelDaBarba = data.nivelDaBarba
+		end
+		if data.sanityPercent then
+			inst.components.sanity:SetPercent(data.sanityPercent)
 		end
 	end
 end
@@ -524,6 +527,7 @@ local function OnSave(inst, data)
 	data.bookcraft_bonus = inst.components.builder.bookcraft_bonus
 	data.fishing_bonus = inst.components.builder.fishing_bonus
 	data.nivelDaBarba = inst.nivelDaBarba
+	data.sanityPercent = inst.components.sanity:GetPercent()
 end
 
 local function SetSkin(inst)
@@ -705,7 +709,7 @@ end
 
 local caveBehaviour = function(inst)
 	-- inst.components.sanity.night_drain_mult = 0
-	inst.components.sanity.dapperness = TUNING.MED
+	inst.components.sanity.dapperness = TUNING.DAPPERNESS_MED_LARGE
 	if not inst.isbearlord then
 		inst.components.combat.damagemultiplier = 0.5
 	end
@@ -973,7 +977,8 @@ local master_postinit = function(inst)
 
 	-- inst.nivelDaBarba = 0
 
-	-- inst.components.builder.science_bonus = 2 --voltar, mudar para este depois
+	inst.components.builder.science_bonus = 1 --voltar, mudar para este depois
+	inst.components.builder.magic_bonus = 2
 	-- inst.components.builder.science_bonus = 2
 	-- inst.components.builder.ancient_bonus = 4
 
@@ -1110,39 +1115,17 @@ local master_postinit = function(inst)
 						v.components.inventoryitem.canbepickedup = true
 					end
 				elseif v.prefab == "rabbit"
-				-- or v.prefab == "dwarfbunnyman"
 				then
-					-- isNearbyRabbit = true
 					v.components.inventoryitem.canbepickedup = true
 				elseif v.prefab == "researchlab" and inst.components.builder.science_bonus < 1
 				then
-					-- print("perto do research")
-					-- print("perto do research")
-					-- print("perto do research")
 					inst.components.builder.science_bonus = 1
 				elseif v.prefab == "researchlab2" and inst.components.builder.science_bonus < 2
 				then
-					-- print("perto do research")
-					-- print("perto do research")
-					-- print("perto do research")
 					inst.components.builder.science_bonus = 2
 				elseif v.prefab == "researchlab4"
 					and inst.components.builder.magic_bonus < 2
 				then
-					print("researchlab4")
-					print("researchlab4")
-					print("researchlab4")
-					-- print(inst.components.builder)
-					-- for index, data in ipairs(inst.components.builder) do
-					-- 	print(index)
-					-- 	for key, value in pairs(data) do
-					-- 		print('\t', key, value)
-					-- 	end
-					-- end
-					-- AwardPlayerAchievement("build_researchlab4", inst.components.builder)
-					-- print("perto do research")
-					-- print("perto do research")
-					-- print("perto do research")
 					inst.components.builder.magic_bonus = 2
 				elseif v.prefab == "researchlab3"
 					and inst.components.builder.science_bonus < 3
