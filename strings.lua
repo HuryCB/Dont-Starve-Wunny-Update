@@ -56,8 +56,11 @@ STRINGS.RECIPE_DESC.WUNNY_BATTERY_LOW = "Better than winona's. Can be picked up"
 STRINGS.NAMES.WUNNY_BATTERY_HIGH= "Wunny's G.E.M.erator"
 STRINGS.RECIPE_DESC.WUNNY_BATTERY_HIGH = "Better than winona's. Can be picked up"
 
-STRINGS.NAMES.WUNNY_SPOTLIGHT = "Wunny Spotlight"
+STRINGS.NAMES.WUNNY_SPOTLIGHT = "Wunny's Spotlight"
 STRINGS.RECIPE_DESC.WUNNY_SPOTLIGHT = "Better than winona's. Can be picked up"
+
+STRINGS.NAMES.WUNNYICEBOX = "Wunny's better Icebox"
+STRINGS.RECIPE_DESC.WUNNYICEBOX = "Double of icebox's preserver rate (0.25 perish rate)"
 
 -- TRINGS.RECIPE_DESC.LUCY = "Woodie's axe for Wunny"
 

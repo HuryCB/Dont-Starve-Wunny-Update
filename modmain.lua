@@ -41,6 +41,7 @@ PrefabFiles = {
     -- "modhats",
 
     "wunnyslingshot",
+    "wunnyicebox"
     -- "beardlordback"
 }
 
@@ -304,7 +305,7 @@ TUNING.WUNNY_HUNGER_RATE = TUNING.WILSON_HUNGER_RATE
 TUNING.BUNNYPACK_HUNGER = 1.15 --mudar para 1.1
 TUNING.BEARDLORDPACK_HUNGER = 1.175 --mudar para 1.1
 TUNING.WUNNY_QUICK_ACTION_HUNGER = -0.25
--- TUNING.SHADOWBUNNYMAN_ATTACK_PERIOD = 
+-- TUNING.SHADOWBUNNYMAN_ATTACK_PERIOD =
 -- WUNNY_RUNNING_HUNGER_RATETUNNIN.WUNNY_IDLE_HUNGER_RATE = 1
 
 ---CUSTOM TUNINGS
@@ -804,6 +805,11 @@ AddRecipe2("madscience_lab_perkWunny", -- name
     }, -- config
     { "REWARD", } -- filters
 )
+
+AddRecipe2("wunnyicebox", { Ingredient("goldnugget", 4), Ingredient("gears", 2), Ingredient("cutstone", 2), Ingredient("bluegem", 2) },
+    TECH.SCIENCE_TWO,
+    { placer = "icebox_placer", min_spacing = 1.5,  image = "icebox.tex" })
+
 
 AddRecipe2("madscience_lab_perkWunny", -- name
     { Ingredient("transistor", 2), Ingredient("cutstone", 2) }, -- ingredients
