@@ -294,10 +294,10 @@ end
 local function OnWobyRemoved(inst)
 	inst.woby = nil
 	inst._replacewobytask = inst:DoTaskInTime(1,
-			function(i)
-				i._replacewobytask = nil
-				if i.woby == nil then SpawnWoby(i) end
-			end)
+		function(i)
+			i._replacewobytask = nil
+			if i.woby == nil then SpawnWoby(i) end
+		end)
 end
 
 local function OnRemoveEntity(inst)
@@ -578,10 +578,10 @@ local function OnSanityDelta(inst, data)
 		-- if inst.nivelDaBarba == 1
 		-- then
 		-- 	inst.AnimState:OverrideSymbol("beard", "beard", "beard_short")
-		
+
 		-- elseif inst.nivelDaBarba == 2
 		-- then
-		
+
 		-- elseif inst.nivelDaBarba == 3
 		-- then
 		print("nivel da barba: ", inst.nivelDaBarba)
@@ -1069,11 +1069,11 @@ local master_postinit = function(inst)
 	inst.components.sanity:SetMax(TUNING.WUNNY_SANITY)
 
 	inst:AddComponent("periodicspawner")
-    inst.components.periodicspawner:SetPrefab("poop")
+	inst.components.periodicspawner:SetPrefab("poop")
 	inst.components.periodicspawner:SetRandomTimes(TUNING.TOTAL_DAY_TIME * 2.45, TUNING.SEG_TIME * 2.2)
-    inst.components.periodicspawner:SetDensityInRange(20, 2)
-    inst.components.periodicspawner:SetMinimumSpacing(8)
-    inst.components.periodicspawner:Start()
+	inst.components.periodicspawner:SetDensityInRange(20, 2)
+	inst.components.periodicspawner:SetMinimumSpacing(8)
+	inst.components.periodicspawner:Start()
 
 	-- Sanity rate
 	-- inst.components.sanity.night_drain_mult = 0
@@ -1143,6 +1143,9 @@ local master_postinit = function(inst)
 				-- and inst.components.builder.fishing_bonus < 1
 				then
 					inst.components.builder.fishing_bonus = 1
+				elseif v.prefab == "butterflywings" and v.components.edible.foodtype ~= FOODTYPE.GOODIES
+				then
+					v.components.edible.foodtype = FOODTYPE.GOODIES
 				end
 				-- elseif v.prefab == "turfcraftingstation"
 				-- 	and inst.components.builder.fishing_bonus < 2
@@ -1217,9 +1220,9 @@ local master_postinit = function(inst)
 	inst:ListenForEvent("timerdone", OnTimerDone)
 
 	inst._woby_spawntask = inst:DoTaskInTime(0, function(i)
-			i._woby_spawntask = nil
-			SpawnWoby(i)
-		end)
+		i._woby_spawntask = nil
+		SpawnWoby(i)
+	end)
 	inst._woby_onremove = function(woby) OnWobyRemoved(inst) end
 
 	inst.OnWobyTransformed = OnWobyTransformed

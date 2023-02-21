@@ -90,8 +90,6 @@ function SetBunnyDamage(inst, multiplier, unequip)
     -- print(multiplier)
     -- print(weaponDamage / 2)
     -- print("setando dano para  ", ((TUNING.BUNNYMAN_DAMAGE + beardLordDamage) * multiplier) + (weaponDamage / 2))
-
-
 end
 
 -- local function SetDamage(inst)
@@ -143,7 +141,7 @@ local function OnEquip(inst, data)
     -- print("equipou e ", inst.components.locomotor:GetSpeedMultiplier())
     -- _G.speedMultiplier = inst.components.locomotor:GetSpeedMultiplier()
     -- if data.eslot == EQUIPSLOTS.HEAD and not data.item:HasTag("open_top_hat") then
-    --     --V2C: HAH! There's no "beard" in "player_wormwood" build.
+    --     --V2C: HAH! There"s no "beard" in "player_wormwood" build.
     --     --     This hides the flower, which uses the beard symbol.
     --     inst.AnimState:OverrideSymbol("beard", "player_wormwood", "beard")
     -- end
@@ -170,7 +168,7 @@ local function DoShadowFx(inst, isnightmare)
     fx.Transform:SetPosition(x, y, z)
     fx.Transform:SetScale(1.2, 1.2, 1.2)
 
-    --When forcing into nightmare state, shadow_trap would've already spawned this fx
+    --When forcing into nightmare state, shadow_trap would"ve already spawned this fx
     if not isnightmare then
         fx = SpawnPrefab("shadow_despawn")
         local platform = inst:GetCurrentPlatform()
@@ -246,7 +244,7 @@ local function OnTimerDone(inst, data)
 end
 
 local function SetForcedBeardLord(inst, duration)
-    --duration nil is loading, so don't perform checks
+    --duration nil is loading, so don"t perform checks
     if duration ~= nil then
         if inst.components.health:IsDead() then
             return
@@ -275,56 +273,67 @@ local function OnForceNightmareState(inst, data)
 end
 
 local function CalcSanityAura(inst, observer)
-    if IsCrazyGuy(observer) then
-        SetObserverdBeardLord(inst)
-        return 0
-    elseif IsForcedNightmare(inst) then
-        return 0
-    end
+    -- if IsCrazyGuy(observer) then
+    --     SetObserverdBeardLord(inst)
+    --     return 0
+    -- elseif IsForcedNightmare(inst) then
+    --     return 0
+    -- end
     return inst.components.follower ~= nil
         and inst.components.follower:GetLeader() == observer
-        and TUNING.SANITYAURA_TINY
-        or 0
+        and TUNING.SANITYAURA_SMALL
 end
 
 local function ShouldAcceptItem(inst, item)
-    return (--accept all hats!
+    print("está no should accept item")
+    print(item.components.equippable ~= nil)
+    print(item.components.equippable.equipslot == EQUIPSLOTS.BODY)
+    print(item.components.equippable ~= nil and
+    item.components.equippable.equipslot == EQUIPSLOTS.BODY)
+
+    print(item.components.equippable.equipslot)
+    return ( --accept all hats!
         item.components.equippable ~= nil and
-            item.components.equippable.equipslot == EQUIPSLOTS.HEAD
+        item.components.equippable.equipslot == EQUIPSLOTS.HEAD
         ) or
-        (--accept all hands!
+        ( --accept all hands!
         item.components.equippable ~= nil and
-            item.components.equippable.equipslot == EQUIPSLOTS.HANDS
+        item.components.equippable.equipslot == EQUIPSLOTS.HANDS
         ) or
-        (--accept all armors!
+        ( --accept all armors!
         item.components.equippable ~= nil and
-            item.components.equippable.equipslot == EQUIPSLOTS.BODY
+        item.components.equippable.equipslot == EQUIPSLOTS.BODY
         ) or
-        (--accept food, but not too many carrots for loyalty!
+        ( --accept all backs (armors)!
+        item.components.equippable ~= nil and
+        item.components.equippable.equipslot == EQUIPSLOTS.BACK
+        ) or
+        ( --accept food, but not too many carrots for loyalty!
         inst.components.eater:CanEat(item) and
-            ((item.prefab ~= "carrot" and item.prefab ~= "carrot_cooked") or
-                inst.components.follower.leader == nil or
-                inst.components.follower:GetLoyaltyPercent() <= .9
-            )
+        ((item.prefab ~= "carrot" and item.prefab ~= "carrot_cooked") or
+        inst.components.follower.leader == nil or
+        inst.components.follower:GetLoyaltyPercent() <= .9
+        )
         )
 end
 
 local function OnGetItemFromPlayer(inst, giver, item)
     --I eat food
+    print("on get item item from player")
     if item.components.edible ~= nil then
         if (item.prefab == "carrot" or
             item.prefab == "carrot_cooked"
             ) and
             item.components.inventoryitem ~= nil and
-            (--make sure it didn't drop due to pockets full
+            ( --make sure it didn"t drop due to pockets full
             item.components.inventoryitem:GetGrandOwner() == inst or
-                --could be merged into a stack
-                (not item:IsValid() and
-                    inst.components.inventory:FindItem(function(obj)
-                        return obj.prefab == item.prefab
-                            and obj.components.stackable ~= nil
-                            and obj.components.stackable:IsStack()
-                    end) ~= nil)
+            --could be merged into a stack
+            (not item:IsValid() and
+            inst.components.inventory:FindItem(function(obj)
+                return obj.prefab == item.prefab
+                    and obj.components.stackable ~= nil
+                    and obj.components.stackable:IsStack()
+            end) ~= nil)
             ) then
             if inst.components.combat:TargetIs(giver) then
                 inst.components.combat:SetTarget(nil)
@@ -345,6 +354,7 @@ local function OnGetItemFromPlayer(inst, giver, item)
         -- end
     end
 
+    print("antes do if do hats")
     --I wear hats
     if item.components.equippable ~= nil and item.components.equippable.equipslot == EQUIPSLOTS.HEAD then
         local current = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
@@ -355,6 +365,7 @@ local function OnGetItemFromPlayer(inst, giver, item)
         inst.AnimState:Show("hat")
     end
 
+    print("antes do if dos weapons")
     --I wear weapons
     if item.components.equippable ~= nil and item.components.equippable.equipslot == EQUIPSLOTS.HANDS then
         local current = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
@@ -365,12 +376,28 @@ local function OnGetItemFromPlayer(inst, giver, item)
         -- inst.AnimState:Show("hat")
     end
 
+    print("antes do if da armor")
+    print(item.components.equippable ~= nil)
+    print(item.components.equippable.equipslot == EQUIPSLOTS.BODY)
     --I wear armors
     if item.components.equippable ~= nil and item.components.equippable.equipslot == EQUIPSLOTS.BODY then
         local current = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
         if current ~= nil then
             inst.components.inventory:DropItem(current)
         end
+        print("tentou equipar o item")
+        inst.components.inventory:Equip(item)
+        -- inst.AnimState:Show("hat")
+        return
+    end
+
+    --I wear back (armors)
+    if item.components.equippable ~= nil and item.components.equippable.equipslot == EQUIPSLOTS.BACK then
+        local current = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BACK)
+        if current ~= nil then
+            inst.components.inventory:DropItem(current)
+        end
+        print("tentou equipar o item")
         inst.components.inventory:Equip(item)
         -- inst.AnimState:Show("hat")
     end
@@ -422,7 +449,7 @@ local function NormalRetargetFn(inst)
                     -- guy:HasTag("monster")--talvez tirando isso para de atacar spider
                     -- or
                     guy:HasTag("wonkey")
-                        or guy:HasTag("pirate")
+                    or guy:HasTag("pirate")
                     -- or (guy.components.inventory ~= nil and
                     --     guy:IsNear(inst, TUNING.BUNNYMAN_SEE_MEAT_DIST) and
                     --     guy.components.inventory:FindItem(is_meat) ~= nil)
@@ -446,7 +473,7 @@ end
 
 local function battlecry(combatcmp, target)
     local strtbl =
-    target ~= nil and
+        target ~= nil and
         target.components.inventory ~= nil and
         target.components.inventory:FindItem(is_meat) ~= nil and
         "RABBIT_MEAT_BATTLECRY" or
@@ -497,7 +524,7 @@ local CAMPFIRE_TAGS = { "campfire", "fire" }
 local function NormalShouldSleep(inst)
     return DefaultSleepTest(inst)
         and (inst.components.follower == nil or inst.components.follower.leader == nil
-            or (FindEntity(inst, 6, nil, CAMPFIRE_TAGS) ~= nil and inst:IsInLight()))
+        or (FindEntity(inst, 6, nil, CAMPFIRE_TAGS) ~= nil and inst:IsInLight()))
 end
 
 function DefaultSleepTest(inst)
@@ -505,8 +532,8 @@ function DefaultSleepTest(inst)
     return StandardSleepChecks(inst)
         -- sleep in the overworld at night
         and (not TheWorld:HasTag("cave") and TheWorld.state.isnight
-            -- in caves, sleep at night if we have a lightwatcher and are in the dark
-            or (TheWorld:HasTag("cave") and TheWorld.state.iscavenight and (not watchlight or not inst:IsInLight())))
+        -- in caves, sleep at night if we have a lightwatcher and are in the dark
+        or (TheWorld:HasTag("cave") and TheWorld.state.iscavenight and (not watchlight or not inst:IsInLight())))
 end
 
 local function ShouldSleep(inst)
@@ -525,9 +552,9 @@ function DefaultWakeTest(inst)
     local watchlight = inst.LightWatcher ~= nil or (inst.components.sleeper and inst.components.sleeper.watchlight)
 
     return StandardWakeChecks(inst)
-        -- wake when it's not night
+        -- wake when it"s not night
         or (not TheWorld:HasTag("cave") and not TheWorld.state.isnight)
-        -- in caves, wake if it's not night and we've got a light shining on us
+        -- in caves, wake if it"s not night and we"ve got a light shining on us
         or (TheWorld:HasTag("cave") and not TheWorld.state.iscavenight and (not watchlight or inst:IsInLight()))
 end
 
@@ -560,7 +587,7 @@ local function fn()
     -- inst:AddTag("crazy")
     -- inst:AddTag("pig")
     -- inst:AddTag("manrabbit")
- inst:AddTag("notraptrigger")
+    inst:AddTag("notraptrigger")
     -- inst:AddTag("scarytoprey")
 
     inst.AnimState:SetBank("manrabbit")
@@ -595,8 +622,10 @@ local function fn()
     inst.components.talker.ontalk = ontalk
 
     inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
-    inst.components.locomotor.runspeed = TUNING.PIG_RUN_SPEED * 2.4 -- account for them being stopped for part of their anim
-    inst.components.locomotor.walkspeed = TUNING.PIG_WALK_SPEED * 2.1 -- account for them being stopped for part of their anim
+    inst.components.locomotor.runspeed = TUNING.PIG_RUN_SPEED *
+        2.4 -- account for them being stopped for part of their anim
+    inst.components.locomotor.walkspeed = TUNING.PIG_WALK_SPEED *
+        2.1 -- account for them being stopped for part of their anim
 
     -- boat hopping setup
     inst.components.locomotor:SetAllowPlatformHopping(true)
@@ -673,7 +702,7 @@ local function fn()
 
     inst:AddComponent("inspectable")
     inst.components.inspectable.getstatus = GetStatus
-------------------------------------------
+    ------------------------------------------
 
     inst:ListenForEvent("attacked", OnAttacked)
     inst:ListenForEvent("newcombattarget", OnNewTarget)
@@ -692,7 +721,7 @@ local function fn()
     inst.components.locomotor.runspeed = TUNING.BUNNYMAN_RUN_SPEED * 130 / 100
     inst.components.locomotor.walkspeed = TUNING.BUNNYMAN_WALK_SPEED * 130 / 100
 
-    inst.components.health:SetMaxHealth(TUNING.BUNNYMAN_HEALTH * 110 / 100)
+    inst.components.health:SetMaxHealth(TUNING.BUNNYMAN_HEALTH * 120 / 100)
 
     MakeHauntablePanic(inst)
 

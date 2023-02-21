@@ -145,12 +145,12 @@ local function OnForceNightmareState(inst, data)
 end
 
 local function CalcSanityAura(inst, observer)
-    if IsCrazyGuy(observer) then
-        SetObserverdBeardLord(inst)
-        return 0
-    elseif IsForcedNightmare(inst) then
-        return 0
-    end
+   -- if IsCrazyGuy(observer) then
+    --     SetObserverdBeardLord(inst)
+    --     return 0
+    -- elseif IsForcedNightmare(inst) then
+    --     return 0
+    -- end
     return inst.components.follower ~= nil
         and inst.components.follower:GetLeader() == observer
         and TUNING.SANITYAURA_TINY
@@ -169,6 +169,10 @@ local function ShouldAcceptItem(inst, item)
         (--accept all armors!
         item.components.equippable ~= nil and
             item.components.equippable.equipslot == EQUIPSLOTS.BODY
+        ) or
+        ( --accept all backs (armors)!
+        item.components.equippable ~= nil and
+        item.components.equippable.equipslot == EQUIPSLOTS.BACK
         ) or
         (--accept food, but not too many carrots for loyalty!
         inst.components.eater:CanEat(item) and
@@ -240,6 +244,18 @@ local function OnGetItemFromPlayer(inst, giver, item)
         if current ~= nil then
             inst.components.inventory:DropItem(current)
         end
+        inst.components.inventory:Equip(item)
+        -- inst.AnimState:Show("hat")
+        return
+    end
+
+    --I wear back (armors)
+    if item.components.equippable ~= nil and item.components.equippable.equipslot == EQUIPSLOTS.BACK then
+        local current = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BACK)
+        if current ~= nil then
+            inst.components.inventory:DropItem(current)
+        end
+        print("tentou equipar o item")
         inst.components.inventory:Equip(item)
         -- inst.AnimState:Show("hat")
     end
