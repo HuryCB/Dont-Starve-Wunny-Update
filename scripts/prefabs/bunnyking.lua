@@ -618,8 +618,8 @@ local function fn()
     inst.components.locomotor.runspeed = 0
     inst.components.locomotor.walkspeed = 0
 
-    -- inst.components.health:SetMaxHealth(TUNING.MERM_KING_HEALTH)
-    inst.components.health:SetMaxHealth(1)
+    inst.components.health:SetMaxHealth(TUNING.MERM_KING_HEALTH)
+    -- inst.components.health:SetMaxHealth(1)
 
     MakeHauntablePanic(inst)
 

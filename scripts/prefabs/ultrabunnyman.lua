@@ -282,6 +282,7 @@ local function CalcSanityAura(inst, observer)
     return inst.components.follower ~= nil
         and inst.components.follower:GetLeader() == observer
         and TUNING.SANITYAURA_SMALL
+        or 0
 end
 
 local function ShouldAcceptItem(inst, item)

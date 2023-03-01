@@ -1,11 +1,11 @@
 -- This information tells other players more about the mod
-name = "Wunny"
-description = "Wunny, the bunny/rabbit man."
+name = "Wunny [REWORKED/UPDATED]"
+description = "Wunny, the bunny/rabbit man. [REWORKED/UPDATED]"
 author = "Hury"
-version = "1.2.13" -- This is the version of the template. Change it to your own number.
+version = "1.2.16" -- This is the version of the template. Change it to your own number.
 
 -- This is the URL name of the mod's thread on the forum; the part after the ? and before the first & in the url
-forumthread = "/files/file/950-extended-sample-character/"
+forumthread = "https://steamcommunity.com/sharedfiles/filedetails/?id=2937888827"
 
 -- This lets other players know if your mod is out of date, update it to match the current version in the game
 api_version = 10

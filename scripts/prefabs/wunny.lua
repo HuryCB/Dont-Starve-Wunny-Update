@@ -346,6 +346,9 @@ local function onbecamehuman(inst)
 	-- Set speed when not a ghost (optional)
 	--resistencia da willow
 	inst.components.freezable:SetResistance(3)
+	inst.components.locomotor.runspeed = 7.2
+	inst.components.locomotor.walkspeed = 7.2
+	inst.runningSpeed = 1.2
 	-- inst.components.locomotor:SetExternalSpeedMultiplier(inst, "wunny_speed_mod", 1)
 end
 
@@ -559,7 +562,7 @@ local function OnSanityDelta(inst, data)
 		inst.components.combat:SetAttackPeriod(0.5)
 		-- inst.components.sanity:DoDelta(-TUNING.WUNNY_SANITY)
 		inst.components.sanity:SetPercent(0)
-		inst.components.combat.damagemultiplier = 1.1
+		inst.components.combat.damagemultiplier = 1.11
 		inst.components.health:SetAbsorptionAmount(0.1)
 
 		inst.components.beard.prize = "beardhair"
@@ -684,25 +687,25 @@ end
 
 
 local caveDay = function(inst)
-	inst.components.locomotor.runspeed = 7.2
-	inst.components.locomotor.walkspeed = 7.2
-	inst.runningSpeed = 1.2
+	inst.components.locomotor.runspeed = 7.8
+	inst.components.locomotor.walkspeed = 7.8
+	inst.runningSpeed = 1.3
 	-- print("print caveday")
 end
 
 local caveDusk = function(inst)
-	inst.components.locomotor.runspeed = 7.8
-	inst.components.locomotor.walkspeed = 7.8
-	inst.runningSpeed = 1.3
+	inst.components.locomotor.runspeed = 7.5
+	inst.components.locomotor.walkspeed = 7.5
+	inst.runningSpeed = 1.25
 	-- print("print cavedusk")
 end
 
 local caveNight = function(inst)
 	if TheWorld.state.iscavenight
 	then
-		inst.components.locomotor.runspeed = 7.5
-		inst.components.locomotor.walkspeed = 7.5
-		inst.runningSpeed = 1.25
+		inst.components.locomotor.runspeed = 7.2
+		inst.components.locomotor.walkspeed = 7.2
+		inst.runningSpeed = 1.2
 		-- print("print cavenight")
 	end
 end
@@ -949,9 +952,15 @@ end
 
 local function OnHealthDelta(inst, data)
 	if data.amount < 0 then
-		inst.components.sanity:DoDelta(data.amount *
-		((data ~= nil and data.overtime) and TUNING.WALTER_SANITY_DAMAGE_OVERTIME_RATE or TUNING.WALTER_SANITY_DAMAGE_RATE) *
-		inst._sanity_damage_protection:Get() / 2)
+		if not inst.isbeardlord then
+			inst.components.sanity:DoDelta(data.amount *
+			((data ~= nil and data.overtime) and TUNING.WALTER_SANITY_DAMAGE_OVERTIME_RATE or TUNING.WALTER_SANITY_DAMAGE_RATE) *
+			inst._sanity_damage_protection:Get() / 2)
+		end
+	elseif data.amount > 0 then
+		if not inst.isbeardlord then
+			inst.components.sanity:DoDelta(data.amount/2)
+		end
 	end
 end
 
@@ -984,6 +993,7 @@ local master_postinit = function(inst)
 
 	--beard
 	inst:AddComponent("beard")
+	inst.components.beard.insulation_factor = TUNING.WEBBER_BEARD_INSULATION_FACTOR
 	inst.components.beard.onreset = OnResetBeard
 	inst.components.beard.prize = "manrabbit_tail"
 	inst.components.beard.is_skinnable = true
