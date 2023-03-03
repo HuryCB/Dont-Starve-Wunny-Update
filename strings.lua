@@ -20,8 +20,8 @@ STRINGS.RECIPE_DESC.BEARDLORDPACK = "12 slots. Increases hunger rate (17.5%) and
 STRINGS.NAMES.BIRCHNUTHAT = "Bunnyman hat"
 STRINGS.RECIPE_DESC.BIRCHNUTHAT = "Gives tiny insulation instead of water protection"
 
-STRINGS.NAMES.batbunny = "Bunny bat"
-STRINGS.RECIPE_DESC.batbunny = "Just like ham bat"
+-- STRINGS.NAMES.batbunny = "Bunny bat"
+-- STRINGS.RECIPE_DESC.batbunny = "Just like ham bat"
 
 STRINGS.NAMES.NEWBUNNYHOUSE = "Chopping Bunnyhouse"
 STRINGS.RECIPE_DESC.NEWBUNNYHOUSE = "Twice the time to spawn, and these bunnymen can chop!"

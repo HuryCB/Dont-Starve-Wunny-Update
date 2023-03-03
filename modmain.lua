@@ -87,7 +87,7 @@ Assets = {
 
     -- Asset("ATLAS", "images/inventoryimages/ham_bat.xml"),
 
-    Asset("ATLAS", "images/inventoryimages/bat_bunny.xml"),
+    -- Asset("ATLAS", "images/inventoryimages/bat_bunny.xml"),
 
     Asset("ATLAS", "images/inventoryimages/beardlordhat.xml"),
 
@@ -107,8 +107,8 @@ Assets = {
 
     Asset("ANIM", "anim/everythingmanrabbit_build.zip"),
 
-    Asset("ANIM", "anim/bat_bunny.zip"),
-    Asset("ANIM", "anim/swap_bat_bunny.zip"),
+    -- Asset("ANIM", "anim/bat_bunny.zip"),
+    -- Asset("ANIM", "anim/swap_bat_bunny.zip"),
 
     Asset("ANIM", "anim/slingshot.zip"),
     Asset("ANIM", "anim/swap_slingshot.zip"),
@@ -161,15 +161,15 @@ params.coolerpack = {
         slotpos = {},
         animbank = "ui_piggyback_2x6",
         animbuild = "ui_piggyback_2x6",
-        pos = GLOBAL.Vector3( -5, -50, 0),
+        pos = GLOBAL.Vector3(-5, -50, 0),
     },
     issidewidget = true,
     type = "pack",
 }
 
 for y = 0, 5 do
-    table.insert(params.coolerpack.widget.slotpos, GLOBAL.Vector3( -162, -75 * y + 170, 0))
-    table.insert(params.coolerpack.widget.slotpos, GLOBAL.Vector3( -162 + 75, -75 * y + 170, 0))
+    table.insert(params.coolerpack.widget.slotpos, GLOBAL.Vector3(-162, -75 * y + 170, 0))
+    table.insert(params.coolerpack.widget.slotpos, GLOBAL.Vector3(-162 + 75, -75 * y + 170, 0))
 end
 
 function params.coolerpack.itemtestfn(container, item, slot)
@@ -193,10 +193,10 @@ function params.coolerpack.itemtestfn(container, item, slot)
 end
 
 AddRecipe("coolerpack", {
-    Ingredient("manrabbit_tail", 4) --4
-    , Ingredient("silk", 6),
-    Ingredient("rope", 2)
-},
+        Ingredient("manrabbit_tail", 4) --4
+        , Ingredient("silk", 6),
+        Ingredient("rope", 2)
+    },
     RECIPETABS.SURVIVAL
     , TECH.NONE, nil,
     nil,
@@ -207,11 +207,11 @@ AddRecipe("coolerpack", {
     "coolerpack.tex")
 --beardlordpack
 AddRecipe("beardlordpack", {
-    Ingredient("manrabbit_tail", 4) --4
-    , Ingredient("silk", 6),
-    Ingredient("rope", 2)
-    , Ingredient("beardhair", 2)
-},
+        Ingredient("manrabbit_tail", 4) --4
+        , Ingredient("silk", 6),
+        Ingredient("rope", 2)
+        , Ingredient("beardhair", 2)
+    },
     RECIPETABS.SURVIVAL
     , TECH.NONE, nil,
     nil,
@@ -302,7 +302,7 @@ STRINGS.CHARACTER_SURVIVABILITY.wunny = "Grim"
 TUNING.WUNNY_SPEED = 6
 TUNING.WUNNY_RUNNING_HUNGER_RATE = 1
 TUNING.WUNNY_HUNGER_RATE = TUNING.WILSON_HUNGER_RATE
-TUNING.BUNNYPACK_HUNGER = 1.15 --mudar para 1.1
+TUNING.BUNNYPACK_HUNGER = 1.15      --mudar para 1.1
 TUNING.BEARDLORDPACK_HUNGER = 1.175 --mudar para 1.1
 TUNING.WUNNY_QUICK_ACTION_HUNGER = -0.25
 -- TUNING.SHADOWBUNNYMAN_ATTACK_PERIOD =
@@ -317,13 +317,13 @@ TUNING.SNAKE_HEALTH = 100
 TUNING.SNAKE_DAMAGE = 10
 TUNING.SNAKE_ATTACK_PERIOD = 3
 TUNING.SNAKE_POISON_CHANCE = 0.25
-TUNING.SNAKE_POISON_START_DAY = 3 -- the day that poison snakes have a chance to show up
+TUNING.SNAKE_POISON_START_DAY = 3            -- the day that poison snakes have a chance to show up
 TUNING.SNAKEDEN_RELEASE_TIME = 5
-TUNING.SNAKE_JUNGLETREE_CHANCE = 0.5 -- chance of a normal snake
+TUNING.SNAKE_JUNGLETREE_CHANCE = 0.5         -- chance of a normal snake
 TUNING.SNAKE_JUNGLETREE_POISON_CHANCE = 0.25 -- chance of a poison snake
-TUNING.SNAKE_JUNGLETREE_AMOUNT_TALL = 2 -- num of times to try and spawn a snake from a tall tree
-TUNING.SNAKE_JUNGLETREE_AMOUNT_MED = 1 -- num of times to try and spawn a snake from a normal tree
-TUNING.SNAKE_JUNGLETREE_AMOUNT_SMALL = 1 -- num of times to try and spawn a snake from a small tree
+TUNING.SNAKE_JUNGLETREE_AMOUNT_TALL = 2      -- num of times to try and spawn a snake from a tall tree
+TUNING.SNAKE_JUNGLETREE_AMOUNT_MED = 1       -- num of times to try and spawn a snake from a normal tree
+TUNING.SNAKE_JUNGLETREE_AMOUNT_SMALL = 1     -- num of times to try and spawn a snake from a small tree
 TUNING.SNAKEDEN_MAX_SNAKES = 3
 -- Custom speech strings
 STRINGS.CHARACTERS.WUNNY = require "speech_wunny"
@@ -703,7 +703,7 @@ AddRecipe("lighter", { Ingredient("rope", 1), Ingredient("goldnugget", 1), Ingre
     "wunny")
 AddRecipe("bernie_inactive", { Ingredient("beardhair", 2), Ingredient("beefalowool", 2), Ingredient("silk", 2) },
     RECIPETABS.SURVIVAL, TECH
-.NONE, nil,
+    .NONE, nil,
     nil,
     nil,
     nil,
@@ -793,36 +793,48 @@ AddRecipe("mermhat", { Ingredient("pondfish", 1), Ingredient("cutreeds", 1), Ing
 -- nil,
 -- "wunny", "images/inventoryimages/birchnuthat.xml",
 -- "birchnuthat.tex")
-AddRecipe2("madscience_lab_perkWunny", -- name
+AddRecipe2("madscience_lab_perkWunny",                          -- name
     { Ingredient("transistor", 2), Ingredient("cutstone", 2) }, -- ingredients
-    TECH.NONE, -- tech
+    TECH.NONE,                                                  -- tech
     {
         product = "madscience_lab",
         builder_tag = "wunny",
         placer = "madscience_lab_placer",
         nounlock = false,
         image = "madscience_lab.tex"
-    }, -- config
+    },            -- config
     { "REWARD", } -- filters
 )
 
-AddRecipe2("wunnyicebox", { Ingredient("goldnugget", 4), Ingredient("gears", 2), Ingredient("cutstone", 2), Ingredient("bluegem", 2) },
+AddRecipe2("wunnyicebox",
+    { Ingredient("goldnugget", 4), Ingredient("gears", 2), Ingredient("cutstone", 2), Ingredient("bluegem", 2) },
     TECH.SCIENCE_TWO,
-    { placer = "icebox_placer", min_spacing = 1.5,  image = "icebox.tex" })
+    { placer = "icebox_placer", min_spacing = 1.5, image = "icebox.tex" })
 
 
-AddRecipe2("madscience_lab_perkWunny", -- name
+AddRecipe2("madscience_lab_perkWunny",                          -- name
     { Ingredient("transistor", 2), Ingredient("cutstone", 2) }, -- ingredients
-    TECH.NONE, -- tech
+    TECH.NONE,                                                  -- tech
     {
         product = "madscience_lab",
         builder_tag = "wunny",
         placer = "madscience_lab_placer",
         nounlock = false,
         image = "madscience_lab.tex"
-    }, -- config
+    },            -- config
     { "REWARD", } -- filters
 )
+
+AddRecipe2("wunnyhambatwunny", { Ingredient("manrabbit_tail", 1), Ingredient("twigs", 2), Ingredient("meat", 2) },
+TECH.SCIENCE_TWO, {
+    product = "hambat",
+    builder_tag = "wunny",
+    nounlock = false,
+} -- config
+-- { "REWARD", } -- filters )
+)
+
+
 --add carrot to rabbithole drop
 AddPrefabPostInit("rabbithole", function(inst)
     GLOBAL.MakeInventoryPhysics(inst)

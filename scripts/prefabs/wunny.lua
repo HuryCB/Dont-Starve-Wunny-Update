@@ -259,6 +259,33 @@ local function ResetOrStartWobyBuckTimer(inst)
 	end
 end
 
+
+local function on_show_warp_marker(inst)
+	inst.components.positionalwarp:EnableMarker(true)
+end
+
+local function on_hide_warp_marker(inst)
+	inst.components.positionalwarp:EnableMarker(false)
+end
+
+local function DelayedWarpBackTalker(inst)
+	-- if the player starts moving right away then we can skip this
+	if inst.sg == nil or inst.sg:HasStateTag("idle") then 
+		inst.components.talker:Say(GetString(inst, "ANNOUNCE_POCKETWATCH_RECALL"))
+	end 
+end
+
+local function OnWarpBack(inst, data)
+	if inst.components.positionalwarp ~= nil then
+		if data ~= nil and data.reset_warp then
+			inst.components.positionalwarp:Reset()
+			inst:DoTaskInTime(15 * FRAMES, DelayedWarpBackTalker) 
+		else
+			inst.components.positionalwarp:GetHistoryPosition(true)
+		end
+	end
+end
+
 local function OnTimerDone(inst, data)
 	if data and data.name == "wobybuck" then
 		inst._wobybuck_damage = 0
@@ -342,13 +369,23 @@ local function OnReroll(inst)
 end
 
 -- When the character is revived from human
-local function onbecamehuman(inst)
+local function onbecamehuman(inst,data, isloading)
 	-- Set speed when not a ghost (optional)
 	--resistencia da willow
 	inst.components.freezable:SetResistance(3)
 	inst.components.locomotor.runspeed = 7.2
 	inst.components.locomotor.walkspeed = 7.2
 	inst.runningSpeed = 1.2
+
+	--Wanda
+	if inst.components.positionalwarp ~= nil then
+		if not isloading then
+			inst.components.positionalwarp:Reset()
+		end
+		if inst.components.inventory:HasItemWithTag("pocketwatch_warp", 1) then
+			inst.components.positionalwarp:EnableMarker(true)
+		end
+	end
 	-- inst.components.locomotor:SetExternalSpeedMultiplier(inst, "wunny_speed_mod", 1)
 end
 
@@ -368,6 +405,11 @@ local function onbecameghost(inst)
 		inst.components.sanity.ignore = false
 		inst.components.sanity:SetPercent(.5, true)
 		inst.components.sanity.ignore = true
+	end
+
+	--Wanda
+	if inst.components.positionalwarp ~= nil then
+		inst.components.positionalwarp:EnableMarker(false)
 	end
 end
 
@@ -971,6 +1013,14 @@ local master_postinit = function(inst)
 	-- print("Runspeed ", inst.components.locomotor:GetRunSpeed())
 	-- print("Multspeed ", inst.components.locomotor:GetSpeedMultiplier())
 	-- print("Walkspeed ", inst.components.locomotor:GetWalkSpeed())
+
+	--Wanda	
+	inst:AddComponent("positionalwarp")
+	inst:DoTaskInTime(0, function() inst.components.positionalwarp:SetMarker("pocketwatch_warp_marker") end)
+	inst:ListenForEvent("show_warp_marker", on_show_warp_marker)
+	inst:ListenForEvent("hide_warp_marker", on_hide_warp_marker)
+    inst:ListenForEvent("onwarpback", OnWarpBack)
+	inst.components.positionalwarp:SetWarpBackDist(TUNING.WANDA_WARP_DIST_YOUNG)
 
 	inst:ListenForEvent("equip", OnEquip)
 	-- inst:ListenForEvent("unequip", OnUnequip)
