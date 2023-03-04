@@ -2,7 +2,7 @@
 name = "Wunny [REWORKED/UPDATED]"
 description = "Wunny, the bunny/rabbit man. [REWORKED/UPDATED]"
 author = "Hury"
-version = "1.2.17" -- This is the version of the template. Change it to your own number.
+version = "1.2.18" -- This is the version of the template. Change it to your own number.
 
 -- This is the URL name of the mod's thread on the forum; the part after the ? and before the first & in the url
 forumthread = "https://steamcommunity.com/sharedfiles/filedetails/?id=2937888827"

@@ -145,10 +145,9 @@ local function OnForceNightmareState(inst, data)
 end
 
 local function CalcSanityAura(inst, observer)
-    -- if IsCrazyGuy(observer) then
-    --     SetObserverdBeardLord(inst)
-    --     return 0
-    -- elseif IsForcedNightmare(inst) then
+    if IsCrazyGuy(observer) then
+        SetObserverdBeardLord(inst)
+    end    -- elseif IsForcedNightmare(inst) then
     --     return 0
     -- end
     return inst.components.follower ~= nil

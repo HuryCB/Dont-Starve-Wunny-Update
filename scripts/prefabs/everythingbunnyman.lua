@@ -145,8 +145,9 @@ local function OnForceNightmareState(inst, data)
 end
 
 local function CalcSanityAura(inst, observer)
-   -- if IsCrazyGuy(observer) then
-    --     SetObserverdBeardLord(inst)
+   if IsCrazyGuy(observer) then
+        SetObserverdBeardLord(inst)
+   end
     --     return 0
     -- elseif IsForcedNightmare(inst) then
     --     return 0

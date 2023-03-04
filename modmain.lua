@@ -826,12 +826,13 @@ AddRecipe2("madscience_lab_perkWunny",                          -- name
 )
 
 AddRecipe2("wunnyhambatwunny", { Ingredient("manrabbit_tail", 1), Ingredient("twigs", 2), Ingredient("meat", 2) },
-TECH.SCIENCE_TWO, {
-    product = "hambat",
-    builder_tag = "wunny",
-    nounlock = false,
-    image = "hambat.tex"
-} -- config
+    TECH.SCIENCE_TWO, {
+        product = "hambat",
+        builder_tag = "wunny",
+        nounlock = false,
+        image = "hambat.tex"
+    },
+    { "CHARACTER" }
 -- { "REWARD", } -- filters )
 )
 

@@ -216,7 +216,7 @@ end
 
 local function SetObserverdBeardLord(inst)
     inst.beardlord = true
-    -- SetBunnyDamage(inst, 1.1)
+    SetBunnyDamage(inst, 1.1)
     inst.components.combat:SetAttackPeriod(0.9)
     if inst.clearbeardlordtask ~= nil then
         inst.clearbeardlordtask:Cancel()
@@ -259,7 +259,7 @@ local function SetForcedBeardLord(inst, duration)
         inst.components.timer:StartTimer("forcenightmare", duration)
     end
     inst.beardlord = true
-    -- SetBunnyDamage(inst, 1.1)
+    SetBunnyDamage(inst, 1.1)
     inst.components.combat:SetAttackPeriod(0.9)
     inst.AnimState:SetBuild("manrabbit_beard_build")
     inst:ListenForEvent("timerdone", OnTimerDone)
@@ -273,8 +273,9 @@ local function OnForceNightmareState(inst, data)
 end
 
 local function CalcSanityAura(inst, observer)
-    -- if IsCrazyGuy(observer) then
-    --     SetObserverdBeardLord(inst)
+    if IsCrazyGuy(observer) then
+        SetObserverdBeardLord(inst)
+    end
     --     return 0
     -- elseif IsForcedNightmare(inst) then
     --     return 0

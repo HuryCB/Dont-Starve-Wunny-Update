@@ -81,11 +81,13 @@ local function ClearObservedBeardlord(inst)
     inst.clearbeardlordtask = nil
     if not IsForcedNightmare(inst) then
         inst.beardlord = nil
+        inst.components.combat:SetDefaultDamage(TUNING.BUNNYMAN_DAMAGE * 100 / 100)
     end
 end
 
 local function SetObserverdBeardLord(inst)
     inst.beardlord = true
+    inst.components.combat:SetDefaultDamage(60)
     if inst.clearbeardlordtask ~= nil then
         inst.clearbeardlordtask:Cancel()
     end
@@ -137,8 +139,9 @@ local function OnForceNightmareState(inst, data)
 end
 
 local function CalcSanityAura(inst, observer)
-    -- if IsCrazyGuy(observer) then
-    --     SetObserverdBeardLord(inst)
+    if IsCrazyGuy(observer) then
+        SetObserverdBeardLord(inst)
+    end
     --     return 0
     -- elseif IsForcedNightmare(inst) then
     --     return 0
