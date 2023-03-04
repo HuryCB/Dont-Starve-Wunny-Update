@@ -133,6 +133,26 @@ local ActionHandler = GLOBAL.ActionHandler
 
 modimport("strings.lua")
 
+FOODTYPE =
+{
+    GENERIC = "GENERIC",
+    MEAT = "MEAT",
+    VEGGIE = "VEGGIE",
+    ELEMENTAL = "ELEMENTAL",
+    GEARS = "GEARS",
+    HORRIBLE = "HORRIBLE",
+    INSECT = "INSECT",
+    SEEDS = "SEEDS",
+    BERRY = "BERRY", --hack for smallbird; berries are actually part of veggie
+    RAW = "RAW",     -- things which some animals can eat off the ground, but players need to cook
+    BURNT = "BURNT", --For lavae.
+    ROUGHAGE = "ROUGHAGE",
+    WOOD = "WOOD",
+    GOODIES = "GOODIES",
+    MONSTER = "MONSTER", -- Added in for woby, uses the secondary foodype originally added for the berries
+}
+
+
 local containers = require "containers"
 
 local params = {}
@@ -1037,9 +1057,17 @@ AddStategraphPostInit("wilson", function(sg)
                 return "quickeat"
             end
 
-            return (obj.components.soul ~= nil and "eat")
-                or (obj.components.edible.foodtype == FOODTYPE.MEAT and "eat")
-                or "quickeat"
+            if obj.components.soul ~= nil
+            then
+                return "eat"
+            end
+
+            if FOODTYPE ~= nil and FOODTYPE.MEAT ~= nil and obj.components.edible.foodtype == FOODTYPE.MEAT
+            then
+                return "eat"
+            end
+
+            return "quickeat"
         end)
     sg.actionhandlers[GLOBAL.ACTIONS.HEAL] = GLOBAL.ActionHandler(GLOBAL.ACTIONS.HEAL, function(inst, action)
         if inst:HasTag("wunny") then
