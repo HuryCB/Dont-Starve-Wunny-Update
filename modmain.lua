@@ -830,6 +830,7 @@ TECH.SCIENCE_TWO, {
     product = "hambat",
     builder_tag = "wunny",
     nounlock = false,
+    image = "hambat.tex"
 } -- config
 -- { "REWARD", } -- filters )
 )
