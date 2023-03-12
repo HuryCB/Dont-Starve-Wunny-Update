@@ -411,6 +411,12 @@ local function onbecameghost(inst)
 	if inst.components.positionalwarp ~= nil then
 		inst.components.positionalwarp:EnableMarker(false)
 	end
+
+	for k, v in pairs(inst.components.petleash:GetPets()) do
+		if v:HasTag("shadowminion") and v._killtask == nil then
+			v._killtask = v:DoTaskInTime(math.random(), KillPet)
+		end
+	end
 end
 
 -- When loading or spawning the character
@@ -908,13 +914,9 @@ local function OnReadFn(inst, book)
 	end
 end
 
-local function OnDeath(inst)
-	for k, v in pairs(inst.components.petleash:GetPets()) do
-		if v:HasTag("shadowminion") and v._killtask == nil then
-			v._killtask = v:DoTaskInTime(math.random(), KillPet)
-		end
-	end
-end
+-- local function OnDeath(inst)
+	
+-- end
 
 local function KillPet(pet)
 	if pet.components.health:IsInvincible() then
@@ -1079,7 +1081,7 @@ local master_postinit = function(inst)
 
 	inst._onpetlost = function(pet) inst.components.sanity:RemoveSanityPenalty(pet) end
 
-	inst:ListenForEvent("death", OnDeath)
+	inst:ListenForEvent("death", onbecameghost)
 
 	inst.components.foodaffinity:AddFoodtypeAffinity(FOODTYPE.VEGGIE, 1.33)
 	inst.components.foodaffinity:AddPrefabAffinity("carrot", 1.5)

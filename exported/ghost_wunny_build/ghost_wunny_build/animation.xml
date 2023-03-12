@@ -1,0 +1,28 @@
+<Anims>
+ <anim name="anim" root="BUILD_PLAYER" numframes="100" framerate="40">
+  <frame idx="0" w="503" h="812" x="5.574661" y="-274.532013">
+   <element name="ghost_eyes" layername="ghost_eyes" frame="0" z_index="1" m_a="0.999420" m_b="-0.030792" m_c="0.030792" m_d="0.999420" m_tx="6.750000" m_ty="-401.748993"/>
+   <element name="ghost_tail" layername="ghost_tail" frame="0" z_index="2" m_a="1.000000" m_b="0.000000" m_c="0.000000" m_d="1.000000" m_tx="0.000000" m_ty="19.950001"/>
+   <element name="ghost_hairpigtails" layername="ghost_hairpigtails" frame="0" z_index="-2" m_a="0.984878" m_b="-0.169998" m_c="0.169998" m_d="0.984878" m_tx="-74.848999" m_ty="-243.548996"/>
+   <element name="ghost_hairpigtails" layername="ghost_hairpigtails" frame="1" z_index="-1" m_a="0.965986" m_b="0.255423" m_c="-0.255423" m_d="0.965986" m_tx="103.250000" m_ty="-248.248993"/>
+  </frame>
+  <frame idx="25" w="503" h="812" x="5.574661" y="-274.532013">
+   <element name="ghost_eyes" layername="ghost_eyes" frame="0" z_index="1" m_a="0.999420" m_b="-0.030792" m_c="0.030792" m_d="0.999420" m_tx="6.750000" m_ty="-401.748993"/>
+   <element name="ghost_tail" layername="ghost_tail" frame="0" z_index="2" m_a="1.000000" m_b="0.000000" m_c="0.000000" m_d="1.000000" m_tx="0.000000" m_ty="19.950001"/>
+   <element name="ghost_hairpigtails" layername="ghost_hairpigtails" frame="0" z_index="-2" m_a="0.984878" m_b="-0.169998" m_c="0.169998" m_d="0.984878" m_tx="-74.848999" m_ty="-243.548996"/>
+   <element name="ghost_hairpigtails" layername="ghost_hairpigtails" frame="1" z_index="-1" m_a="0.965986" m_b="0.255423" m_c="-0.255423" m_d="0.965986" m_tx="103.250000" m_ty="-248.248993"/>
+  </frame>
+  <frame idx="50" w="503" h="812" x="5.574661" y="-274.532013">
+   <element name="ghost_eyes" layername="ghost_eyes" frame="0" z_index="1" m_a="0.999420" m_b="-0.030792" m_c="0.030792" m_d="0.999420" m_tx="6.750000" m_ty="-401.748993"/>
+   <element name="ghost_tail" layername="ghost_tail" frame="0" z_index="2" m_a="1.000000" m_b="0.000000" m_c="0.000000" m_d="1.000000" m_tx="0.000000" m_ty="19.950001"/>
+   <element name="ghost_hairpigtails" layername="ghost_hairpigtails" frame="0" z_index="-2" m_a="0.984878" m_b="-0.169998" m_c="0.169998" m_d="0.984878" m_tx="-74.848999" m_ty="-243.548996"/>
+   <element name="ghost_hairpigtails" layername="ghost_hairpigtails" frame="1" z_index="-1" m_a="0.965986" m_b="0.255423" m_c="-0.255423" m_d="0.965986" m_tx="103.250000" m_ty="-248.248993"/>
+  </frame>
+  <frame idx="75" w="503" h="812" x="5.574661" y="-274.532013">
+   <element name="ghost_eyes" layername="ghost_eyes" frame="0" z_index="1" m_a="0.999420" m_b="-0.030792" m_c="0.030792" m_d="0.999420" m_tx="6.750000" m_ty="-401.748993"/>
+   <element name="ghost_tail" layername="ghost_tail" frame="0" z_index="2" m_a="1.000000" m_b="0.000000" m_c="0.000000" m_d="1.000000" m_tx="0.000000" m_ty="19.950001"/>
+   <element name="ghost_hairpigtails" layername="ghost_hairpigtails" frame="0" z_index="-2" m_a="0.984878" m_b="-0.169998" m_c="0.169998" m_d="0.984878" m_tx="-74.848999" m_ty="-243.548996"/>
+   <element name="ghost_hairpigtails" layername="ghost_hairpigtails" frame="1" z_index="-1" m_a="0.965986" m_b="0.255423" m_c="-0.255423" m_d="0.965986" m_tx="103.250000" m_ty="-248.248993"/>
+  </frame>
+ </anim>
+</Anims>

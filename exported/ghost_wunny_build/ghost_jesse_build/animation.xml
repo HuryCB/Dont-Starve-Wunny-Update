@@ -1,0 +1,23 @@
+<Anims>
+ <anim name="anim" root="BUILD_PLAYER" numframes="100" framerate="40">
+  <frame idx="0" w="277" h="777" x="6.727264" y="-306.347961">
+   <element name="ghost_eyes" layername="ghost_eyes" frame="0" z_index="1" m_a="0.999420" m_b="-0.030792" m_c="0.030792" m_d="0.999420" m_tx="6.750000" m_ty="-401.748993"/>
+   <element name="ghost_tail" layername="ghost_tail" frame="0" z_index="2" m_a="1.000000" m_b="0.000000" m_c="0.000000" m_d="1.000000" m_tx="0.000000" m_ty="19.950001"/>
+  </frame>
+  <frame idx="25" w="267" h="770" x="8.706787" y="-304.030914">
+   <element name="ghost_eyes" layername="ghost_eyes" frame="0" z_index="1" m_a="0.955623" m_b="-0.035785" m_c="0.043367" m_d="1.158072" m_tx="12.632353" m_ty="-395.866638"/>
+   <element name="ghost_tail" layername="ghost_tail" frame="0" z_index="2" m_a="1.000000" m_b="0.000000" m_c="0.000000" m_d="1.000000" m_tx="0.000000" m_ty="19.950001"/>
+  </frame>
+  <frame idx="50" w="268" h="816" x="25.860527" y="-316.898132">
+   <element name="ghost_eyes" layername="ghost_eyes" frame="0" z_index="1" m_a="1.043545" m_b="-0.021870" m_c="0.025168" m_d="1.200908" m_tx="21.416668" m_ty="-350.936890"/>
+   <element name="ghost_tail" layername="ghost_tail" frame="0" z_index="2" m_a="1.000000" m_b="0.000000" m_c="0.000000" m_d="1.000000" m_tx="0.000000" m_ty="19.950001"/>
+   <element name="ghost_FX" layername="ghost_FX" frame="7" z_index="2" m_a="1.000000" m_b="0.000000" m_c="0.000000" m_d="1.000000" m_tx="5.450000" m_ty="-10.849000"/>
+  </frame>
+  <frame idx="75" w="423" h="828" x="-2.276337" y="-306.508118">
+   <element name="ghost_eyes" layername="ghost_eyes" frame="3" z_index="1" m_a="1.153399" m_b="-0.001053" m_c="0.001082" m_d="1.185290" m_tx="28.500000" m_ty="-305.449005"/>
+   <element name="ghost_tail" layername="ghost_tail" frame="0" z_index="2" m_a="1.000000" m_b="0.000000" m_c="0.000000" m_d="1.000000" m_tx="0.000000" m_ty="19.950001"/>
+   <element name="ghost_FX" layername="ghost_FX" frame="7" z_index="2" m_a="1.000000" m_b="0.000000" m_c="0.000000" m_d="1.000000" m_tx="5.450000" m_ty="-10.849000"/>
+   <element name="ghost_body" layername="ghost_body" frame="0" z_index="2" m_a="0.958617" m_b="0.041284" m_c="-0.040481" m_d="0.939967" m_tx="6.900000" m_ty="-324.199005"/>
+  </frame>
+ </anim>
+</Anims>
